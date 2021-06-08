@@ -38,6 +38,11 @@ import TambahPenjualan from "./Component/Pages/Penjualan/TambahPenjualan";
 import TambahBarang from "./Component/Pages/Barang/TambahBarang";
 import TambahPinjaman from "./Component/Pages/Pinjam/TambahPinjaman";
 import TambahSimpanan from "./Component/Pages/Simpan/TambahSimpanan";
+import EditBarang from "./Component/Pages/Barang/EditBarang";
+import EditKredit from "./Component/Pages/Kredit/EditKredit";
+import EditPenjualan from "./Component/Pages/Penjualan/EditPenjualan";
+import EditPinjaman from "./Component/Pages/Pinjam/EditPinjaman";
+import EditSimpanan from "./Component/Pages/Simpan/EditSimpanan";
 
 export const AuthContext = createContext();
 
@@ -113,6 +118,11 @@ function App() {
           <Route exact path="/pinjamsementara" component={DaftarPinjamanSementara}/>
           <Route exact path="/kreditsementara" component={DaftarKreditSementara}/>
           <Route exact path="/editanggota/:id" component={EditAnggota} />
+          <Route exact path="/editbarang/:id" component={EditBarang} />
+          <Route exact path="/editkredit/:id" component={EditKredit} />
+          <Route exact path="/editpenjualan/:id" component={EditPenjualan} />
+          <Route exact path="/editpinjaman/:id" component={EditPinjaman} />
+          <Route exact path="/editsimpanan/:id" component={EditSimpanan} />
           <Route exact path="/tambahanggota" component={TambahAnggota} />
           <Route exact path="/tambahkredit" component={TambahKredit} />
           <Route exact path="/tambahpenjualan" component={TambahPenjualan} />

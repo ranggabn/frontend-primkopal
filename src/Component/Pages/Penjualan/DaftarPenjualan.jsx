@@ -7,7 +7,7 @@ import { Redirect } from "react-router";
 
 const api = "http://localhost:3001";
 
-export default function DaftarPenjualan() {
+export default function DaftarPenjualan(props) {
   const [mahasiswa, setMahasiswa] = useState([]);
   const { state } = useContext(AuthContext);
 
@@ -28,6 +28,11 @@ export default function DaftarPenjualan() {
       const newData = mahasiswa.filter(mahasiswa => mahasiswa.id_mahasiswa !== id)
       setMahasiswa(newData)
     }).catch(err=>console.error(err))
+  }
+
+  function update(id) {
+    console.log(id);
+    props.history.push("/editpenjualan/"+id)
   }
 
   if(!state.isAuthenticated){
@@ -67,6 +72,12 @@ export default function DaftarPenjualan() {
               <td>{mahasiswa.nama}</td>
               <td>{mahasiswa.jurusan}</td>
               <td>
+              <Button
+                  color="secondary"
+                  onClick={() => update(mahasiswa.id_mahasiswa)}
+                >
+                  Edit
+                </Button>
                 <span> </span>
                 <Button color="danger" onClick={() => remove(mahasiswa.id_mahasiswa)}>Hapus</Button>
               </td>

@@ -16,7 +16,7 @@ import { AuthContext } from "../../../App";
 
 const api = "http://localhost:3001";
 
-export default function EditAnggota(props) {
+export default function EditSimpanan(props) {
   let { id } = useParams();
   const [mahasiswa, setMahasiswa] = useState([]);
   const [data, setData] = useState({
@@ -40,7 +40,7 @@ export default function EditAnggota(props) {
     e.preventDefault()
     await axios.put(api + "/edit", data).catch((err) => console.error(err));
     setMahasiswa(data);
-    props.history.push("/daftaranggota")
+    props.history.push("/daftarsimpanan")
   };
 
   const handle = (name) => (e) => {
@@ -54,7 +54,7 @@ export default function EditAnggota(props) {
   }
   return (
     <Container className="mt-5">
-      <h4>Formulir Edit Data Anggota</h4>
+      <h4>Formulir Edit Data Simpanan</h4>
       <hr />
       {/* <Alert color="info" isOpen={visible} toggle={onDismiss}>
         Berhasil Diubah!
@@ -108,7 +108,7 @@ export default function EditAnggota(props) {
                     <Button
                       className="fa fa-chevron-left mt-3"
                       type="button"
-                      href="/daftaranggota"
+                      href="/daftarsimpanan"
                     >
                       {" "}
                       Kembali{" "}

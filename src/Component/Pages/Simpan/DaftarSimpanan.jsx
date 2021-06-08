@@ -3,10 +3,11 @@ import { Container, Button, Table } from "reactstrap";
 import axios from "axios";
 import qs from 'querystring'
 import { AuthContext } from "../../../App";
+import { Redirect } from "react-router";
 
 const api = "http://localhost:3001";
 
-export default function DaftarSimpanan() {
+export default function DaftarSimpanan(props) {
   const [mahasiswa, setMahasiswa] = useState([]);
 
   useEffect(() => {
@@ -28,6 +29,16 @@ export default function DaftarSimpanan() {
     }).catch(err=>console.error(err))
   }
 
+  function update(id) {
+    console.log(id);
+    props.history.push("/editsimpanan/"+id)
+  }
+
+  const { state } = useContext(AuthContext);
+  
+  if(!state.isAuthenticated){
+    return <Redirect to="/masuk"/>
+  }
   return (
     <Container className="mt-5">
       <h2>DAFTAR SIMPANAN</h2>
@@ -66,6 +77,12 @@ export default function DaftarSimpanan() {
               <td>{mahasiswa.nama}</td>
               <td>{mahasiswa.jurusan}</td>
               <td>
+              <Button
+                  color="secondary"
+                  onClick={() => update(mahasiswa.id_mahasiswa)}
+                >
+                  Edit
+                </Button>
                 <span> </span>
                 <Button color="danger" onClick={() => remove(mahasiswa.id_mahasiswa)}>Hapus</Button>
               </td>
