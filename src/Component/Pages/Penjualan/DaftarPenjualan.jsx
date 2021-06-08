@@ -3,11 +3,13 @@ import { Container, Button, Table } from "reactstrap";
 import axios from "axios";
 import qs from 'querystring'
 import { AuthContext } from "../../../App";
+import { Redirect } from "react-router";
 
 const api = "http://localhost:3001";
 
 export default function DaftarPenjualan() {
   const [mahasiswa, setMahasiswa] = useState([]);
+  const { state } = useContext(AuthContext);
 
   useEffect(() => {
     axios.get(api + "/tampil").then((res) => {
@@ -28,10 +30,20 @@ export default function DaftarPenjualan() {
     }).catch(err=>console.error(err))
   }
 
+  if(!state.isAuthenticated){
+    return <Redirect to="/masuk"/>
+  }
   return (
     <Container className="mt-5">
       <h2>DAFTAR PENJUALAN</h2>
       <hr />
+      <Button
+        color="success"
+        href="/tambahpenjualan"
+        className="mt-1 mb-3 float-right"
+      >
+        Tambah Penjualan
+      </Button>
       <Table className="table-bordered">
         <thead>
           <tr>

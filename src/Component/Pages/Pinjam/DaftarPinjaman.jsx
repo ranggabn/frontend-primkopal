@@ -32,6 +32,13 @@ export default function DaftarPenjualan() {
     <Container className="mt-5">
       <h2>DAFTAR PINJAMAN</h2>
       <hr />
+      <Button
+        color="success"
+        href="/tambahpinjaman"
+        className="mt-1 mb-3 float-right"
+      >
+        Tambah Data Pinjaman
+      </Button>
       <Table className="table-bordered">
         <thead>
           <tr>

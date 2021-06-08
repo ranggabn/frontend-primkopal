@@ -38,6 +38,13 @@ export default function DaftarBarang() {
     <Container className="mt-5">
       <h2>DAFTAR BARANG</h2>
       <hr />
+      <Button
+        color="success"
+        href="/tambahbarang"
+        className="mt-1 mb-3 float-right"
+      >
+        Tambah Barang
+      </Button>
       <Table className="table-bordered">
         <thead>
           <tr>

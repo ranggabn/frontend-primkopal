@@ -32,6 +32,13 @@ export default function DaftarKredit() {
     <Container className="mt-5">
       <h2>DAFTAR KREDIT</h2>
       <hr />
+      <Button
+        color="success"
+        href="/tambahkredit"
+        className="mt-1 mb-3 float-right"
+      >
+        Tambah Data Kredit
+      </Button>
       <Table className="table-bordered">
         <thead>
           <tr>

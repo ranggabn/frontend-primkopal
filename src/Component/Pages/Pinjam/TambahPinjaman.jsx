@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import {
   Container,
   Alert,
@@ -11,79 +11,52 @@ import {
   Input,
 } from "reactstrap";
 import axios from "axios";
-import { Redirect, useParams } from "react-router";
+import { Redirect } from "react-router";
 import { AuthContext } from "../../../App";
-import { useForm } from "react-hook-form";
-import qs from "querystring";
 
 const api = "http://localhost:3001";
 
-export default function EditAnggota(props) {
-  let { id } = useParams();
-  // const [userData, setUserData] = useState("");
-
-  // const onFinish = (values) => {
-  //   const body = {
-  //     id: id,
-  //     nim: values.nim,
-  //     nama: values.nama,
-  //     jurusan: values.jurusan,
-  //   };
-  //   console.log(body);
-  //   axios
-  //     .put(api + "/edit/", body)
-  //     .then((res) => {
-  //       props.history.push("/daftaranggota");
-  //       const myData = [visible];
-  //       setVisible(myData);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // };
-
+export default function TambahPinjaman() {
   const [mahasiswa, setMahasiswa] = useState([]);
   const [data, setData] = useState({
-    id: "",
     nim: "",
     nama: "",
     jurusan: "",
   });
 
+  const [visible, setVisible] = useState(false);
 
-  useEffect(() => {
-    async function getData() {
-      let response = await axios.get(api + "/tampil/" + id);
-      response = await response.data.values[0];
-      setData(response);
-    }
-    getData();
-  }, []);
+  const onDismiss = () => setVisible(false);
 
-  const submit = async (e) => {
-    e.preventDefault()
-    await axios.put(api + "/edit", data).catch((err) => console.error(err));
-    setMahasiswa(data);
-    props.history.push("/daftaranggota")
-  };
+  function submit(e) {
+    e.preventDefault();
+    axios.post(api + "/tambah", data).then((res) => {
+      console.log(res.data.values);
+      const myData = [...mahasiswa, res.data.values, visible];
+      setMahasiswa(myData);
+      setVisible(myData)
+    });
+  }
 
-  const handle = (name) => (e) => {
-    setData({ ...data, [name]: e.target.value });
-  };
+  function handle(e) {
+    const newData = { ...data };
+    newData[e.target.name] = e.target.value;
+    setData(newData);
+  }
 
   const { state } = useContext(AuthContext);
-
-  if (!state.isAuthenticated) {
-    return <Redirect to="/masuk" />;
+  
+  if(!state.isAuthenticated){
+    return <Redirect to="/masuk"/>
   }
   return (
     <Container className="mt-5">
       <h4>Formulir Tambah Data Anggota</h4>
       <hr />
-      {/* <Alert color="info" isOpen={visible} toggle={onDismiss}>
-        Berhasil Diubah!
-      </Alert> */}
-      <Form className="form" onSubmit={submit}>
+      <Alert color="info" isOpen={visible} toggle={onDismiss}>
+        Berhasil Ditambahkan!
+      </Alert>
+      <Form className="form" onSubmit={(e) => submit(e)}>
         <Col>
           <Label>NIM</Label>
           <FormGroup>
@@ -93,7 +66,8 @@ export default function EditAnggota(props) {
                   type="text"
                   name="nim"
                   value={data.nim}
-                  onChange={handle("nim")}
+                  onChange={(e) => handle(e)}
+                  placeholder="Masukkan NIM"
                 />
               </Col>
             </Row>
@@ -106,7 +80,8 @@ export default function EditAnggota(props) {
                   type="text"
                   name="nama"
                   value={data.nama}
-                  onChange={handle("nama")}
+                  onChange={(e) => handle(e)}
+                  placeholder="Masukkan Nama"
                 />
               </Col>
             </Row>
@@ -119,7 +94,8 @@ export default function EditAnggota(props) {
                   type="text"
                   name="jurusan"
                   value={data.jurusan}
-                  onChange={handle("jurusan")}
+                  onChange={(e) => handle(e)}
+                  placeholder="Masukkan Jurusan"
                 />
               </Col>
             </Row>
@@ -149,7 +125,7 @@ export default function EditAnggota(props) {
                       color="primary"
                       className="mt-3 float-right"
                       type="button"
-                      onClick={submit}
+                      onClick={(e) => submit(e)}
                     >
                       {" "}
                       Simpan{" "}

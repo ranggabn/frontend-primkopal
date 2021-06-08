@@ -13,6 +13,7 @@ import {
 import axios from "axios";
 import { Redirect } from "react-router";
 import { AuthContext } from "../../../App";
+import { useForm } from "react-hook-form";
 
 const api = "http://localhost:3001";
 
@@ -28,15 +29,15 @@ export default function TambahAnggota() {
 
   const onDismiss = () => setVisible(false);
 
-  function submit(e) {
+  const submit = async (e) => {
     e.preventDefault();
     axios.post(api + "/tambah", data).then((res) => {
       console.log(res.data.values);
       const myData = [...mahasiswa, res.data.values, visible];
       setMahasiswa(myData);
-      setVisible(myData)
+      setVisible(myData);
     });
-  }
+  };
 
   function handle(e) {
     const newData = { ...data };
@@ -44,11 +45,11 @@ export default function TambahAnggota() {
     setData(newData);
   }
 
-//   const { state } = useContext(AuthContext);
-  
-//   if(!state.isAuthenticated){
-//     return <Redirect to="/masuk"/>
-//   }
+  const { state } = useContext(AuthContext);
+
+  if (!state.isAuthenticated) {
+    return <Redirect to="/masuk" />;
+  }
   return (
     <Container className="mt-5">
       <h4>Formulir Tambah Data Anggota</h4>
@@ -56,18 +57,18 @@ export default function TambahAnggota() {
       <Alert color="info" isOpen={visible} toggle={onDismiss}>
         Berhasil Ditambahkan!
       </Alert>
-      <Form className="form" onSubmit={(e) => submit(e)}>
+      <Form className="form" onSubmit={submit}>
         <Col>
           <Label>NIM</Label>
           <FormGroup>
             <Row>
               <Col>
-                <Input
+                <Input                  
                   type="text"
                   name="nim"
                   value={data.nim}
                   onChange={(e) => handle(e)}
-                  placeholder="Masukkan NIM"
+                  placeholder="Masukkan NIM"                  
                 />
               </Col>
             </Row>
@@ -77,7 +78,7 @@ export default function TambahAnggota() {
             <Row>
               <Col>
                 <Input
-                  type="text"
+                  type="tex"
                   name="nama"
                   value={data.nama}
                   onChange={(e) => handle(e)}

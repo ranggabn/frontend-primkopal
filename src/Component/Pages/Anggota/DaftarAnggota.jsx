@@ -7,7 +7,7 @@ import { Redirect } from "react-router";
 
 const api = "http://localhost:3001";
 
-export default function DaftarAnggota() {
+export default function DaftarAnggota(props) {
 
   const [mahasiswa, setMahasiswa] = useState([]);
 
@@ -35,6 +35,11 @@ export default function DaftarAnggota() {
       .catch((err) => console.error(err));
   }
 
+  function update(id) {
+    console.log(id);
+    props.history.push("/editanggota/"+id)
+  }
+
   const { state } = useContext(AuthContext);
   
   if(!state.isAuthenticated){
@@ -55,7 +60,7 @@ export default function DaftarAnggota() {
       <Table className="table-bordered">
         <thead>
           <tr>
-            <th colspan="5" className="text-center" bgcolor="#BABABA">
+            <th colSpan="5" className="text-center" bgcolor="#BABABA">
               <h5>
                 <b>Rincian Data Anggota</b>
               </h5>
@@ -79,6 +84,7 @@ export default function DaftarAnggota() {
               <td>
                 <Button
                   color="secondary"
+                  onClick={() => update(mahasiswa.id_mahasiswa)}
                 >
                   Edit
                 </Button>

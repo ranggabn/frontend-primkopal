@@ -32,6 +32,13 @@ export default function DaftarSimpanan() {
     <Container className="mt-5">
       <h2>DAFTAR SIMPANAN</h2>
       <hr />
+      <Button
+        color="success"
+        href="/tambahsimpanan"
+        className="mt-1 mb-3 float-right"
+      >
+        Tambah Data Simpanan
+      </Button>
       <Table className="table-bordered">
         <thead>
           <tr>

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../../App";
 import MenuAdmin from "./MenuAdmin";
 import MenuMember from "./MenuMember";
@@ -8,13 +8,24 @@ import MenuStaff from "./MenuStaff";
 export default function MenuComp() {
   const { state } = useContext(AuthContext);
 
+  const [user, setUser] = useState({});
+
+  useEffect(() => {
+    const loggedInUser = state.user
+    if (loggedInUser) {
+      const foundUser = JSON.stringify(loggedInUser);
+      setUser(foundUser);
+    } 
+  }, []);
+
   if (!state.isAuthenticated) {
     return <MenuPublik />;
   }
-  if (state.role === 1) {
+  if (user && state.role == 1) {
     return <MenuAdmin />;
-  }else if(state.role === 2){
-    return <MenuStaff />
+  }if (user && state.role == 2) {
+    return <MenuStaff />;
+  }if (user && state.role == 3) {
+    return <MenuMember />;
   }
-  return <MenuMember />;
 }

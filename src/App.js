@@ -33,15 +33,20 @@ import DaftarPinjamanSementara from "./Component/Pages/Pinjam/DaftarPinjamanSeme
 import DaftarKreditSementara from "./Component/Pages/Kredit/DaftarKreditSementara";
 import EditAnggota from "./Component/Pages/Anggota/EditAnggota";
 import TambahAnggota from "./Component/Pages/Anggota/TambahAnggota";
+import TambahKredit from "./Component/Pages/Kredit/TambahKredit";
+import TambahPenjualan from "./Component/Pages/Penjualan/TambahPenjualan";
+import TambahBarang from "./Component/Pages/Barang/TambahBarang";
+import TambahPinjaman from "./Component/Pages/Pinjam/TambahPinjaman";
+import TambahSimpanan from "./Component/Pages/Simpan/TambahSimpanan";
 
 export const AuthContext = createContext();
 
 const initialState = {
-  isAuthenticated: false,
-  user: null,
-  token: null,
+  isAuthenticated: localStorage.getItem("token"),
+  user: localStorage.getItem("user"),
+  token: localStorage.getItem("token"),
   tokenExpires: 0,
-  role: 0
+  role: localStorage.getItem("role"),
 };
 
 const reducer = (state, action) => {
@@ -49,36 +54,39 @@ const reducer = (state, action) => {
     case "LOGIN":
       localStorage.setItem("user", JSON.stringify(action.payload.user));
       localStorage.setItem("token", JSON.stringify(action.payload.token));
+      localStorage.setItem("role", JSON.stringify(action.payload.role));
       return {
         ...state,
         isAuthenticated: true,
         user: action.payload.user,
         token: action.payload.token,
         tokenExpires: action.payload.expires,
-        role: action.payload.role
+        role: action.payload.role,
       };
     case "LOGOUT":
       localStorage.clear();
       return {
         ...state,
         isAuthenticated: false,
-        user: null
+        user: null,
+        token: null,
       };
-      default: return state
+    default: return state;
   }
 };
 
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
+
   return (
     <BrowserRouter>
       <Switch>
         <AuthContext.Provider value={{ state, dispatch }}>
-          <MenuComp/>
+          <MenuComp />
           {/* {!state.isAuthenticated ? <Redirect to={{ pathname: "/Login" }} /> :  <Redirect to={{ pathname: "/Home" }} />} */}
 
           <Route exact path="/" component={Home} />
-          <Route exact path="/Home" component={HomeComp}/>
+          <Route exact path="/Home" component={HomeComp} />
           <Route exact path="/Register" component={Register} />
           <Route exact path="/visimisi" component={Visimisi} />
           <Route exact path="/kredit" component={Kredit1} />
@@ -102,11 +110,15 @@ function App() {
           <Route exact path="/daftarsimpanan" component={DaftarSimpanan} />
           <Route exact path="/daftarkredit" component={DaftarKredit} />
           <Route exact path="/daftarpenjualan" component={DaftarPenjualan} />
-          <Route exact path="/pinjamsementara" component={DaftarPinjamanSementara} />
-          <Route exact path="/kreditsementara" component={DaftarKreditSementara} />
+          <Route exact path="/pinjamsementara" component={DaftarPinjamanSementara}/>
+          <Route exact path="/kreditsementara" component={DaftarKreditSementara}/>
           <Route exact path="/editanggota/:id" component={EditAnggota} />
           <Route exact path="/tambahanggota" component={TambahAnggota} />
-
+          <Route exact path="/tambahkredit" component={TambahKredit} />
+          <Route exact path="/tambahpenjualan" component={TambahPenjualan} />
+          <Route exact path="/tambahbarang" component={TambahBarang} />
+          <Route exact path="/tambahpinjaman" component={TambahPinjaman} />
+          <Route exact path="/tambahsimpanan" component={TambahSimpanan} />
         </AuthContext.Provider>
       </Switch>
       <Footer />
