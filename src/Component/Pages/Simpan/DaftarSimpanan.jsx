@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Container, Button, Table } from "reactstrap";
+import { Container, Button, Table, Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from "reactstrap";
 import axios from "axios";
 import qs from 'querystring'
 import { AuthContext } from "../../../App";
@@ -8,24 +8,27 @@ import { Redirect } from "react-router";
 const api = "http://localhost:3001";
 
 export default function DaftarSimpanan(props) {
-  const [mahasiswa, setMahasiswa] = useState([]);
+  const { state } = useContext(AuthContext);
+  const [simpanan, setSimpanan] = useState([]);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const toggle = () => setDropdownOpen((prevState) => !prevState);
 
   useEffect(() => {
-    axios.get(api + "/tampil").then((res) => {
-      setMahasiswa(res.data.values);
+    axios.get(api + "/tampilSimpanan").then((res) => {
+      setSimpanan(res.data.values);
     });
   }, []);
 
   function remove(id) {
     // console.log(id);
-    const data = qs.stringify({id_mahasiswa: id})
-    axios.delete(api+"/hapus", {
+    const data = qs.stringify({id_simpanan: id})
+    axios.delete(api+"/hapusSimpanan", {
       data: data,
       headers: { "Content-type": "application/x-www-form-urlencoded" }
     }).then(res => {
       console.log(res.data.values);
-      const newData = mahasiswa.filter(mahasiswa => mahasiswa.id_mahasiswa !== id)
-      setMahasiswa(newData)
+      const newData = simpanan.filter(simpanan => simpanan.id_simpanan !== id)
+      setSimpanan(newData)
     }).catch(err=>console.error(err))
   }
 
@@ -34,7 +37,6 @@ export default function DaftarSimpanan(props) {
     props.history.push("/editsimpanan/"+id)
   }
 
-  const { state } = useContext(AuthContext);
   
   if(!state.isAuthenticated){
     return <Redirect to="/masuk"/>
@@ -43,19 +45,26 @@ export default function DaftarSimpanan(props) {
     <Container className="mt-5">
       <h2>DAFTAR SIMPANAN</h2>
       <hr />
-      <Button
-        color="success"
-        href="/tambahsimpanan"
-        className="mt-1 mb-3 float-right"
-      >
-        Tambah Data Simpanan
-      </Button>
       <Table className="table-bordered">
         <thead>
           <tr>
             <th colspan="6" className="text-center" bgcolor="#BABABA">
               <h5>
                 <b>Rincian Simpanan Anggota</b>
+                <Dropdown
+                  group
+                  size="sm"
+                  className="float-right"
+                  isOpen={dropdownOpen}
+                  toggle={toggle}
+                >
+                  <DropdownToggle caret>Urutkan Berdasarkan</DropdownToggle>
+                  <DropdownMenu>
+                    <DropdownItem>Tanggal</DropdownItem>
+                    <DropdownItem>Nama</DropdownItem>
+                    <DropdownItem>NRP / NIP</DropdownItem>
+                  </DropdownMenu>
+                </Dropdown>
               </h5>
             </th>
           </tr>
@@ -64,27 +73,27 @@ export default function DaftarSimpanan(props) {
             <th>Nama</th>
             <th>NRP / NIP</th>
             <th>Jumlah Simpanan</th>
-            <th>Bukti Transfer</th>
+            <th>Terbilang</th>
             <th>Keterangan</th>
           </tr>
         </thead>
         <tbody>
-          {mahasiswa.map((mahasiswa) => (
-            <tr key={mahasiswa.id_mahasiswa}>
-              <td>{mahasiswa.nim}</td>
-              <td>{mahasiswa.nama}</td>
-              <td>{mahasiswa.nama}</td>
-              <td>{mahasiswa.nama}</td>
-              <td>{mahasiswa.jurusan}</td>
+          {simpanan.map((simpanan) => (
+            <tr key={simpanan.id_simpanan}>
+              <td>{simpanan.tanggal_simpan}</td>
+              <td>{simpanan.username}</td>
+              <td>{simpanan.id_user}</td>
+              <td>{simpanan.jumlah_simpanan}</td>
+              <td>{simpanan.terbilang}</td>
               <td>
               <Button
                   color="secondary"
-                  onClick={() => update(mahasiswa.id_mahasiswa)}
+                  onClick={() => update(simpanan.id_simpanan)}
                 >
-                  Edit
+                  Detail
                 </Button>
                 <span> </span>
-                <Button color="danger" onClick={() => remove(mahasiswa.id_mahasiswa)}>Hapus</Button>
+                <Button color="danger" onClick={() => remove(simpanan.id_simpanan)}>Hapus</Button>
               </td>
             </tr>
           ))}

@@ -52,6 +52,7 @@ const initialState = {
   token: localStorage.getItem("token"),
   tokenExpires: 0,
   role: localStorage.getItem("role"),
+  id: localStorage.getItem("id")
 };
 
 const reducer = (state, action) => {
@@ -60,6 +61,7 @@ const reducer = (state, action) => {
       localStorage.setItem("user", JSON.stringify(action.payload.user));
       localStorage.setItem("token", JSON.stringify(action.payload.token));
       localStorage.setItem("role", JSON.stringify(action.payload.role));
+      localStorage.setItem("id", JSON.stringify(action.payload.id));
       return {
         ...state,
         isAuthenticated: true,
@@ -67,6 +69,7 @@ const reducer = (state, action) => {
         token: action.payload.token,
         tokenExpires: action.payload.expires,
         role: action.payload.role,
+        id: action.payload.id
       };
     case "LOGOUT":
       localStorage.clear();

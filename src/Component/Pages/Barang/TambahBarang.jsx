@@ -70,7 +70,7 @@ export default function TambahBarang() {
   }
   return (
     <Container className="mt-5">
-      <h4>Formulir Tambah Data Anggota</h4>
+      <h4>Formulir Tambah Data Barang</h4>
       <hr />
       <Form className="form" onSubmit={(e) => submit(e)}>
         <Col>

@@ -25,7 +25,6 @@ export default function TambahSimpanan() {
   });
 
   const [visible, setVisible] = useState(false);
-
   const onDismiss = () => setVisible(false);
 
   function submit(e) {

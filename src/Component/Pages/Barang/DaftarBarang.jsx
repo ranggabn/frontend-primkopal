@@ -1,5 +1,13 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Container, Button, Table } from "reactstrap";
+import {
+  Container,
+  Button,
+  Table,
+  Dropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem
+} from "reactstrap";
 import axios from "axios";
 import qs from "querystring";
 import { AuthContext } from "../../../App";
@@ -9,6 +17,9 @@ const api = "http://localhost:3001";
 
 export default function DaftarBarang(props) {
   const [barang, setbarang] = useState([]);
+  const { state } = useContext(AuthContext);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const toggle = () => setDropdownOpen((prevState) => !prevState);
 
   useEffect(() => {
     axios.get(api + "/tampilBarang").then((res) => {
@@ -18,23 +29,24 @@ export default function DaftarBarang(props) {
 
   function remove(id) {
     // console.log(id);
-    const data = qs.stringify({id_barang: id})
-    axios.delete(api+"/hapusBarang", {
-      data: data,
-      headers: { "Content-type": "application/x-www-form-urlencoded" }
-    }).then(res => {
-      console.log(res.data.values);
-      const newData = barang.filter(barang => barang.id_barang !== id)
-      setbarang(newData)
-    }).catch(err=>console.error(err))
+    const data = qs.stringify({ id_barang: id });
+    axios
+      .delete(api + "/hapusBarang", {
+        data: data,
+        headers: { "Content-type": "application/x-www-form-urlencoded" },
+      })
+      .then((res) => {
+        console.log(res.data.values);
+        const newData = barang.filter((barang) => barang.id_barang !== id);
+        setbarang(newData);
+      })
+      .catch((err) => console.error(err));
   }
 
   function update(id) {
     console.log(id);
     props.history.push("/editbarang/" + id);
   }
-
-  const { state } = useContext(AuthContext);
 
   if (!state.isAuthenticated) {
     return <Redirect to="/masuk" />;
@@ -56,6 +68,21 @@ export default function DaftarBarang(props) {
             <th colSpan="6" className="text-center" bgcolor="#BABABA">
               <h5>
                 <b>Rincian Data Barang</b>
+                <Dropdown
+                  group
+                  size="sm"
+                  className="float-right"
+                  isOpen={dropdownOpen}
+                  toggle={toggle}
+                >
+                  <DropdownToggle caret>Urutkan Berdasarkan</DropdownToggle>
+                  <DropdownMenu>
+                    <DropdownItem>Nama</DropdownItem>
+                    <DropdownItem>Harga</DropdownItem>
+                    <DropdownItem>Kategori</DropdownItem>
+                    <DropdownItem>Status</DropdownItem>
+                  </DropdownMenu>
+                </Dropdown>
               </h5>
             </th>
           </tr>
@@ -84,10 +111,7 @@ export default function DaftarBarang(props) {
                   Edit
                 </Button>
                 <span> </span>
-                <Button
-                  color="danger"
-                  onClick={() => remove(barang.id_barang)}
-                >
+                <Button color="danger" onClick={() => remove(barang.id_barang)}>
                   Hapus
                 </Button>
               </td>
