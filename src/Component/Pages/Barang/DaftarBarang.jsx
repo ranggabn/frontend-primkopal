@@ -1,43 +1,43 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Container, Button, Table } from "reactstrap";
 import axios from "axios";
-import qs from 'querystring'
+import qs from "querystring";
 import { AuthContext } from "../../../App";
 import { Redirect } from "react-router";
 
 const api = "http://localhost:3001";
 
 export default function DaftarBarang(props) {
-  const [mahasiswa, setMahasiswa] = useState([]);
+  const [barang, setbarang] = useState([]);
 
   useEffect(() => {
-    axios.get(api + "/tampil").then((res) => {
-      setMahasiswa(res.data.values);
+    axios.get(api + "/tampilBarang").then((res) => {
+      setbarang(res.data.values);
     });
   }, []);
 
   function remove(id) {
     // console.log(id);
-    const data = qs.stringify({id_mahasiswa: id})
-    axios.delete(api+"/hapus", {
+    const data = qs.stringify({id_barang: id})
+    axios.delete(api+"/hapusBarang", {
       data: data,
       headers: { "Content-type": "application/x-www-form-urlencoded" }
     }).then(res => {
       console.log(res.data.values);
-      const newData = mahasiswa.filter(mahasiswa => mahasiswa.id_mahasiswa !== id)
-      setMahasiswa(newData)
+      const newData = barang.filter(barang => barang.id_barang !== id)
+      setbarang(newData)
     }).catch(err=>console.error(err))
   }
 
   function update(id) {
     console.log(id);
-    props.history.push("/editbarang/"+id)
+    props.history.push("/editbarang/" + id);
   }
 
   const { state } = useContext(AuthContext);
-  
-  if(!state.isAuthenticated){
-    return <Redirect to="/masuk"/>
+
+  if (!state.isAuthenticated) {
+    return <Redirect to="/masuk" />;
   }
   return (
     <Container className="mt-5">
@@ -53,7 +53,7 @@ export default function DaftarBarang(props) {
       <Table className="table-bordered">
         <thead>
           <tr>
-            <th colspan="4" className="text-center" bgcolor="#BABABA">
+            <th colSpan="6" className="text-center" bgcolor="#BABABA">
               <h5>
                 <b>Rincian Data Barang</b>
               </h5>
@@ -63,24 +63,33 @@ export default function DaftarBarang(props) {
             <th>Nama Barang</th>
             <th>Harga</th>
             <th>Keterangan</th>
+            <th>Kategori</th>
             <th>Status</th>
+            <th>Aksi</th>
           </tr>
         </thead>
         <tbody>
-          {mahasiswa.map((mahasiswa) => (
-            <tr key={mahasiswa.id_mahasiswa}>
-              <td>{mahasiswa.nim}</td>
-              <td>{mahasiswa.nama}</td>
-              <td>{mahasiswa.jurusan}</td>
+          {barang.map((barang) => (
+            <tr key={barang.id_barang}>
+              <td>{barang.nama}</td>
+              <td>{barang.harga}</td>
+              <td>{barang.keterangan}</td>
+              <td>{barang.kategori_barang}</td>
+              <td>{barang.status_barang}</td>
               <td>
-              <Button
+                <Button
                   color="secondary"
-                  onClick={() => update(mahasiswa.id_mahasiswa)}
+                  onClick={() => update(barang.id_barang)}
                 >
                   Edit
                 </Button>
                 <span> </span>
-                <Button color="danger" onClick={() => remove(mahasiswa.id_mahasiswa)}>Hapus</Button>
+                <Button
+                  color="danger"
+                  onClick={() => remove(barang.id_barang)}
+                >
+                  Hapus
+                </Button>
               </td>
             </tr>
           ))}

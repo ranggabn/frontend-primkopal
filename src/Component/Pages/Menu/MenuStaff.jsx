@@ -41,7 +41,7 @@ export default function MenuStaff() {
             </NavItem>
           </Nav>
           <NavbarText>
-            <Button href="/" onClick={() => dispatch({ type: "LOGOUT" })}>Keluar</Button>
+            <Button href="/masuk" onClick={() => dispatch({ type: "LOGOUT" })}>Keluar</Button>
           </NavbarText>
         </Collapse>
       </Navbar>

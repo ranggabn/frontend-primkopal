@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {
   Container,
   Alert,
@@ -17,61 +17,63 @@ import { AuthContext } from "../../../App";
 const api = "http://localhost:3001";
 
 export default function TambahBarang() {
-  const [mahasiswa, setMahasiswa] = useState([]);
+  const [barang, setBarang] = useState([]);
   const [data, setData] = useState({
-    nim: "",
     nama: "",
-    jurusan: "",
+    harga: "",
+    gambar: "",
+    keterangan: "",
+    id_kategori: "",
+    id_status: "",
   });
 
-  const [visible, setVisible] = useState(false);
+  const [statusSelect, setStatusSelect] = useState([]);
+  useEffect(() => {
+    axios.get(api + "/tampilStatus").then((res) => {
+      setStatusSelect(res.data.values);
+    });
+  }, []);
+  const ss = statusSelect.map((ss) => ss);
 
+  const [kategoriSelect, setkategoriSelect] = useState([]);
+  useEffect(() => {
+    axios.get(api + "/tampilKategori").then((res) => {
+      setkategoriSelect(res.data.values);
+    });
+  }, []);
+  const ks = kategoriSelect.map((ks) => ks);
+
+  const [visible, setVisible] = useState(false);
   const onDismiss = () => setVisible(false);
 
   function submit(e) {
     e.preventDefault();
-    axios.post(api + "/tambah", data).then((res) => {
+    axios.post(api + "/tambahBarang", data).then((res) => {
       console.log(res.data.values);
-      const myData = [...mahasiswa, res.data.values, visible];
-      setMahasiswa(myData);
-      setVisible(myData)
+      const myData = [...barang, res.data.values, visible];
+      setBarang(myData);
+      setVisible(myData);
     });
   }
 
   function handle(e) {
+    e.preventDefault()
     const newData = { ...data };
     newData[e.target.name] = e.target.value;
     setData(newData);
   }
 
   const { state } = useContext(AuthContext);
-  
-  if(!state.isAuthenticated){
-    return <Redirect to="/masuk"/>
+
+  if (!state.isAuthenticated) {
+    return <Redirect to="/masuk" />;
   }
   return (
     <Container className="mt-5">
       <h4>Formulir Tambah Data Anggota</h4>
       <hr />
-      <Alert color="info" isOpen={visible} toggle={onDismiss}>
-        Berhasil Ditambahkan!
-      </Alert>
       <Form className="form" onSubmit={(e) => submit(e)}>
         <Col>
-          <Label>NIM</Label>
-          <FormGroup>
-            <Row>
-              <Col>
-                <Input
-                  type="text"
-                  name="nim"
-                  value={data.nim}
-                  onChange={(e) => handle(e)}
-                  placeholder="Masukkan NIM"
-                />
-              </Col>
-            </Row>
-          </FormGroup>
           <Label>Nama</Label>
           <FormGroup>
             <Row>
@@ -81,25 +83,100 @@ export default function TambahBarang() {
                   name="nama"
                   value={data.nama}
                   onChange={(e) => handle(e)}
-                  placeholder="Masukkan Nama"
+                  placeholder="Nama Barang"
                 />
               </Col>
             </Row>
           </FormGroup>
-          <Label>Jurusan</Label>
+          <Label>Harga</Label>
           <FormGroup>
             <Row>
               <Col>
                 <Input
-                  type="text"
-                  name="jurusan"
-                  value={data.jurusan}
+                  type="number"
+                  name="harga"
+                  value={data.harga}
                   onChange={(e) => handle(e)}
-                  placeholder="Masukkan Jurusan"
+                  placeholder="Harga Barang"
                 />
               </Col>
             </Row>
           </FormGroup>
+          <Label>Keterangan</Label>
+          <FormGroup>
+            <Row>
+              <Col>
+                <Input
+                  type="textarea"
+                  name="keterangan"
+                  value={data.keterangan}
+                  onChange={(e) => handle(e)}
+                  placeholder="Keterangan Barang"
+                />
+              </Col>
+            </Row>
+          </FormGroup>
+          <Label>Kategori</Label>
+          <FormGroup>
+            <Row>
+              <Col>
+                <Input
+                  type="select"
+                  name="id_kategori"
+                  value={data.id_kategori}
+                  onChange={(e) => handle(e)}
+                >
+                  <option value="" disabled selected>
+                    Pilih Kategori
+                  </option>
+                  {ks.map((ks, key) => (
+                    <option key={key} value={ks.id}>
+                      {ks.kategori_barang}
+                    </option>
+                  ))}
+                </Input>
+              </Col>
+            </Row>
+          </FormGroup>
+          <Label>Status</Label>
+          <FormGroup>
+            <Row>
+              <Col>
+                <Input
+                  type="select"
+                  name="id_status"
+                  value={data.id_status}
+                  onChange={(e) => handle(e)}
+                >
+                  <option value="" disabled selected>
+                    Pilih Status
+                  </option>
+                  {ss.map((ss, key) => (
+                    <option key={key} value={ss.id_status}>
+                      {ss.status_barang}
+                    </option>
+                  ))}
+                </Input>
+              </Col>
+            </Row>
+          </FormGroup>
+          <Label>Gambar</Label>
+          <FormGroup>
+            <Row>
+              <Col>
+                <Input
+                  type="file"
+                  name="gambar"
+                  value={data.gambar}
+                  onChange={(e) => handle(e)}
+                  accept="image/*"
+                />
+              </Col>
+            </Row>
+          </FormGroup>
+          <Alert color="info" isOpen={visible} toggle={onDismiss}>
+            Berhasil Ditambahkan!
+          </Alert>
           <Row>
             <Col>
               <FormGroup>
@@ -108,7 +185,7 @@ export default function TambahBarang() {
                     <Button
                       className="fa fa-chevron-left mt-3"
                       type="button"
-                      href="/daftaranggota"
+                      href="/daftarbarang"
                     >
                       {" "}
                       Kembali{" "}

@@ -18,18 +18,35 @@ const api = "http://localhost:3001";
 
 export default function EditBarang(props) {
   let { id } = useParams();
-  const [mahasiswa, setMahasiswa] = useState([]);
+  const [barang, setbarang] = useState([]);
   const [data, setData] = useState({
     id: "",
-    nim: "",
     nama: "",
-    jurusan: "",
+    harga: "",
+    keterangan: "",
+    id_kategori: "",
+    id_status: "",
   });
 
+  const [statusSelect, setStatusSelect] = useState([]);
+  useEffect(() => {
+    axios.get(api + "/tampilStatus").then((res) => {
+      setStatusSelect(res.data.values);
+    });
+  }, []);
+  const ss = statusSelect.map((ss) => ss);
+
+  const [kategoriSelect, setkategoriSelect] = useState([]);
+  useEffect(() => {
+    axios.get(api + "/tampilKategori").then((res) => {
+      setkategoriSelect(res.data.values);
+    });
+  }, []);
+  const ks = kategoriSelect.map((ks) => ks);
 
   useEffect(() => {
     async function getData() {
-      let response = await axios.get(api + "/tampil/" + id);
+      let response = await axios.get(api + "/tampilBarang/" + id);
       response = await response.data.values[0];
       setData(response);
     }
@@ -38,8 +55,8 @@ export default function EditBarang(props) {
 
   const submit = async (e) => {
     e.preventDefault()
-    await axios.put(api + "/edit", data).catch((err) => console.error(err));
-    setMahasiswa(data);
+    await axios.put(api + "/ubahBarang", data).catch((err) => console.error(err));
+    setbarang(data);
     props.history.push("/daftarbarang")
   };
 
@@ -61,20 +78,7 @@ export default function EditBarang(props) {
       </Alert> */}
       <Form className="form" onSubmit={submit}>
         <Col>
-          <Label>NIM</Label>
-          <FormGroup>
-            <Row>
-              <Col>
-                <Input
-                  type="text"
-                  name="nim"
-                  value={data.nim}
-                  onChange={handle("nim")}
-                />
-              </Col>
-            </Row>
-          </FormGroup>
-          <Label>Nama</Label>
+          <Label>Nama Barang</Label>
           <FormGroup>
             <Row>
               <Col>
@@ -87,15 +91,72 @@ export default function EditBarang(props) {
               </Col>
             </Row>
           </FormGroup>
-          <Label>Jurusan</Label>
+          <Label>Harga</Label>
           <FormGroup>
             <Row>
               <Col>
                 <Input
-                  type="text"
-                  name="jurusan"
-                  value={data.jurusan}
-                  onChange={handle("jurusan")}
+                  type="number"
+                  name="harga"
+                  value={data.harga}
+                  onChange={handle("harga")}
+                />
+              </Col>
+            </Row>
+          </FormGroup>
+          <Label>Kategori</Label>
+          <FormGroup>
+            <Row>
+              <Col>
+                <Input
+                  type="select"
+                  name="id_kategori"
+                  value={data.id_kategori}
+                  onChange={handle("id_kategori")}
+                >
+                  <option value="" disabled selected>
+                    Pilih Kategori
+                  </option>
+                  {ks.map((ks, key) => (
+                    <option key={key} value={ks.id}>
+                      {ks.kategori_barang}
+                    </option>
+                  ))}
+                </Input>
+              </Col>
+            </Row>
+          </FormGroup>
+          <Label>Status</Label>
+          <FormGroup>
+            <Row>
+              <Col>
+                <Input
+                  type="select"
+                  name="id_status"
+                  value={data.id_status}
+                  onChange={handle("id_status")}
+                >
+                  <option value="" disabled selected>
+                    Pilih Status
+                  </option>
+                  {ss.map((ss, key) => (
+                    <option key={key} value={ss.id_status}>
+                      {ss.status_barang}
+                    </option>
+                  ))}
+                </Input>
+              </Col>
+            </Row>
+          </FormGroup>
+          <Label>Keterangan</Label>
+          <FormGroup>
+            <Row>
+              <Col>
+                <Input
+                  type="textarea"
+                  name="keterangan"
+                  value={data.keterangan}
+                  onChange={handle("keterangan")}
                 />
               </Col>
             </Row>

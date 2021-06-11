@@ -68,7 +68,7 @@ export default function MenuMember() {
               </NavItem>
             </Nav>
             <NavbarText>
-            <Button onClick={() => dispatch({ type: "LOGOUT" })} href="/">Keluar</Button>
+            <Button onClick={() => dispatch({ type: "LOGOUT" })} href="/masuk">Keluar</Button>
             </NavbarText>
           </Collapse>
         </Container>

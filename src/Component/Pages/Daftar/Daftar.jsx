@@ -1,4 +1,5 @@
-import React, { Component } from "react";
+import React from "react";
+import { useState } from "react";
 import {
   Container,
   Row,
@@ -7,190 +8,216 @@ import {
   Form,
   FormGroup,
   Input,
+  Alert,
   Label,
   Button,
 } from "reactstrap";
+import axios from 'axios'
 
-export default class Daftar extends Component {
-  constructor(props) {
-    super(props);
+const api = "http://localhost:3001";
 
-    this.state = {
-      nama: "",
-      nrp: "",
-      satker: "",
-      tempat_lahir: "",
-      tanggal_lahir: "",
-      nohp: "",
-      password: "",
-      password_ulang: "",
-      bukti_transfer: "",
-      response: "",
-      display: "none",
-    };
-  }
+export default function Daftar() {
+  const [user, setUser] = useState([]);
+  const [state, setState] = useState({
+    nama: "",
+    nrp: "",
+    satker: "",
+    tempat_lahir: "",
+    tanggal_lahir: "",
+    nomor_telefon: "",
+    password: "",
+    password_ulang: "",
+    bukti_transfer: "",
+  });
 
-  handleChange = (e) => {
-    this.setState({
-      [e.target.name]: e.target.value,
+  const [visible, setVisible] = useState(false);
+
+  const onDismiss = () => setVisible(false);
+
+  const submit = async (e) => {
+    e.preventDefault();
+    axios.post(api + "/registrasi", state).then((res) => {
+      console.log(res.data.values);
+      const myData = [...user, res.data.values, visible];
+      setUser(myData);
+      setVisible(myData);
     });
   };
 
-  render() {
-    return (
-      <Container className="mt-5">
+  function handle(e) {
+    const newData = { ...state };
+    newData[e.target.name] = e.target.value;
+    setState(newData);
+  }
+
+  return (
+    <Container className="mt-5">
+      <Row>
+        <Col>
+          <h3 className="text-center">
+            <b>DAFTAR ANGGOTA</b>
+          </h3>
+          <Alert color="info" isOpen={visible} toggle={onDismiss}>
+            Berhasil Ditambahkan!
+          </Alert>
+        </Col>
+      </Row>
+      <Card className="container mt-5">
         <Row>
           <Col>
-            <h3 className="text-center">
-              <b>DAFTAR ANGGOTA</b>
-            </h3>
-          </Col>
-        </Row>
-        <Card className="container mt-5">
-          <Row>
-            <Col>
-              <Form className="mt-4">
-                <Label>Nama Lengkap</Label>
-                <FormGroup>
-                  <Row>
-                    <Col>
-                      <Input
-                        type="text"
-                        name="nama"
-                        value={this.state.nama}
-                        onChange={this.handleChange}
-                      />
-                    </Col>
-                  </Row>
-                </FormGroup>
-                <Label>NRP / NIP</Label>
-                <FormGroup>
-                  <Row>
-                    <Col>
-                      <Input
-                        type="text"
-                        name="nrp"
-                        value={this.state.nrp}
-                        onChange={this.handleChange}
-                      />
-                    </Col>
-                  </Row>
-                </FormGroup>
+            <Form className="mt-4" onSubmit={submit}>
+              <Label>Nama Lengkap</Label>
+              <FormGroup>
                 <Row>
                   <Col>
-                    <Label>Tempat Lahir</Label>
-                    <FormGroup>
-                      <Row>
-                        <Col>
-                          <Input
-                            type="text"
-                            name="tempat_lahir"
-                            value={this.state.tempat_lahir}
-                            onChange={this.handleChange}
-                          />
-                        </Col>
-                      </Row>
-                    </FormGroup>
-                  </Col>
-                  <Col>
-                    <Label>Tanggal Lahir</Label>
-                    <FormGroup>
-                      <Row>
-                        <Col>
-                          <Input
-                            type="date"
-                            name="tanggal_lahir"
-                            value={this.state.tanggal_lahir}
-                            onChange={this.handleChange}
-                          />
-                        </Col>
-                      </Row>
-                    </FormGroup>
+                    <Input
+                      type="text"
+                      name="nama"
+                      value={state.nama}
+                      onChange={(e) => handle(e)}
+                    />
                   </Col>
                 </Row>
-                <Label>No. HP / Telefon</Label>
-                <FormGroup>
-                  <Row>
-                    <Col>
-                      <Input
-                        type="number"
-                        name="nohp"
-                        value={this.state.nohp}
-                        onChange={this.handleChange}
-                      />
-                    </Col>
-                  </Row>
-                </FormGroup>
-                <Label>Kata Sandi</Label>
-                <FormGroup>
-                  <Row>
-                    <Col>
-                      <Input
-                        type="text"
-                        name="password"
-                        value={this.state.password}
-                        onChange={this.handleChange}
-                      />
-                    </Col>
-                  </Row>
-                </FormGroup>
-                <Label>Ulangi Kata Sandi</Label>
-                <FormGroup>
-                  <Row>
-                    <Col>
-                      <Input
-                        type="text"
-                        name="password_ulang"
-                        value={this.state.password_ulang}
-                        onChange={this.handleChange}
-                      />
-                    </Col>
-                  </Row>
-                </FormGroup>
-                <hr />
-                <p className="text-center">UNTUK PENDAFTARAN ANGGOTA</p>
-                <p className="text-center">
-                  SILAHKAN MEMBAYAR IURAN WAJIB SEJUMLAH RP 10.000
-                </p>
-                <p className="text-center">
-                  PEMBAYARAN BISA DILAKUKAN DENGAN TRANSFER KE NOMOR REKENING
-                </p>
-                <p className="text-center">
-                  <b>34343241212341 BANK BTN (A.N PRIMKOPAL AAL SURABAYA)</b>
-                </p>
-                <hr />
-                <FormGroup>
-                  <Label for="bukti_transfer">Unggah Bukti Transfer</Label>
-                  <Input
-                    type="file"
-                    name="bukti_transfer"
-                    value={this.state.bukti_transfer}
-                    onChange={this.handleChange}
-                    accept="image/*"
-                  />
-                </FormGroup>
-                <hr />
-                <FormGroup>
-                  <Row>
-                    <Col>
-                      <Button
-                        color="primary"
-                        className="mt-3 float-right"
-                        type="button"
-                        onClick={this.addMahasiswa}
-                        href="/"
-                      >
-                        {" "}
-                        Daftar{" "}
-                      </Button>
-                    </Col>
-                  </Row>
-                </FormGroup>
-              </Form>
-            </Col>
-          </Row>
-        </Card>
-      </Container>
-    );
-  }
+              </FormGroup>
+              <Label>NRP / NIP</Label>
+              <FormGroup>
+                <Row>
+                  <Col>
+                    <Input
+                      type="text"
+                      name="nrp"
+                      value={state.nrp}
+                      onChange={(e) => handle(e)}
+                    />
+                  </Col>
+                </Row>
+              </FormGroup>
+              <Label>Satuan Kerja</Label>
+              <FormGroup>
+                <Row>
+                  <Col>
+                    <Input
+                      type="text"
+                      name="satker"
+                      value={state.satker}
+                      onChange={(e) => handle(e)}
+                    />
+                  </Col>
+                </Row>
+              </FormGroup>
+              <Row>
+                <Col>
+                  <Label>Tempat Lahir</Label>
+                  <FormGroup>
+                    <Row>
+                      <Col>
+                        <Input
+                          type="text"
+                          name="tempat_lahir"
+                          value={state.tempat_lahir}
+                          onChange={(e) => handle(e)}
+                        />
+                      </Col>
+                    </Row>
+                  </FormGroup>
+                </Col>
+                <Col>
+                  <Label>Tanggal Lahir</Label>
+                  <FormGroup>
+                    <Row>
+                      <Col>
+                        <Input
+                          type="date"
+                          name="tanggal_lahir"
+                          value={state.tanggal_lahir}
+                          onChange={(e) => handle(e)}
+                        />
+                      </Col>
+                    </Row>
+                  </FormGroup>
+                </Col>
+              </Row>
+              <Label>No. HP / Telefon</Label>
+              <FormGroup>
+                <Row>
+                  <Col>
+                    <Input
+                      type="number"
+                      name="nomor_telefon"
+                      value={state.nomor_telefon}
+                      onChange={(e) => handle(e)}
+                    />
+                  </Col>
+                </Row>
+              </FormGroup>
+              <Label>Kata Sandi</Label>
+              <FormGroup>
+                <Row>
+                  <Col>
+                    <Input
+                      type="password"
+                      name="password"
+                      value={state.password}
+                      onChange={(e) => handle(e)}
+                    />
+                  </Col>
+                </Row>
+              </FormGroup>
+              <Label>Ulangi Kata Sandi</Label>
+              <FormGroup>
+                <Row>
+                  <Col>
+                    <Input
+                      type="password"
+                      name="password_ulang"
+                      value={state.password_ulang}
+                      onChange={(e) => handle(e)}
+                    />
+                  </Col>
+                </Row>
+              </FormGroup>
+              <hr />
+              <p className="text-center">UNTUK PENDAFTARAN ANGGOTA</p>
+              <p className="text-center">
+                SILAHKAN MEMBAYAR IURAN WAJIB SEJUMLAH RP 10.000
+              </p>
+              <p className="text-center">
+                PEMBAYARAN BISA DILAKUKAN DENGAN TRANSFER KE NOMOR REKENING
+              </p>
+              <p className="text-center">
+                <b>34343241212341 BANK BTN (A.N PRIMKOPAL AAL SURABAYA)</b>
+              </p>
+              <hr />
+              <FormGroup>
+                <Label for="bukti_transfer">Unggah Bukti Transfer</Label>
+                <Input
+                  type="file"
+                  name="bukti_transfer"
+                  value={state.bukti_transfer}
+                  onChange={(e) => handle(e)}
+                  accept="image/*"
+                />
+              </FormGroup>
+              <hr />
+              <FormGroup>
+                <Row>
+                  <Col>
+                    <Button
+                      color="primary"
+                      className="mt-3 float-right"
+                      type="button"
+                      onClick={(e) => submit(e)}
+                    >
+                      {" "}
+                      Daftar{" "}
+                    </Button>
+                  </Col>
+                </Row>
+              </FormGroup>
+            </Form>
+          </Col>
+        </Row>
+      </Card>
+    </Container>
+  );
 }
