@@ -8,24 +8,24 @@ import { Redirect } from "react-router";
 const api = "http://localhost:3001";
 
 export default function DaftarKredit(props) {
-  const [mahasiswa, setMahasiswa] = useState([]);
+  const [kredit, setkredit] = useState([]);
 
   useEffect(() => {
-    axios.get(api + "/tampil").then((res) => {
-      setMahasiswa(res.data.values);
+    axios.get(api + "/tampilKredit").then((res) => {
+      setkredit(res.data.values);
     });
   }, []);
 
   function remove(id) {
     // console.log(id);
-    const data = qs.stringify({id_mahasiswa: id})
-    axios.delete(api+"/hapus", {
+    const data = qs.stringify({id_kredit: id})
+    axios.delete(api+"/hapusKredit", {
       data: data,
       headers: { "Content-type": "application/x-www-form-urlencoded" }
     }).then(res => {
       console.log(res.data.values);
-      const newData = mahasiswa.filter(mahasiswa => mahasiswa.id_mahasiswa !== id)
-      setMahasiswa(newData)
+      const newData = kredit.filter(kredit => kredit.id_kredit !== id)
+      setkredit(newData)
     }).catch(err=>console.error(err))
   }
 
@@ -53,7 +53,7 @@ export default function DaftarKredit(props) {
       <Table className="table-bordered">
         <thead>
           <tr>
-            <th colspan="7" className="text-center" bgcolor="#BABABA">
+            <th colSpan="8" className="text-center" bgcolor="#BABABA">
               <h5>
                 <b>Rincian Kredit Anggota</b>
               </h5>
@@ -64,29 +64,31 @@ export default function DaftarKredit(props) {
             <th>Nama</th>
             <th>NRP / NIP</th>
             <th>Nama Barang</th>
-            <th>Harga Barang</th>
+            <th>Cicilan / Bulan</th>
             <th>Lama Cicilan</th>
-            <th>Status Kredit</th>
+            <th>Status</th>
+            <th>Aksi</th>
           </tr>
         </thead>
         <tbody>
-          {mahasiswa.map((mahasiswa) => (
-            <tr key={mahasiswa.id_mahasiswa}>
-              <td>{mahasiswa.nim}</td>
-              <td>{mahasiswa.nama}</td>
-              <td>{mahasiswa.nama}</td>
-              <td>{mahasiswa.nama}</td>
-              <td>{mahasiswa.nama}</td>
-              <td>{mahasiswa.jurusan}</td>
+          {kredit.map((kredit) => (
+            <tr key={kredit.id_kredit}>
+              <td>{kredit.tanggal_kredit}</td>
+              <td>{kredit.username}</td>
+              <td>{kredit.id_user}</td>
+              <td>{kredit.nama_barang}</td>
+              <td>{kredit.harga}</td>
+              <td>{kredit.cicilan}</td>
+              <td>{kredit.status}</td>
               <td>
               <Button
                   color="secondary"
-                  onClick={() => update(mahasiswa.id_mahasiswa)}
+                  onClick={() => update(kredit.id_kredit)}
                 >
                   Edit
                 </Button>
                 <span> </span>
-                <Button color="danger" onClick={() => remove(mahasiswa.id_mahasiswa)}>Hapus</Button>
+                <Button color="danger" onClick={() => remove(kredit.id_kredit)}>Hapus</Button>
               </td>
             </tr>
           ))}
