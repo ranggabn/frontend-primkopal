@@ -1,43 +1,48 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Container, Button, Table } from "reactstrap";
+import { Container, Button, Table, Dropdown, DropdownItem, DropdownToggle, DropdownMenu } from "reactstrap";
 import axios from "axios";
-import qs from 'querystring'
+import qs from "querystring";
 import { AuthContext } from "../../../App";
 import { Redirect } from "react-router";
+import moment from "moment";
 
 const api = "http://localhost:3001";
 
-export default function DaftarPenjualan(props) {
-  const [mahasiswa, setMahasiswa] = useState([]);
+export default function DaftarPinjaman(props) {
+  const [pinjaman, setpinjaman] = useState([]);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const toggle = () => setDropdownOpen((prevState) => !prevState);
 
   useEffect(() => {
-    axios.get(api + "/tampil").then((res) => {
-      setMahasiswa(res.data.values);
+    axios.get(api + "/tampilPinjaman").then((res) => {
+      setpinjaman(res.data.values);
     });
   }, []);
 
-  function remove(id) {
-    // console.log(id);
-    const data = qs.stringify({id_mahasiswa: id})
-    axios.delete(api+"/hapus", {
-      data: data,
-      headers: { "Content-type": "application/x-www-form-urlencoded" }
-    }).then(res => {
-      console.log(res.data.values);
-      const newData = mahasiswa.filter(mahasiswa => mahasiswa.id_mahasiswa !== id)
-      setMahasiswa(newData)
-    }).catch(err=>console.error(err))
+  function remove(id) {    
+    const data = qs.stringify({ id_pinjaman: id });
+    axios
+      .delete(api + "/hapusPinjaman", {
+        data: data,
+        headers: { "Content-type": "application/x-www-form-urlencoded" },
+      })
+      .then((res) => {
+        console.log(res.data.values);
+        const newData = pinjaman.filter((pinjaman) => pinjaman.id_pinjaman !== id);
+        setpinjaman(newData);
+      })
+      .catch((err) => console.error(err));
   }
 
   function update(id) {
     console.log(id);
-    props.history.push("/editpinjaman/"+id)
+    props.history.push("/editPinjaman/" + id);
   }
 
   const { state } = useContext(AuthContext);
-  
-  if(!state.isAuthenticated){
-    return <Redirect to="/masuk"/>
+
+  if (!state.isAuthenticated) {
+    return <Redirect to="/masuk" />;
   }
   return (
     <Container className="mt-5">
@@ -45,17 +50,32 @@ export default function DaftarPenjualan(props) {
       <hr />
       <Button
         color="success"
-        href="/tambahpinjaman"
+        href="/tambahPinjaman"
         className="mt-1 mb-3 float-right"
       >
-        Tambah Data Pinjaman
+        Tambah Data pinjaman
       </Button>
       <Table className="table-bordered">
         <thead>
           <tr>
-            <th colspan="6" className="text-center" bgcolor="#BABABA">
+            <th colSpan="8" className="text-center" bgcolor="#BABABA">
               <h5>
-                <b>Rincian Pinjaman Anggota</b>
+                <b>Rincian pinjaman Anggota</b>
+                <Dropdown
+                  group
+                  size="sm"
+                  className="float-right"
+                  isOpen={dropdownOpen}
+                  toggle={toggle}
+                >
+                  <DropdownToggle caret>Urutkan Berdasarkan</DropdownToggle>
+                  <DropdownMenu>
+                    <DropdownItem>Tanggal</DropdownItem>
+                    <DropdownItem>Nama</DropdownItem>
+                    <DropdownItem>NRP / NIP</DropdownItem>
+                    <DropdownItem>Status</DropdownItem>
+                  </DropdownMenu>
+                </Dropdown>
               </h5>
             </th>
           </tr>
@@ -64,27 +84,33 @@ export default function DaftarPenjualan(props) {
             <th>Nama</th>
             <th>NRP / NIP</th>
             <th>Jumlah Pinjaman</th>
+            <th>Cicilan / Bulan</th>
             <th>Lama Cicilan</th>
-            <th>Status Pinjaman</th>
+            <th>Status</th>
+            <th>Aksi</th>
           </tr>
         </thead>
         <tbody>
-          {mahasiswa.map((mahasiswa) => (
-            <tr key={mahasiswa.id_mahasiswa}>
-              <td>{mahasiswa.nim}</td>
-              <td>{mahasiswa.nama}</td>
-              <td>{mahasiswa.nama}</td>
-              <td>{mahasiswa.nama}</td>
-              <td>{mahasiswa.jurusan}</td>
+          {pinjaman.map((pinjaman) => (
+            <tr key={pinjaman.id_pinjaman}>
+              <td>{moment(pinjaman.tanggal_pinjam).format('YYYY-MM-DD')}</td>
+              <td>{pinjaman.username}</td>
+              <td>{pinjaman.id_user}</td>
+              <td>{pinjaman.besar_pinjaman}</td>
+              <td>{pinjaman.besar_pinjaman}</td>
+              <td>{pinjaman.cicilan} Bulan</td>
+              <td>{pinjaman.status}</td>
               <td>
-              <Button
+                <Button
                   color="secondary"
-                  onClick={() => update(mahasiswa.id_mahasiswa)}
+                  onClick={() => update(pinjaman.id_pinjaman)}
                 >
-                  Edit
+                  Detail
                 </Button>
                 <span> </span>
-                <Button color="danger" onClick={() => remove(mahasiswa.id_mahasiswa)}>Hapus</Button>
+                <Button color="danger" onClick={() => remove(pinjaman.id_pinjaman)}>
+                  Hapus
+                </Button>
               </td>
             </tr>
           ))}

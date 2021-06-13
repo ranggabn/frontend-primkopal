@@ -25,7 +25,7 @@ export default function MenuAdmin() {
         <Collapse isOpen={isOpen} navbar>
           <Nav className="mr-auto" navbar>
             <NavItem>
-              <NavLink to="/Home" className="nav-link">
+              <NavLink to="/admin" className="nav-link">
                 Home
               </NavLink>
             </NavItem>

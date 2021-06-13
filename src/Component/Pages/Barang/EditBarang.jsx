@@ -112,9 +112,10 @@ export default function EditBarang(props) {
                   type="select"
                   name="id_kategori"
                   value={data.id_kategori}
+                  defaultValue={'DEFAULT'}
                   onChange={handle("id_kategori")}
                 >
-                  <option value="" disabled selected>
+                  <option value="DEFAULT" disabled>
                     Pilih Kategori
                   </option>
                   {ks.map((ks, key) => (
@@ -134,9 +135,10 @@ export default function EditBarang(props) {
                   type="select"
                   name="id_status"
                   value={data.id_status}
+                  defaultValue={'DEFAULT'}
                   onChange={handle("id_status")}
                 >
-                  <option value="" disabled selected>
+                  <option value="DEFAULT" disabled>
                     Pilih Status
                   </option>
                   {ss.map((ss, key) => (

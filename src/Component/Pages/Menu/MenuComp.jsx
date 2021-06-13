@@ -21,11 +21,11 @@ export default function MenuComp() {
   if (!state.isAuthenticated) {
     return <MenuPublik />;
   }
-  if (user && state.role == 1) {
+  if (user && state.role === 1) {
     return <MenuAdmin />;
-  }if (user && state.role == 2) {
+  }if (user && state.role === 2) {
     return <MenuStaff />;
-  }if (user && state.role == 3) {
+  }if (user && state.role === 3) {
     return <MenuMember />;
   }
 }

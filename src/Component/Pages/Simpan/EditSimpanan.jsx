@@ -8,13 +8,11 @@ import {
   FormGroup,
   Input,
   Label,
-  Button,
-  Alert,
+  Button,  
 } from "reactstrap";
 import axios from "axios";
 import { Redirect, useParams } from "react-router";
 import { AuthContext } from "../../../App";
-import moment from "moment";
 
 const api = "http://localhost:3001";
 
@@ -41,10 +39,12 @@ export default function Simpan(props) {
 
   const submit = async (e) => {
     e.preventDefault();
-    await axios.put(api + "/ubahSimpanan", data).catch((err) => console.error(err));
+    await axios
+      .put(api + "/ubahSimpanan", data)
+      .catch((err) => console.error(err));
     setsimpanan(data);
-    props.history.push("/daftarsimpanan") 
-  }
+    props.history.push("/daftarsimpanan");
+  };
 
   const handle = (name) => (e) => {
     setData({ ...data, [name]: e.target.value });
@@ -146,40 +146,40 @@ export default function Simpan(props) {
               </FormGroup>
               <hr />
               <Row>
-            <Col>
-              <FormGroup>
-                <Row>
-                  <Col>
-                    <Button
-                      className="fa fa-chevron-left mt-3"
-                      type="button"
-                      href="/daftarsimpanan"
-                    >
-                      {" "}
-                      Kembali{" "}
-                    </Button>
-                  </Col>
-                </Row>
-              </FormGroup>
-            </Col>
-            <Col>
-              <FormGroup>
-                <Row>
-                  <Col>
-                    <Button
-                      color="primary"
-                      className="mt-3 float-right"
-                      type="button"
-                      onClick={submit}
-                    >
-                      {" "}
-                      Simpan{" "}
-                    </Button>
-                  </Col>
-                </Row>
-              </FormGroup>
-            </Col>
-          </Row>
+                <Col>
+                  <FormGroup>
+                    <Row>
+                      <Col>
+                        <Button
+                          className="fa fa-chevron-left mt-3"
+                          type="button"
+                          href="/daftarsimpanan"
+                        >
+                          {" "}
+                          Kembali{" "}
+                        </Button>
+                      </Col>
+                    </Row>
+                  </FormGroup>
+                </Col>
+                <Col>
+                  <FormGroup>
+                    <Row>
+                      <Col>
+                        <Button
+                          color="primary"
+                          className="mt-3 float-right"
+                          type="button"
+                          onClick={submit}
+                        >
+                          {" "}
+                          Simpan{" "}
+                        </Button>
+                      </Col>
+                    </Row>
+                  </FormGroup>
+                </Col>
+              </Row>
             </Form>
           </Col>
         </Row>

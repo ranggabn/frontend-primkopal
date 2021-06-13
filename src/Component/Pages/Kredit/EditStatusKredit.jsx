@@ -8,75 +8,63 @@ import {
   Label,
   Input,
   Button,
-  Alert,
   Card,
 } from "reactstrap";
 import axios from "axios";
-import { Redirect } from "react-router";
+import { Redirect, useParams } from "react-router";
 import { AuthContext } from "../../../App";
-import moment from "moment";
 
 const api = "http://localhost:3001";
 
-export default function Kredit1(props) {
+export default function EditStatusKredit(props) {
+  let { id } = useParams();
   const { state } = useContext(AuthContext);
   const [kredit, setKredit] = useState([]);
   const [data, setData] = useState({
     id_user: "",
     id_status: "",
-    id_cicilan: "",
+    id_cicil: "",
     satker: "",
     nomor_telefon: "",
     nama_barang: "",
     harga: "",
     terbilang: "",
-    cicil: "",
+    besar_cicilan: "",
     tanggal_kredit: "",
   });
-  const [visible, setVisible] = useState(false);
-  const onDismiss = () => setVisible(false);
 
+  const [status, setStatus] = useState([]);
   useEffect(() => {
-    setData({
-      id_user: state.id,
-      tanggal_kredit: moment().format("YYYY-MM-DD"),
-      id_status: 1,
-      cicil: 1999
+    axios.get(api + "/tampilStatusKP/").then((res) => {
+      setStatus(res.data.values);
     });
   }, []);
+  const statusKP = status.map((statusKP) => statusKP);
 
-  const [cicilan, setCicilan] = useState([]);
   useEffect(() => {
-    axios.get(api + "/tampilCicilan").then((res) => {
-      setCicilan(res.data.values);
-    });
+    async function getData() {
+      let response = await axios.get(api + "/tampilKredit/" + id);
+      response = await response.data.values[0];
+      setData(response);
+    }
+    getData();
   }, []);
-  const cicil = cicilan.map((cicil) => cicil);
 
-  function submit(e) {
-    axios.post(api + "/tambahKredit", data).then((res) => {
-      console.log(res.data.values);
-      const myData = [...kredit, res.data.values, visible];
-      setKredit(myData);
-      setVisible(myData);
-      e.preventDefault();
-      setData({
-        id_cicilan: "",
-        satker: "",
-        nomor_telefon: "",
-        nama_barang: "",
-        harga: "",
-        terbilang: "",
-      });
-    });
-  }
+  const submit = async (e) => {
+    e.preventDefault();
+    await axios
+      .put(api + "/ubahKredit", data)
+      .catch((err) => console.error(err));
+    setKredit(data);
+    props.history.push("/daftarKredit");
+  };
 
   let besarCicilan;
   function handle(e) {
     const newData = { ...data };
     newData[e.target.name] = e.target.value;
     setData(newData);
-    besarCicilan = newData.harga / newData.id_cicilan + newData.harga * 0.01;
+    besarCicilan = newData.harga / newData.id_cicil + newData.harga * 0.01;
     // console.log(besarCicilan);
   }
 
@@ -105,8 +93,9 @@ export default function Kredit1(props) {
                   <Input
                     type="text"
                     name="nama"
-                    value={state.user}
+                    value={data.username}
                     onChange={(e) => handle(e)}
+                    disabled
                   />
                 </Col>
               </Row>
@@ -120,6 +109,7 @@ export default function Kredit1(props) {
                     name="id_user"
                     value={data.id_user}
                     onChange={(e) => handle(e)}
+                    disabled
                   />
                 </Col>
               </Row>
@@ -133,6 +123,7 @@ export default function Kredit1(props) {
                     name="satker"
                     value={data.satker}
                     onChange={(e) => handle(e)}
+                    disabled
                   />
                 </Col>
               </Row>
@@ -146,6 +137,7 @@ export default function Kredit1(props) {
                     name="nomor_telefon"
                     value={data.nomor_telefon}
                     onChange={(e) => handle(e)}
+                    disabled
                   />
                 </Col>
               </Row>
@@ -159,6 +151,7 @@ export default function Kredit1(props) {
                     name="nama_barang"
                     value={data.nama_barang}
                     onChange={(e) => handle(e)}
+                    disabled
                   />
                 </Col>
               </Row>
@@ -172,7 +165,7 @@ export default function Kredit1(props) {
                     name="harga"
                     value={data.harga}
                     onChange={(e) => handle(e)}
-                    placeholder="Rp."
+                    disabled
                   />
                 </FormGroup>
               </Col>
@@ -184,6 +177,7 @@ export default function Kredit1(props) {
                     name="terbilang"
                     value={data.terbilang}
                     onChange={(e) => handle(e)}
+                    disabled
                   />
                 </FormGroup>
               </Col>
@@ -193,20 +187,12 @@ export default function Kredit1(props) {
               <Row>
                 <Col>
                   <Input
-                    type="select"
-                    name="id_cicilan"
-                    value={data.id_cicilan}
+                    type="text"
+                    name="id_cicil"
+                    value={data.id_cicil + " Bulan"}
                     onChange={(e) => handle(e)}
-                  >
-                    <option value="" disabled selected>
-                      Pilih Cicilan
-                    </option>
-                    {cicil.map((cicil, key) => (
-                      <option key={key} value={cicil.id_cicilan}>
-                        {cicil.cicilan} Bulan
-                      </option>
-                    ))}
-                  </Input>
+                    disabled
+                    />
                 </Col>
               </Row>
             </FormGroup>
@@ -216,33 +202,68 @@ export default function Kredit1(props) {
                 <Col>
                   <Input
                     type="number"
-                    name="cicil"
-                    value={data.cicil}
+                    name="besar_cicilan"
+                    value={data.besar_cicilan}
                     onChange={(e) => handle(e)}
                     disabled
                   />
                 </Col>
               </Row>
             </FormGroup>
-            <Alert color="info" isOpen={visible} toggle={onDismiss}>
-              Kredit berhasil diajukan, Untuk informasi lebih lengkap silahkan
-              dilihat pada halaman data Kredit!
-            </Alert>
+            <Label>Ubah Status</Label>
             <FormGroup>
               <Row>
                 <Col>
-                  <Button
-                    color="primary"
-                    className="mt-3 float-right"
-                    type="button"
-                    onClick={(e) => submit(e)}
+                  <Input
+                    type="select"
+                    name="id_status"
+                    value={data.id_status}
+                    onChange={(e) => handle(e)}
                   >
-                    {" "}
-                    Ajukan Kredit{" "}
-                  </Button>
+                    {statusKP.map((statusKP, key) => (
+                      <option key={key} value={statusKP.id_statusKP}>
+                        {statusKP.status}
+                      </option>
+                    ))}
+                  </Input>
                 </Col>
               </Row>
             </FormGroup>
+            <Row>
+              <Col>
+                <FormGroup>
+                  <Row>
+                    <Col>
+                      <Button
+                        className="fa fa-chevron-left mt-3"
+                        type="button"
+                        href="/kreditsementara"
+                      >
+                        {" "}
+                        Kembali{" "}
+                      </Button>
+                    </Col>
+                  </Row>
+                </FormGroup>
+              </Col>
+              <Col>
+                <FormGroup>
+                  <Row>
+                    <Col>
+                      <Button
+                        color="primary"
+                        className="mt-3 float-right"
+                        type="button"
+                        onClick={(e) => submit(e)}
+                      >
+                        {" "}
+                        Simpan{" "}
+                      </Button>
+                    </Col>
+                  </Row>
+                </FormGroup>
+              </Col>
+            </Row>
           </Col>
         </Form>
       </Card>

@@ -13,7 +13,6 @@ import {
 import axios from "axios";
 import { Redirect } from "react-router";
 import { AuthContext } from "../../../App";
-import { useForm } from "react-hook-form";
 
 const api = "http://localhost:3001";
 

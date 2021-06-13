@@ -8,25 +8,22 @@ import {
   Label,
   Input,
   Button,
-  Alert,
   Card,
 } from "reactstrap";
 import axios from "axios";
 import { Redirect, useParams } from "react-router";
 import { AuthContext } from "../../../App";
-import moment from "moment";
-import Kredit2 from "./Kredit2";
 
 const api = "http://localhost:3001";
 
-export default function Kredit1(props) {
+export default function EditKredit(props) {
   let { id } = useParams();
   const { state } = useContext(AuthContext);
   const [kredit, setKredit] = useState([]);
   const [data, setData] = useState({
     id_user: "",
     id_status: "",
-    id_cicilan: "",
+    id_cicil: "",
     satker: "",
     nomor_telefon: "",
     nama_barang: "",
@@ -35,22 +32,17 @@ export default function Kredit1(props) {
     cicil: "",
     tanggal_kredit: "",
   });
-  const [visible, setVisible] = useState(false);
-  const onDismiss = () => setVisible(false);
 
   useEffect(() => {
     setData({
-      id_user: state.id,
-      tanggal_kredit: moment().format("YYYY-MM-DD"),
       id_status: 1,
-      cicil: 1999
     });
   }, []);
 
   const [cicilan, setCicilan] = useState([]);
   useEffect(() => {
-    axios.get(api + "/tampilCicilan/" + id).then((res) => {
-      setData(res.data.values);
+    axios.get(api + "/tampilCicilan/").then((res) => {
+      setCicilan(res.data.values);
     });
   }, []);
   const cicil = cicilan.map((cicil) => cicil);
@@ -65,10 +57,12 @@ export default function Kredit1(props) {
   }, []);
 
   const submit = async (e) => {
-    e.preventDefault()
-    await axios.put(api + "/ubahBarang", data).catch((err) => console.error(err));
+    e.preventDefault();
+    await axios
+      .put(api + "/ubahKredit", data)
+      .catch((err) => console.error(err));
     setKredit(data);
-    props.history.push("/daftarKredit")
+    props.history.push("/daftarKredit");
   };
 
   let besarCicilan;
@@ -76,8 +70,8 @@ export default function Kredit1(props) {
     const newData = { ...data };
     newData[e.target.name] = e.target.value;
     setData(newData);
-    besarCicilan = newData.harga / newData.id_cicilan + newData.harga * 0.01;
-    console.log(besarCicilan);
+    besarCicilan = newData.harga / newData.id_cicil + newData.harga * 0.01;
+    // console.log(besarCicilan);
   }
 
   if (!state.isAuthenticated) {
@@ -105,7 +99,7 @@ export default function Kredit1(props) {
                   <Input
                     type="text"
                     name="nama"
-                    value={state.user}
+                    value={data.username}
                     onChange={(e) => handle(e)}
                   />
                 </Col>
@@ -194,11 +188,12 @@ export default function Kredit1(props) {
                 <Col>
                   <Input
                     type="select"
-                    name="id_cicilan"
-                    value={data.id_cicilan}
+                    name="id_cicil"
+                    value={data.id_cicil}
+                    defaultValue={"DEFAULT"}
                     onChange={(e) => handle(e)}
                   >
-                    <option value="" disabled selected>
+                    <option value="DEFAULT" disabled>
                       Pilih Cicilan
                     </option>
                     {cicil.map((cicil, key) => (
@@ -224,25 +219,41 @@ export default function Kredit1(props) {
                 </Col>
               </Row>
             </FormGroup>
-            <Alert color="info" isOpen={visible} toggle={onDismiss}>
-              Kredit berhasil diajukan, Untuk informasi lebih lengkap silahkan
-              dilihat pada halaman data Kredit!
-            </Alert>
-            <FormGroup>
-              <Row>
-                <Col>
-                  <Button
-                    color="primary"
-                    className="mt-3 float-right"
-                    type="button"
-                    onClick={(e) => submit(e)}
-                  >
-                    {" "}
-                    Ajukan Kredit{" "}
-                  </Button>
-                </Col>
-              </Row>
-            </FormGroup>
+            <Row>
+              <Col>
+                <FormGroup>
+                  <Row>
+                    <Col>
+                      <Button
+                        className="fa fa-chevron-left mt-3"
+                        type="button"
+                        href="/daftarkredit"
+                      >
+                        {" "}
+                        Kembali{" "}
+                      </Button>
+                    </Col>
+                  </Row>
+                </FormGroup>
+              </Col>
+              <Col>
+                <FormGroup>
+                  <Row>
+                    <Col>
+                      <Button
+                        color="primary"
+                        className="mt-3 float-right"
+                        type="button"
+                        onClick={(e) => submit(e)}
+                      >
+                        {" "}
+                        Simpan{" "}
+                      </Button>
+                    </Col>
+                  </Row>
+                </FormGroup>
+              </Col>
+            </Row>
           </Col>
         </Form>
       </Card>

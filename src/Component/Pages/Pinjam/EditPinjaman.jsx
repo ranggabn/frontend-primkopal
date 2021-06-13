@@ -1,14 +1,14 @@
 import React, { useState, useContext, useEffect } from "react";
 import {
   Container,
-  Alert,
   Col,
-  Form,
-  Button,
-  FormGroup,
   Row,
+  Form,
+  FormGroup,
   Label,
   Input,
+  Button,
+  Card,
 } from "reactstrap";
 import axios from "axios";
 import { Redirect, useParams } from "react-router";
@@ -18,18 +18,37 @@ const api = "http://localhost:3001";
 
 export default function EditPinjaman(props) {
   let { id } = useParams();
-  const [mahasiswa, setMahasiswa] = useState([]);
+  const { state } = useContext(AuthContext);
+  const [pinjam, setpinjam] = useState([]);
   const [data, setData] = useState({
-    id: "",
-    nim: "",
-    nama: "",
-    jurusan: "",
+    id_user: "",
+    id_status: "",
+    id_cicil: "",
+    satker: "",
+    nomor_telefon: "",
+    besar_pinjaman: "",
+    terbilang: "",
+    keperluan: "",
+    cicil: "",
   });
 
+  useEffect(() => {
+    setData({
+      id_status: 1,
+    });
+  }, []);
+
+  const [cicilan, setCicilan] = useState([]);
+  useEffect(() => {
+    axios.get(api + "/tampilCicilan/").then((res) => {
+      setCicilan(res.data.values);
+    });
+  }, []);
+  const cicil = cicilan.map((cicil) => cicil);
 
   useEffect(() => {
     async function getData() {
-      let response = await axios.get(api + "/tampil/" + id);
+      let response = await axios.get(api + "/tampilPinjaman/" + id);
       response = await response.data.values[0];
       setData(response);
     }
@@ -37,106 +56,201 @@ export default function EditPinjaman(props) {
   }, []);
 
   const submit = async (e) => {
-    e.preventDefault()
-    await axios.put(api + "/edit", data).catch((err) => console.error(err));
-    setMahasiswa(data);
-    props.history.push("/daftarpenjualan")
+    e.preventDefault();
+    await axios
+      .put(api + "/ubahPinjaman", data)
+      .catch((err) => console.error(err));
+    setpinjam(data);
+    props.history.push("/daftarpinjaman");
   };
 
-  const handle = (name) => (e) => {
-    setData({ ...data, [name]: e.target.value });
-  };
-
-  const { state } = useContext(AuthContext);
+  let besarCicilan;
+  function handle(e) {
+    const newData = { ...data };
+    newData[e.target.name] = e.target.value;
+    setData(newData);
+    besarCicilan = newData.harga / newData.id_cicil + newData.harga * 0.01;
+    // console.log(besarCicilan);
+  }
 
   if (!state.isAuthenticated) {
     return <Redirect to="/masuk" />;
   }
   return (
     <Container className="mt-5">
-      <h4>Formulir Edit Data Pinjaman</h4>
-      <hr />
-      {/* <Alert color="info" isOpen={visible} toggle={onDismiss}>
-        Berhasil Diubah!
-      </Alert> */}
-      <Form className="form" onSubmit={submit}>
+      <Row>
         <Col>
-          <Label>NIM</Label>
-          <FormGroup>
-            <Row>
-              <Col>
-                <Input
-                  type="text"
-                  name="nim"
-                  value={data.nim}
-                  onChange={handle("nim")}
-                />
-              </Col>
-            </Row>
-          </FormGroup>
-          <Label>Nama</Label>
-          <FormGroup>
-            <Row>
-              <Col>
-                <Input
-                  type="text"
-                  name="nama"
-                  value={data.nama}
-                  onChange={handle("nama")}
-                />
-              </Col>
-            </Row>
-          </FormGroup>
-          <Label>Jurusan</Label>
-          <FormGroup>
-            <Row>
-              <Col>
-                <Input
-                  type="text"
-                  name="jurusan"
-                  value={data.jurusan}
-                  onChange={handle("jurusan")}
-                />
-              </Col>
-            </Row>
-          </FormGroup>
-          <Row>
-            <Col>
-              <FormGroup>
-                <Row>
-                  <Col>
-                    <Button
-                      className="fa fa-chevron-left mt-3"
-                      type="button"
-                      href="/daftarpinjaman"
-                    >
-                      {" "}
-                      Kembali{" "}
-                    </Button>
-                  </Col>
-                </Row>
-              </FormGroup>
-            </Col>
-            <Col>
-              <FormGroup>
-                <Row>
-                  <Col>
-                    <Button
-                      color="primary"
-                      className="mt-3 float-right"
-                      type="button"
-                      onClick={submit}
-                    >
-                      {" "}
-                      Simpan{" "}
-                    </Button>
-                  </Col>
-                </Row>
-              </FormGroup>
-            </Col>
-          </Row>
+        <h3 className="text-center">
+            <b>FORMULIR PERMOHONAN</b>
+            <br />
+            <b>USIPA PRIMKOPAL AAL</b>
+          </h3>
+          <h6 className="text-center">(PEMINJAMAN S.D. RP 25.000.000)</h6>
         </Col>
-      </Form>
+      </Row>
+      <Card className="mt-5">
+      <Form className="form mt-4 mb-4" onSubmit={(e) => submit(e)}>
+          <Col>
+            <Label>Nama Lengkap</Label>
+            <FormGroup>
+              <Row>
+                <Col>
+                  <Input
+                    type="text"
+                    name="username"
+                    value={data.username}
+                    onChange={(e) => handle(e)}
+                  />
+                </Col>
+              </Row>
+            </FormGroup>
+            <Label>NRP / NIP</Label>
+            <FormGroup>
+              <Row>
+                <Col>
+                  <Input
+                    type="text"
+                    name="id_user"
+                    value={data.id_user}
+                    onChange={(e) => handle(e)}
+                  />
+                </Col>
+              </Row>
+            </FormGroup>
+            <Label>Satuan Kerja</Label>
+            <FormGroup>
+              <Row>
+                <Col>
+                  <Input
+                    type="text"
+                    name="satker"
+                    value={data.satker}
+                    onChange={(e) => handle(e)}
+                  />
+                </Col>
+              </Row>
+            </FormGroup>
+            <Label>No. HP / Telefon</Label>
+            <FormGroup>
+              <Row>
+                <Col>
+                  <Input
+                    type="number"
+                    name="nomor_telefon"
+                    value={data.nomor_telefon}
+                    onChange={(e) => handle(e)}
+                  />
+                </Col>
+              </Row>
+            </FormGroup>
+            <Row>
+              <Col>
+                <Label>Besar Pinjaman</Label>
+                <FormGroup>
+                  <Input
+                    type="number"
+                    name="besar_pinjaman"
+                    value={data.besar_pinjaman}
+                    onChange={(e) => handle(e)}
+                    placeholder="Rp."
+                  />
+                </FormGroup>
+              </Col>
+              <Col>
+                <Label>Terbilang</Label>
+                <FormGroup>
+                  <Input
+                    type="text"
+                    name="terbilang"
+                    value={data.terbilang}
+                    onChange={(e) => handle(e)}
+                  />
+                </FormGroup>
+              </Col>
+            </Row>
+            <Label>Keperluan</Label>
+            <FormGroup>
+              <Row>
+                <Col>
+                  <Input
+                    type="textarea"
+                    name="keperluan"
+                    value={data.keperluan}
+                    onChange={(e) => handle(e)}
+                  />
+                </Col>
+              </Row>
+            </FormGroup>
+            <FormGroup>
+              <Row>
+                <Col>
+                  <Input
+                    type="select"
+                    name="id_cicil"
+                    value={data.id_cicil}
+                    defaultValue={"DEFAULT"}
+                    onChange={(e) => handle(e)}
+                  >
+                    <option value="DEFAULT" disabled>
+                      Pilih Cicilan
+                    </option>
+                    {cicil.map((cicil, key) => (
+                      <option key={key} value={cicil.id_cicilan}>
+                        {cicil.cicilan} Bulan
+                      </option>
+                    ))}
+                  </Input>
+                </Col>
+              </Row>
+            </FormGroup>
+            <Label>Jumlah Cicilan / Bulan</Label>
+            <FormGroup>
+              <Row>
+                <Col>
+                  <Input
+                    type="number"
+                    name="cicil"
+                    value={data.besar_cicilan}                    
+                    onChange={(e) => handle(e)}
+                    disabled
+                  />
+                </Col>
+              </Row>
+            </FormGroup>
+            <FormGroup>
+              <Row>
+                <Col>
+                  <FormGroup>
+                    <Row>
+                      <Col>
+                        <Button
+                          className="fa fa-chevron-left mt-3"
+                          type="button"
+                          href="/daftarpinjaman"
+                        >
+                          {" "}
+                          Kembali{" "}
+                        </Button>
+                      </Col>
+                    </Row>
+                  </FormGroup>
+                </Col>
+                <Col>
+                  <Button
+                    color="primary"
+                    className="mt-3 float-right"
+                    type="button"
+                    onClick={(e) => submit(e)}
+                  >
+                    {" "}
+                    Simpan{" "}
+                  </Button>
+                </Col>
+              </Row>
+            </FormGroup>
+          </Col>
+        </Form>
+      </Card>
     </Container>
   );
 }

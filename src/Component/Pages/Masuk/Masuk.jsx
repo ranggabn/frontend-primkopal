@@ -12,7 +12,6 @@ import {
   FormText,
   Form,
 } from "reactstrap";
-import { Link } from "react-router-dom";
 import { AuthContext } from "../../../App";
 
 const qs = require("querystring");

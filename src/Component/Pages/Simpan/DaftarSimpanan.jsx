@@ -4,6 +4,7 @@ import axios from "axios";
 import qs from 'querystring'
 import { AuthContext } from "../../../App";
 import { Redirect } from "react-router";
+import moment from "moment";
 
 const api = "http://localhost:3001";
 
@@ -80,7 +81,7 @@ export default function DaftarSimpanan(props) {
         <tbody>
           {simpanan.map((simpanan) => (
             <tr key={simpanan.id_simpanan}>
-              <td>{simpanan.tanggal_simpan}</td>
+              <td>{moment(simpanan.tanggal_simpan).format('YYYY-MM-DD')}</td>
               <td>{simpanan.username}</td>
               <td>{simpanan.id_user}</td>
               <td>{simpanan.jumlah_simpanan}</td>

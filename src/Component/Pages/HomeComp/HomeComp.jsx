@@ -12,9 +12,9 @@ export default function HomeComp() {
   }
   if(state.role === 1){
     return <Redirect to="/admin"/>
-  } else if(state.role === 2){
+  }if(state.role === 2){
     return <Redirect to="/staff"/>
-  }else if(state.role === 3){
+  }if(state.role === 3){
     return <Redirect to="/member"/>
   }
   return (
