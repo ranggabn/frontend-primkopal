@@ -42,7 +42,7 @@ export default function DaftarAnggota(props) {
 
   const { state } = useContext(AuthContext);
   
-  if(!state.isAuthenticated){
+  if(!state.isAuthenticated){    
     return <Redirect to="/masuk"/>
   }
   return (

@@ -77,9 +77,9 @@ export default function Pinjam2() {
   function handle(e) {
     const newData = { ...data };
     newData[e.target.name] = e.target.value;
-    setData(newData);
-    besarCicilan = newData.harga / newData.id_cicilan + newData.harga * 0.01;
-    // console.log(besarCicilan);
+    besarCicilan = parseInt(newData.besar_pinjaman, 10) / parseInt(newData.id_cicil, 10) + parseInt(newData.besar_pinjaman, 10) * 0.01;
+    console.log(newData.besar_pinjaman, newData.id_cicil);
+    setData({...newData, besar_cicilan:besarCicilan})
   }
 
   if (!state.isAuthenticated) {
@@ -196,11 +196,10 @@ export default function Pinjam2() {
                   <Input
                     type="select"
                     name="id_cicil"
-                    value={data.id_cicil}
-                    defaultValue={"DEFAULT"}
+                    value={data.id_cicil}                    
                     onChange={(e) => handle(e)}
                   >
-                    <option value="DEFAULT" disabled>
+                    <option value="" disabled selected>
                       Pilih Cicilan
                     </option>
                     {cicil.map((cicil, key) => (
@@ -218,7 +217,7 @@ export default function Pinjam2() {
                 <Col>
                   <Input
                     type="number"
-                    name="cicil"
+                    name="besar_cicilan"
                     value={data.besar_cicilan}                    
                     onChange={(e) => handle(e)}
                     disabled

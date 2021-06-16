@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import {
   Col,
   Card,
@@ -7,31 +7,34 @@ import {
   CardText,
   CardTitle,
 } from "reactstrap";
+import axios from "axios";
 import { numberWithCommas } from "../../Fungsional/Koma";
 
-const Menus = ({ menu, masukKeranjang }) => {
+const api = "http://localhost:3001";
+
+export default function Menus(props) {
+  const [barang, setbarang] = useState([]);
+  useEffect(() => {
+    axios.get(api + "/tampilBarang").then((res) => {
+      setbarang(res.data.values);
+    });
+  }, []);
+
   return (
     <Col md={4} xs={6} className="mb-4">
-      <Card className="shadow" onClick={() => masukKeranjang(menu)}>
+      <Card className="shadow">
         <CardImg
           top
           width="100%"
           height="200vw"
-          src={
-            "assets/images/" +
-            menu.categories.nama.toLowerCase() +
-            "/" +
-            menu.gambar
-          }
+          src={barang.gambar}
           alt="Card image cap"
         />
         <CardBody>
-          <CardTitle tag="h5">{menu.nama}</CardTitle>
-          <CardText>Rp. {numberWithCommas(menu.harga)}</CardText>
+          <CardTitle tag="h5">{barang.nama}</CardTitle>
+          <CardText>Rp. {numberWithCommas(barang.harga)}</CardText>
         </CardBody>
       </Card>
     </Col>
-  );
-};
-
-export default Menus;
+  )
+}

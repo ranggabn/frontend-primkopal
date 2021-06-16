@@ -13,6 +13,7 @@ import {
 import axios from "axios";
 import { Redirect } from "react-router";
 import { AuthContext } from "../../../App";
+import { getBase64 } from "../../../Util/GetBase64";
 
 const api = "http://localhost:3001";
 
@@ -47,13 +48,30 @@ export default function TambahBarang() {
   const onDismiss = () => setVisible(false);
 
   function submit(e) {
-    e.preventDefault();
     axios.post(api + "/tambahBarang", data).then((res) => {
       console.log(res.data.values);
       const myData = [...barang, res.data.values, visible];
       setBarang(myData);
       setVisible(myData);
+      e.preventDefault();
+      setData({
+        nama: "",
+        harga: "",
+        gambar: "",
+        keterangan: "",
+        id_kategori: "",
+        id_status: "",
+      })
     });
+    // console.log(data);
+  }
+
+  async function handleUploadImage(e) {
+    e.preventDefault()
+    // console.log(Array.from(e.target.files)[0]);
+    let temporary =  Array.from(e.target.files)[0];
+    let result = await getBase64(temporary)
+    setData({...data,gambar:result});
   }
 
   function handle(e) {
@@ -167,8 +185,7 @@ export default function TambahBarang() {
                 <Input
                   type="file"
                   name="gambar"
-                  value={data.gambar}
-                  onChange={(e) => handle(e)}
+                  onChange={(e) => handleUploadImage(e)}
                   accept="image/*"
                 />
               </Col>

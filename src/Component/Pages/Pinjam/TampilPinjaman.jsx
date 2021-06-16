@@ -1,72 +1,37 @@
-import React, { Component } from "react";
-import { Container, Alert, Button, Table, NavLink } from "reactstrap";
-import { Link } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
+import { Container, Table } from "reactstrap";
 import axios from "axios";
-import qs from "querystring";
+import { Redirect, useParams } from "react-router";
+import { AuthContext } from "../../../App";
+import moment from 'moment'
+import { numberWithCommas } from "../../Fungsional/Koma";
 
 const api = "http://localhost:3001";
 
-export default class Tabungan extends Component {
-  constructor(props) {
-    super(props);
+export default function TampilPinjaman() {
+  const { state } = useContext(AuthContext);
+  let id_user  = useParams()
+  id_user = state.id
+  const [pinjaman, setpinjaman] = useState([])
 
-    this.state = {
-      mahasiswa: [],
-      response: "",
-      display: "none",
-    };
-  }
-
-  componentDidMount() {
-    axios.get(api + "/tampil").then((res) => {
-      this.setState({
-        mahasiswa: res.data.values,
-      });
+  useEffect(() => {
+    axios.get(api + "/tampilPinjamanUser/" + id_user).then((res) => {
+      setpinjaman(res.data.values);
+      console.log(pinjaman);
     });
+  }, []);
+
+  if (!state.isAuthenticated) {
+    return <Redirect to="/masuk" />;
   }
-
-  deleteMahasiswa = (idMahasiswa) => {
-    const { mahasiswa } = this.state;
-    const data = qs.stringify({
-      id_mahasiswa: idMahasiswa,
-    });
-
-    axios
-      .delete(api + "/hapus", {
-        data: data,
-        headers: { "Content-type": "application/x-www-form-urlencoded" },
-      })
-      .then((json) => {
-        if (json.data.status === 200) {
-          this.setState({
-            response: json.data.values,
-            mahasiswa: mahasiswa.filter(
-              (mahasiswa) => mahasiswa.id_mahasiswa !== idMahasiswa
-            ),
-            display: "block",
-          });
-          this.props.history.push("/mahasiswa");
-        } else {
-          this.setState({
-            response: json.data.values,
-            display: "block",
-          });
-        }
-      });
-  };
-
-  render() {
-    return (
-      <Container className="mt-5">
+  return (
+    <Container className="mt-5">
         <h2>Data Pinjaman</h2>
-        <Alert color="success" style={{ display: this.state.display }}>
-          {this.state.response}
-        </Alert>
         <hr />
         <Table className="table-bordered">
           <thead>
             <tr>
-              <th colspan="4" className="text-center" bgcolor="#BABABA">
+              <th colSpan="5" className="text-center" bgcolor="#BABABA">
                 <h5><b>RINCIAN PINJAMAN</b></h5>
               </th>
             </tr>
@@ -78,41 +43,34 @@ export default class Tabungan extends Component {
                 <br/>
                 Satuan Kerja
               </th>
-              <th colspan="3">
-                : Rangga Baghas Nugroho
+              <th colSpan="4">
+                : {state.user}
                 <br/>
-                : 175150200111062
+                : {state.id}
                 <br/>
-                : Teknik Informatika
+                : {state.role}
               </th>
             </tr>
             <tr>
-              <th>Tanggal</th>
-              <th>Cicilan ke - </th>
+              <th>Tanggal Awal Pinjaman</th>
+              <th>Lama Cicilan</th>
               <th>Jumlah Pembayaran</th>
               <th>Total Pinjaman</th>
+              <th>Status Pinjaman</th>
             </tr>
           </thead>
           <tbody>
-            {this.state.mahasiswa.map((mahasiswa) => (
-              <tr key={mahasiswa.id_mahasiswa}>
-                <td>{mahasiswa.nim}</td>
-                <td>{mahasiswa.nama}</td>
-                <td>{mahasiswa.jurusan}</td>
-                <td>
-                  <span> </span>
-                  <Button
-                    onClick={() => this.deleteMahasiswa(mahasiswa.id_mahasiswa)}
-                    color="danger"
-                  >
-                    Hapus
-                  </Button>
-                </td>
+          {pinjaman.map((pinjaman) => (
+            <tr key={pinjaman.id_pinjaman}>
+              <td>{moment(pinjaman.tanggal_pinjam).format('YYYY-MM-DD')}</td>
+              <td>{pinjaman.id_cicil} Bulan</td>
+              <td>{numberWithCommas(pinjaman.besar_cicilan)}</td>
+              <td>{numberWithCommas(pinjaman.besar_pinjaman)}</td>
+              <td>{pinjaman.status}</td>
               </tr>
             ))}
           </tbody>
         </Table>
       </Container>
-    );
-  }
+  )
 }

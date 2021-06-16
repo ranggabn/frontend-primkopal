@@ -5,6 +5,7 @@ import qs from "querystring";
 import { AuthContext } from "../../../App";
 import { Redirect } from "react-router";
 import moment from "moment";
+import { numberWithCommas } from "../../Fungsional/Koma";
 
 const api = "http://localhost:3001";
 
@@ -98,7 +99,7 @@ export default function DaftarKredit(props) {
               <td>{kredit.username}</td>
               <td>{kredit.id_user}</td>
               <td>{kredit.nama_barang}</td>
-              <td>{kredit.harga}</td>
+              <td>{numberWithCommas(kredit.besar_cicilan)}</td>
               <td>{kredit.cicilan} Bulan</td>
               <td>{kredit.status}</td>
               <td>

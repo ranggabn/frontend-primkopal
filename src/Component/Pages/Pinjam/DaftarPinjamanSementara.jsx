@@ -20,7 +20,7 @@ export default function DaftarPinjamanSementara(props) {
 
   function update(id) {
     console.log(id);
-    props.history.push("/editstatuspinjaman/" + id);
+    props.history.push("/editstatuspinjam/" + id);
   }
 
   const { state } = useContext(AuthContext);

@@ -49,7 +49,7 @@ export default function DaftarSimpanan(props) {
       <Table className="table-bordered">
         <thead>
           <tr>
-            <th colspan="6" className="text-center" bgcolor="#BABABA">
+            <th colSpan="6" className="text-center" bgcolor="#BABABA">
               <h5>
                 <b>Rincian Simpanan Anggota</b>
                 <Dropdown

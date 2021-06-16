@@ -1,72 +1,64 @@
-import React, { Component } from "react";
+import React, { useEffect, useState } from "react";
 import { Col, ListGroup, ListGroupItem } from "reactstrap";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faUtensils,
-  faCoffee,
-  faCheese,
+  faCameraRetro,
+  faPencilAlt,
+  faBriefcase,
+  faCar,
+  faShoppingBag
 } from "@fortawesome/free-solid-svg-icons";
 
-const api = "http://localhost:3004";
+const api = "http://localhost:3001";
 
-const Icon = ({ nama }) => {
-  if (nama === "Makanan")
-    return <FontAwesomeIcon icon={faUtensils} className="mr-3" />;
-  if (nama === "Minuman")
-    return <FontAwesomeIcon icon={faCoffee} className="mr-2" />;
-  if (nama === "Cemilan")
-    return <FontAwesomeIcon icon={faCheese} className="mr-3" />;
-  return <FontAwesomeIcon icon={faUtensils} className="mr-2" />;
-};
+export default function Kategori(props) {
+  const [kategori, setkategori] = useState([]);
+  useEffect(() => {
+    axios.get(api + "/tampilKategori").then((res) => {
+      setkategori(res.data.values);
+    });
+  }, []);
+  const kb = kategori.map((kb) => kb);
 
-export default class Hasil extends Component {
-  constructor(props) {
-    super(props);
+  const Icon = ({ nama }) => {
+    if (nama == "Bahan Pokok")
+      return <FontAwesomeIcon icon={faUtensils} className="mr-3" />;
+    if (nama == "Alat Tulis")
+      return <FontAwesomeIcon icon={faPencilAlt} className="mr-3" />;
+    if (nama == "Alat Kantor")
+      return <FontAwesomeIcon icon={faBriefcase} className="mr-3" />;
+    if (nama == "Elektronik")
+      return <FontAwesomeIcon icon={faCameraRetro} className="mr-3" />;
+    if (nama == "Kendaraan")
+      return <FontAwesomeIcon icon={faCar} className="mr-3" />;
+    if (nama == "Merchandise")
+      return <FontAwesomeIcon icon={faShoppingBag} className="mr-3" />;
 
-    this.state = {
-      categories: [],
-    };
+      return <FontAwesomeIcon icon={faUtensils} className="mr-3" />;
+  };
+
+  function tampil(id){
+    console.log(id);
+    props.history.push('/menu')
   }
 
-  componentDidMount() {
-    axios
-      .get(api + "/categories")
-      .then((res) => {
-        console.log("Response : ", res);
-        const categories = res.data;
-        this.setState({ categories });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
-
-  render() {
-    const { categories } = this.state;
-    const { changeCategory } = this.props;
-    return (
-      <Col md={2} mt="2">
-        <hr />
-        <h4>
-          <strong>Kategori</strong>
-        </h4>
-        <hr />
-        <ListGroup>
-          {categories &&
-            categories.map((kategori) => (
-              <ListGroupItem
-                tag="button"
-                action
-                key={kategori.id}
-                onClick={() => changeCategory(kategori.nama)}
-              >
-                <Icon nama={kategori.nama} />
-                {kategori.nama}
-              </ListGroupItem>
-            ))}
-        </ListGroup>
-      </Col>
-    );
-  }
+  return (
+    <Col md={2} mt="2">
+      <hr />
+      <h4>
+        <strong>Kategori</strong>
+      </h4>
+      <hr />
+      <ListGroup>
+        {kb.map((kb, key) => (
+          <ListGroupItem tag="button" action key={key}>
+            <Icon nama={kb.kategori_barang} />
+            {kb.kategori_barang}
+          </ListGroupItem>
+        ))}
+      </ListGroup>
+    </Col>
+  );
 }

@@ -1,22 +1,29 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Container, Alert, Button, Table, NavLink } from "reactstrap";
+import { Container, Table } from "reactstrap";
 import axios from "axios";
+import { Redirect, useParams } from "react-router";
 import { AuthContext } from "../../../App";
+import moment from 'moment'
+import { numberWithCommas } from "../../Fungsional/Koma";
 
 const api = "http://localhost:3001";
 
 export default function TampilKredit() {
-
   const { state } = useContext(AuthContext);
-
-  const [mahasiswa, setMahasiswa] = useState([]);
+  let id_user  = useParams()
+  id_user = state.id
+  const [kredit, setkredit] = useState([])
 
   useEffect(() => {
-    axios.get(api + "/tampil").then((res) => {
-      setMahasiswa(res.data.values);
+    axios.get(api + "/tampilKreditUser/" + id_user).then((res) => {
+      setkredit(res.data.values);
+      console.log(kredit);
     });
+    
   }, []);
-
+  if (!state.isAuthenticated) {
+    return <Redirect to="/masuk" />;
+  }
   return (
     <Container className="mt-5">
       <h2>Data Kredit</h2>
@@ -24,7 +31,7 @@ export default function TampilKredit() {
       <Table className="table-bordered">
         <thead>
           <tr>
-            <th colspan="4" className="text-center" bgcolor="#BABABA">
+            <th colSpan="6" className="text-center" bgcolor="#BABABA">
               <h5>
                 <b>RINCIAN KREDIT</b>
               </h5>
@@ -38,31 +45,32 @@ export default function TampilKredit() {
               <br />
               Satuan Kerja
             </th>
-            <th colspan="3">
+            <th colSpan="5">
               : {state.user}
               <br />
-              : 175150200111062
+              : {state.id}
               <br />
-              : Teknik Informatika
+              : {state.role}
             </th>
           </tr>
           <tr>
-            <th>Tanggal</th>
-            <th>Cicilan ke - </th>
-            <th>Jumlah Pembayaran</th>
-            <th>Total Harga Kredit</th>
+            <th>Tanggal Awal Kredit</th>
+            <th>Lama Cicilan</th>
+            <th>Cicilan / Bulan</th>
+            <th>Nama Barang</th>
+            <th>Total Kredit</th>
+            <th>Status</th>
           </tr>
         </thead>
         <tbody>
-          {mahasiswa.map((mahasiswa) => (
-            <tr key={mahasiswa.id_mahasiswa}>
-              <td>{mahasiswa.nim}</td>
-              <td>{mahasiswa.nama}</td>
-              <td>{mahasiswa.jurusan}</td>
-              <td>
-                <span> </span>
-                <Button color="danger">Hapus</Button>
-              </td>
+          {kredit.map((kredit) => (
+            <tr key={kredit.id_user}>
+              <td>{moment(kredit.tanggal_kredit).format('YYYY-MM-DD')}</td>
+              <td>{kredit.id_cicil} Bulan</td>
+              <td>{numberWithCommas(kredit.besar_cicilan)}</td>
+              <td>{kredit.nama_barang}</td>              
+              <td>{numberWithCommas(kredit.harga)}</td>
+              <td>{kredit.status}</td>
             </tr>
           ))}
         </tbody>

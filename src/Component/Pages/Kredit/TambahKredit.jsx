@@ -24,14 +24,14 @@ export default function TambahKredit(props) {
   const [data, setData] = useState({
     id_user: "",
     id_status: "",
-    id_cicilan: "",
+    id_cicil: "",
     nama: "",
     satker: "",
     nomor_telefon: "",
     nama_barang: "",
     harga: "",
     terbilang: "",
-    cicil: "",
+    besar_cicilan: "",
     tanggal_kredit: "",
   });
   const [visible, setVisible] = useState(false);
@@ -41,7 +41,6 @@ export default function TambahKredit(props) {
     setData({
       tanggal_kredit: moment().format("YYYY-MM-DD"),
       id_status: 1,
-      cicil: 1999,
     });
   }, []);
 
@@ -61,7 +60,7 @@ export default function TambahKredit(props) {
       setVisible(myData);
       e.preventDefault();
       setData({
-        id_cicilan: "",
+        id_cicil: "",
         id_user: "",
         nama: "",
         satker: "",
@@ -77,9 +76,9 @@ export default function TambahKredit(props) {
   function handle(e) {
     const newData = { ...data };
     newData[e.target.name] = e.target.value;
-    setData(newData);
-    besarCicilan = newData.harga / newData.id_cicilan + newData.harga * 0.01;
-    // console.log(besarCicilan);
+    besarCicilan = parseInt(newData.harga, 10) / parseInt(newData.id_cicil, 10) + parseInt(newData.harga, 10) * 0.01;
+    console.log(newData.harga, newData.id_cicil);
+    setData({...newData, besar_cicilan:besarCicilan})
   }
 
   if (!state.isAuthenticated) {
@@ -196,15 +195,15 @@ export default function TambahKredit(props) {
                 <Col>
                   <Input
                     type="select"
-                    name="id_cicilan"
-                    value={data.id_cicilan}
+                    name="id_cicil"
+                    value={data.id_cicil}
                     onChange={(e) => handle(e)}
                   >
                     <option value="" disabled selected>
                       Pilih Cicilan
                     </option>
                     {cicil.map((cicil, key) => (
-                      <option key={key} value={cicil.id_cicilan}>
+                      <option key={key} value={cicil.id_cicil}>
                         {cicil.cicilan} Bulan
                       </option>
                     ))}
@@ -218,8 +217,8 @@ export default function TambahKredit(props) {
                 <Col>
                   <Input
                     type="number"
-                    name="cicil"
-                    value={data.cicil}
+                    name="besar_cicilan"
+                    value={data.besar_cicilan}
                     onChange={(e) => handle(e)}
                     disabled
                   />

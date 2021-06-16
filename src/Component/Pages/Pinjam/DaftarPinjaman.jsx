@@ -97,7 +97,7 @@ export default function DaftarPinjaman(props) {
               <td>{pinjaman.username}</td>
               <td>{pinjaman.id_user}</td>
               <td>{pinjaman.besar_pinjaman}</td>
-              <td>{pinjaman.besar_pinjaman}</td>
+              <td>{pinjaman.besar_cicilan}</td>
               <td>{pinjaman.cicilan} Bulan</td>
               <td>{pinjaman.status}</td>
               <td>

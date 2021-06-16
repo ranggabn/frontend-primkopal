@@ -1,18 +1,15 @@
 import React, { useReducer, createContext } from "react";
 import "./App.css";
-import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
-import NavbarComp from "./Component/Fungsional/NavbarComp";
+import { BrowserRouter, Switch, Route } from "react-router-dom";
 import Home from "./Component/Pages/Home/Home";
 import Footer from "./Component/Fungsional/Footer";
 import Visimisi from "./Component/Pages/Profil/Visimisi";
 import Kredit1 from "./Component/Pages/Kredit/Kredit1";
-import Kredit2 from "./Component/Pages/Kredit/Kredit2";
 import Masuk from "./Component/Pages/Masuk/Masuk";
 import Daftar from "./Component/Pages/Daftar/Daftar";
 import Simpan from "./Component/Pages/Simpan/Simpan";
 import Pinjam1 from "./Component/Pages/Pinjam/Pinjam1";
 import Pinjam2 from "./Component/Pages/Pinjam/Pinjam2";
-import Pinjam3 from "./Component/Pages/Pinjam/Pinjam3";
 import Tabungan from "./Component/Pages/Simpan/Tabungan";
 import TampilPinjaman from "./Component/Pages/Pinjam/TampilPinjaman";
 import TampilKredit from "./Component/Pages/Kredit/TampilKredit";
@@ -60,10 +57,10 @@ const initialState = {
 const reducer = (state, action) => {
   switch (action.type) {
     case "LOGIN":
-      localStorage.setItem("user", JSON.stringify(action.payload.user));
-      localStorage.setItem("token", JSON.stringify(action.payload.token));
-      localStorage.setItem("role", JSON.stringify(action.payload.role));
-      localStorage.setItem("id", JSON.stringify(action.payload.id));
+      localStorage.setItem("user", action.payload.user);
+      localStorage.setItem("token", action.payload.token);
+      localStorage.setItem("role", action.payload.role);
+      localStorage.setItem("id", action.payload.id);
       return {
         ...state,
         isAuthenticated: true,
@@ -99,14 +96,12 @@ function App() {
           <Route exact path="/Home" component={HomeComp} />
           <Route exact path="/Register" component={Register} />
           <Route exact path="/visimisi" component={Visimisi} />
-          <Route exact path="/kredit" component={Kredit1} />
-          <Route exact path="/kredit2" component={Kredit2} />
+          <Route exact path="/kredit" component={Kredit1} />          
           <Route exact path="/masuk" component={Masuk} />
           <Route exact path="/daftar" component={Daftar} />
           <Route exact path="/simpan" component={Simpan} />
           <Route exact path="/pinjam" component={Pinjam1} />
-          <Route exact path="/pinjam2" component={Pinjam2} />
-          <Route exact path="/pinjam3" component={Pinjam3} />
+          <Route exact path="/pinjam2" component={Pinjam2} />          
           <Route exact path="/tabungan" component={Tabungan} />
           <Route exact path="/tampilpinjaman" component={TampilPinjaman} />
           <Route exact path="/tampilkredit" component={TampilKredit} />

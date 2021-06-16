@@ -25,7 +25,7 @@ export default function MenuStaff() {
         <Collapse isOpen={isOpen} navbar>
           <Nav className="mr-auto" navbar>
             <NavItem>
-              <NavLink to="/staff" className="nav-link">
+              <NavLink to="/Home" className="nav-link">
                 Home
               </NavLink>
             </NavItem>

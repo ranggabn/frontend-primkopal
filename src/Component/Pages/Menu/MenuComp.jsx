@@ -8,24 +8,21 @@ import MenuStaff from "./MenuStaff";
 export default function MenuComp() {
   const { state } = useContext(AuthContext);
 
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState([]);
 
   useEffect(() => {
     const loggedInUser = state.user
+    // console.log(loggedInUser);
     if (loggedInUser) {
-      const foundUser = JSON.stringify(loggedInUser);
-      setUser(foundUser);
+      setUser(loggedInUser);
     } 
-  }, []);
+  }, [state.user]);
 
-  if (!state.isAuthenticated) {
-    return <MenuPublik />;
-  }
-  if (user && state.role === 1) {
+  if (user && state.role == 1) {
     return <MenuAdmin />;
-  }if (user && state.role === 2) {
+  }else if (user && state.role == 2) {
     return <MenuStaff />;
-  }if (user && state.role === 3) {
+  }else if (user && state.role == 3) {
     return <MenuMember />;
-  }
+  }else {return <MenuPublik/>}
 }

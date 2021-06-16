@@ -30,7 +30,7 @@ export default function Kredit1(props) {
     nama_barang: "",
     harga: "",
     terbilang: "",
-    cicil: "",
+    besar_cicilan: "",
     tanggal_kredit: "",
   });
   const [visible, setVisible] = useState(false);
@@ -67,6 +67,7 @@ export default function Kredit1(props) {
         nama_barang: "",
         harga: "",
         terbilang: "",
+        besar_cicilan: ""
       });
     });
   }
@@ -75,9 +76,9 @@ export default function Kredit1(props) {
   function handle(e) {
     const newData = { ...data };
     newData[e.target.name] = e.target.value;
-    setData(newData);
-    besarCicilan = newData.harga / newData.id_cicilan + newData.harga * 0.01;
-    // console.log(besarCicilan);
+    besarCicilan = parseInt(newData.harga, 10) / parseInt(newData.id_cicil, 10) + parseInt(newData.harga, 10) * 0.01;
+    console.log(newData.harga, newData.id_cicil);
+    setData({...newData, besar_cicilan:besarCicilan})
   }
 
   if (!state.isAuthenticated) {
@@ -216,8 +217,8 @@ export default function Kredit1(props) {
                 <Col>
                   <Input
                     type="number"
-                    name="cicil"
-                    value={data.cicil}
+                    name="besar_cicilan"
+                    value={data.besar_cicilan}
                     onChange={(e) => handle(e)}
                     disabled
                   />

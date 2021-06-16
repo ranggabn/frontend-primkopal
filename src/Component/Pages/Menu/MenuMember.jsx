@@ -27,7 +27,7 @@ export default function MenuMember() {
           <Collapse isOpen={isOpen} navbar>
             <Nav className="mr-auto" navbar>
               <NavItem>
-                <NavLink to="/member" className="nav-link">
+                <NavLink to="/Home" className="nav-link">
                   Home
                 </NavLink>
               </NavItem>
