@@ -65,7 +65,7 @@ export default function EditPinjaman(props) {
     setData({ ...newData, besar_cicilan: besarCicilan });
     console.log(besarCicilan);
   }
-
+  
   if (!state.isAuthenticated) {
     return <Redirect to="/masuk" />;
   }

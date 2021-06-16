@@ -189,7 +189,7 @@ export default function Kredit1(props) {
                 </FormGroup>
               </Col>
             </Row>
-            <Label>Pilih Lama Cicilan</Label>
+            <Label>Lama Cicilan</Label>
             <FormGroup>
               <Row>
                 <Col>

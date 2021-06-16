@@ -8,7 +8,7 @@ import { Redirect } from "react-router";
 const api = "http://localhost:3001";
 
 export default function DaftarAnggota(props) {
-
+  const { state } = useContext(AuthContext);
   const [mahasiswa, setMahasiswa] = useState([]);
 
   useEffect(() => {
@@ -39,10 +39,8 @@ export default function DaftarAnggota(props) {
     console.log(id);
     props.history.push("/editanggota/"+id)
   }
-
-  const { state } = useContext(AuthContext);
   
-  if(!state.isAuthenticated){    
+  if(!state.isAuthenticated){   
     return <Redirect to="/masuk"/>
   }
   return (

@@ -22,7 +22,6 @@ export default function EditBarang(props) {
   const [barang, setbarang] = useState([]);
   const [data, setData] = useState({});
   const [newImage, setnewImage] = useState("");
-  console.log(newImage);
 
   const [statusSelect, setStatusSelect] = useState([]);
   useEffect(() => {
@@ -57,7 +56,7 @@ export default function EditBarang(props) {
       .put(api + "/ubahBarang", data)
       .catch((err) => console.error(err));
     setbarang(data);
-    props.history.push("/daftarbarang");
+    // props.history.push("/daftarbarang");
   };
 
   async function handleUploadImage(e) {
@@ -66,9 +65,9 @@ export default function EditBarang(props) {
     let temporary = Array.from(e.target.files)[0];
     let result = await getBase64(temporary);
     setnewImage(result);
-    const inputImage = ({...newImage[e.target.name] = e.target.value})
-    inputImage[e.target.name] = e.target.value;
-    setData(inputImage)
+    setData({...data,gambar:newImage});
+    // setData({...data, gambar : newImage});
+    // console.log(data.gambar);  
   }
 
   const handle = (name) => (e) => {
@@ -83,7 +82,7 @@ export default function EditBarang(props) {
   if (data) {
     if (data.gambar) {
       // console.log(URL.createObjectURL(data.gambar));
-      console.log(data.gambar);
+      // console.log(data.gambar);
     }
     return (
       <Container className="mt-5">
@@ -190,7 +189,7 @@ export default function EditBarang(props) {
                     accept="image/*"
                   />
                   <img
-                    src={newImage || data.gambar}
+                    src={data.gambar || newImage}
                     alt="gambar"
                     width={200}
                     height={200}

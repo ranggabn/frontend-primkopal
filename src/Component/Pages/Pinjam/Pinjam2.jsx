@@ -15,6 +15,7 @@ import axios from "axios";
 import { Redirect } from "react-router";
 import { AuthContext } from "../../../App";
 import moment from "moment";
+import { getBase64 } from "../../../Util/GetBase64";
 
 const api = "http://localhost:3001";
 
@@ -32,7 +33,7 @@ export default function Pinjam2() {
     keperluan: "",
     tanggal_pinjam: "",
     besar_cicilan: "",
-    nama: ""
+    nama: "",
   });
   const [visible, setVisible] = useState(false);
   const onDismiss = () => setVisible(false);
@@ -41,7 +42,7 @@ export default function Pinjam2() {
     setData({
       tanggal_pinjam: moment().format("YYYY-MM-DD"),
       id_status: 1,
-      id_user: state.id
+      id_user: state.id,
     });
   }, []);
 
@@ -68,7 +69,7 @@ export default function Pinjam2() {
         terbilang: "",
         keperluan: "",
         tanggal_pinjam: "",
-        besar_cicilan: ""
+        besar_cicilan: "",
       });
     });
   }
@@ -77,9 +78,18 @@ export default function Pinjam2() {
   function handle(e) {
     const newData = { ...data };
     newData[e.target.name] = e.target.value;
-    besarCicilan = parseInt(newData.besar_pinjaman, 10) / parseInt(newData.id_cicil, 10) + parseInt(newData.besar_pinjaman, 10) * 0.01;
+    besarCicilan =
+      parseInt(newData.besar_pinjaman, 10) / parseInt(newData.id_cicil, 10) +
+      parseInt(newData.besar_pinjaman, 10) * 0.01;
     console.log(newData.besar_pinjaman, newData.id_cicil);
-    setData({...newData, besar_cicilan:besarCicilan})
+    setData({ ...newData, besar_cicilan: besarCicilan });
+  }
+
+  async function handleUploadImage(e) {
+    e.preventDefault();
+    let temporary = Array.from(e.target.files)[0];
+    let result = await getBase64(temporary);
+    setData({ ...data, [e.target.value]: result });
   }
 
   if (!state.isAuthenticated) {
@@ -190,13 +200,14 @@ export default function Pinjam2() {
                 </Col>
               </Row>
             </FormGroup>
+            <Label>Lama Cicilan</Label>
             <FormGroup>
               <Row>
                 <Col>
                   <Input
                     type="select"
                     name="id_cicil"
-                    value={data.id_cicil}                    
+                    value={data.id_cicil}
                     onChange={(e) => handle(e)}
                   >
                     <option value="" disabled selected>
@@ -218,13 +229,140 @@ export default function Pinjam2() {
                   <Input
                     type="number"
                     name="besar_cicilan"
-                    value={data.besar_cicilan}                    
+                    value={data.besar_cicilan}
                     onChange={(e) => handle(e)}
                     disabled
                   />
                 </Col>
               </Row>
             </FormGroup>
+            <hr />
+            <Label>KTA</Label>
+            <FormGroup>
+              <Row>
+                <Col>
+                  <Input
+                    type="file"
+                    name="gambar"
+                    onChange={(e) => handleUploadImage(e)}
+                    accept="image/*"
+                  />
+                </Col>
+              </Row>
+            </FormGroup>
+            <hr />
+            <Label>KTP Pemohon</Label>
+            <FormGroup>
+              <Row>
+                <Col>
+                  <Input
+                    type="file"
+                    name="gambar"
+                    onChange={(e) => handleUploadImage(e)}
+                    accept="image/*"
+                  />
+                </Col>
+              </Row>
+            </FormGroup>
+            <hr />
+            <Label>KTP Suami / Istri</Label>
+            <FormGroup>
+              <Row>
+                <Col>
+                  <Input
+                    type="file"
+                    name="gambar"
+                    onChange={(e) => handleUploadImage(e)}
+                    accept="image/*"
+                  />
+                </Col>
+              </Row>
+            </FormGroup>
+            <hr />
+            <Label>Slip Gaji</Label>
+            <FormGroup>
+              <Row>
+                <Col>
+                  <Input
+                    type="file"
+                    name="gambar"
+                    onChange={(e) => handleUploadImage(e)}
+                    accept="image/*"
+                  />
+                </Col>
+              </Row>
+            </FormGroup>
+            <hr />
+            <Label>Rincian Gaji Juru Bayar</Label>
+            <FormGroup>
+              <Row>
+                <Col>
+                  <Input
+                    type="file"
+                    name="gambar"
+                    onChange={(e) => handleUploadImage(e)}
+                    accept="image/*"
+                  />
+                </Col>
+              </Row>
+            </FormGroup>
+            <hr />
+            <Label>Kartu Keluarga Non Dinas</Label>
+            <FormGroup>
+              <Row>
+                <Col>
+                  <Input
+                    type="file"
+                    name="gambar"
+                    onChange={(e) => handleUploadImage(e)}
+                    accept="image/*"
+                  />
+                </Col>
+              </Row>
+            </FormGroup>
+            <hr />
+            <Label>Surat Pernyataan Kesehatan</Label>
+            <FormGroup>
+              <Row>
+                <Col>
+                  <Input
+                    type="file"
+                    name="gambar"
+                    onChange={(e) => handleUploadImage(e)}
+                    accept="image/*"
+                  />
+                </Col>
+              </Row>
+            </FormGroup>
+            <hr />
+            <Label>Asuransi BP Jiwa Asri</Label>
+            <FormGroup>
+              <Row>
+                <Col>
+                  <Input
+                    type="file"
+                    name="gambar"
+                    onChange={(e) => handleUploadImage(e)}
+                    accept="image/*"
+                  />
+                </Col>
+              </Row>
+            </FormGroup>
+            <hr />
+            <Label>SK Bebas Hutang Bank</Label>
+            <FormGroup>
+              <Row>
+                <Col>
+                  <Input
+                    type="file"
+                    name="gambar"
+                    onChange={(e) => handleUploadImage(e)}
+                    accept="image/*"
+                  />
+                </Col>
+              </Row>
+            </FormGroup>
+            <hr />
             <Alert color="info" isOpen={visible} toggle={onDismiss}>
               Pinjaman berhasil diajukan, Untuk informasi lebih lengkap silahkan
               dilihat pada halaman data Pinjaman!

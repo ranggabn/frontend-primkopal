@@ -30,7 +30,9 @@ const api = "http://localhost:3001";
 
 export default function Produk(props) {
   const [produk, setproduk] = useState([]);
-  const [data, setdata] = useState('1');
+  const [data, setdata] = useState({
+    id_kategori : '1'
+  });
   const [kategori, setkategori] = useState([]);
 
   useEffect(() => {
@@ -57,18 +59,24 @@ export default function Produk(props) {
     return <FontAwesomeIcon icon={faUtensils} className="mr-3" />;
   };
 
-  function tampilPerKategori(id) {
-    console.log(id);
-    setdata(id)
-  }
-
   useEffect(() => {
-    axios.get(api + "/tampilbarangIdKategori/" + data).then((res) => {
+    axios.get(api + "/tampilBarang").then((res) => {
       setproduk(res.data.values);
       console.log(res.data.values);
     });
-  }, []);
+  }, [])
+
+  function handle(id) {
+    const newData = { ...data, id_kategori : id};
+    setdata(newData)
+    axios.get(api + "/tampilbarangIdKategori/" + newData.id_kategori).then((res) => {
+      setproduk(res.data.values);
+      console.log(res.data.values);
+    });
+    console.log(newData);
+  }
   const produks = produk.map((produks) => produks);
+
   return (
     <div>
       <Container>
@@ -92,7 +100,7 @@ export default function Produk(props) {
           <hr />
           <ListGroup>
             {kb.map((kb, key) => (
-              <ListGroupItem tag="button" action key={key} onClick={(e) => tampilPerKategori(kb.id)}>
+              <ListGroupItem tag="button" action key={key} onClick={() => handle(kb.id)}>
                 <Icon nama={kb.kategori_barang} />
                 {kb.kategori_barang}
               </ListGroupItem>
