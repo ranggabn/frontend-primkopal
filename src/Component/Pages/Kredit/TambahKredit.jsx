@@ -18,7 +18,7 @@ import moment from "moment";
 
 const api = "http://localhost:3001";
 
-export default function TambahKredit(props) {
+export default function TambahKredit() {
   const { state } = useContext(AuthContext);
   const [kredit, setKredit] = useState([]);
   const [data, setData] = useState({

@@ -56,7 +56,7 @@ export default function EditBarang(props) {
       .put(api + "/ubahBarang", data)
       .catch((err) => console.error(err));
     setbarang(data);
-    // props.history.push("/daftarbarang");
+    props.history.push("/daftarbarang");
   };
 
   async function handleUploadImage(e) {
@@ -65,7 +65,7 @@ export default function EditBarang(props) {
     let temporary = Array.from(e.target.files)[0];
     let result = await getBase64(temporary);
     setnewImage(result);
-    setData({...data,gambar:newImage});
+    setData({...data,gambar:result});
     // setData({...data, gambar : newImage});
     // console.log(data.gambar);  
   }
@@ -80,10 +80,6 @@ export default function EditBarang(props) {
     return <Redirect to="/masuk" />;
   }
   if (data) {
-    if (data.gambar) {
-      // console.log(URL.createObjectURL(data.gambar));
-      // console.log(data.gambar);
-    }
     return (
       <Container className="mt-5">
         <h4>Formulir Edit Data Barang</h4>
