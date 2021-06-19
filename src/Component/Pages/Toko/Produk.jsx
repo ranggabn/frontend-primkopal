@@ -11,7 +11,7 @@ import {
   CardText,
   CardTitle,
   Button,
-  Badge
+  Badge,
 } from "reactstrap";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -26,6 +26,7 @@ import {
 import { numberWithCommas } from "../../Fungsional/Koma";
 import { Redirect } from "react-router";
 import { AuthContext } from "../../../App";
+import swal from 'sweetalert'
 
 const api = "http://localhost:3001";
 
@@ -43,7 +44,7 @@ export default function Produk() {
     id_barang: "",
     jumlah_harga: "",
     total_harga: "",
-    jumlah: ""
+    jumlah: "",
   });
   const [tampilkeranjang, settampilkeranjang] = useState([]);
 
@@ -102,25 +103,64 @@ export default function Produk() {
     setdata(newData);
     let response = await axios.get(api + "/tampilBarang/" + newData.id_barang);
     response = response.data.values[0];
-    const dataKer = {
-      ...dataKeranjang,
-      id_barang: response.id_barang,
-      id_user: state.id,
-      jumlah_harga: response.harga,
-      jumlah: 1
-    };
-    setdataKeranjang(dataKer);
-    axios.post(api + "/tambahKeranjang", dataKer).then((res) => {
-      const myData = [...keranjangs, res.data.values];
-      setkeranjangs(myData);
-      getListKeranjang();
-    });
+    axios
+      .get(api + "/tampilKeranjangBarang/" + newData.id_barang)
+      .then((res) => {
+        if (res.data.values.length === 0) {
+          const dataKer = {
+            ...dataKeranjang,
+            id_barang: response.id_barang,
+            id_user: state.id,
+            jumlah_harga: response.harga,
+            jumlah: 1,
+          };
+          setdataKeranjang(dataKer);
+          axios.post(api + "/tambahKeranjang", dataKer).then((res) => {
+            swal({
+              title: "Sukses Masuk Keranjang",
+              text: "Cek Keranjang Anda!",
+              icon: "success",
+              button: false,
+              timer: 1200
+            })
+            console.log(produk.nama);
+            const myData = [...keranjangs, res.data.values];
+            setkeranjangs(myData);
+            getListKeranjang();
+          });
+        } else {
+          const dataKer = {
+            ...dataKeranjang,
+            id_barang: response.id_barang,
+            jumlah_harga: res.data.values[0].jumlah_harga + response.harga,
+            jumlah: res.data.values[0].jumlah + 1,
+          };
+          axios.put(api + "/ubahKeranjang", dataKer).then((res) => {
+            swal({
+              title: "Sukses Masuk Keranjang",
+              text: "Cek Keranjang Anda!",
+              icon: "success",
+              button: false,
+              timer: 1200
+            })
+            const myData = [...keranjangs, res.data.values];
+            setkeranjangs(myData);
+            getListKeranjang();
+          });
+        }
+      });
   }
 
   const getListKeranjang = () => {
     axios.get(api + "/tampilKeranjang/" + state.id).then((res) => {
       settampilkeranjang(res.data.values);
-      console.log(res.data.values);
+    });
+    axios.get(api + "/totalHarga/" + state.id).then((res) => {
+      const dataKer = {
+        ...dataKeranjang,
+        total_harga: res.data.values[0].total_harga,
+      };
+      setdataKeranjang(dataKer);
     });
   };
   const tamker = tampilkeranjang.map((tamker) => tamker);
@@ -142,7 +182,7 @@ export default function Produk() {
         </Row>
       </Container>
 
-      <Row className="mt-5 ml-3 mr-3">
+      <Row className="mt-5 ml-1 mr-1">
         <Col md={2} mt="2">
           <hr />
           <h4>
@@ -150,7 +190,11 @@ export default function Produk() {
           </h4>
           <hr />
           <ListGroup>
-            <ListGroupItem tag="button" action onClick={(e) => semuaKategori(e)}>
+            <ListGroupItem
+              tag="button"
+              action
+              onClick={(e) => semuaKategori(e)}
+            >
               Semua Kategori
             </ListGroupItem>
             {kb.map((kb, key) => (
@@ -213,19 +257,37 @@ export default function Produk() {
             {tamker.map((tamker, key) => (
               <ListGroupItem key={key}>
                 <Row>
-                  <Col xs="2">
+                  <Col xs="1.5">
                     <Badge color="success" pill>
                       {tamker.jumlah}
                     </Badge>
                   </Col>
-                  <Col xs="auto">
+                  <Col>
                     <h5>{tamker.nama}</h5>
                     <p>Rp. {numberWithCommas(tamker.harga)}</p>
                   </Col>
-                  <Col xs="3"></Col>
+                  <Col xs="4.5">
+                    <strong>
+                      {" "}
+                      <p>Rp. {numberWithCommas(tamker.jumlah_harga)}</p>
+                    </strong>
+                  </Col>
                 </Row>
               </ListGroupItem>
             ))}
+            <br />
+          </ListGroup>
+          <ListGroup>
+            <ListGroupItem color="success">
+              <Row>
+                <Col xs="5">
+                  <h5>Total : </h5>
+                </Col>
+                <Col>
+                <h5>Rp. {numberWithCommas(dataKeranjang.total_harga)}</h5>
+                </Col>
+              </Row>
+            </ListGroupItem>
           </ListGroup>
         </Col>
       </Row>

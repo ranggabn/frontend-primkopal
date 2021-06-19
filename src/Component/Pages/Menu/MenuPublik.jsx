@@ -44,11 +44,6 @@ export default function MenuPublik() {
                   <DropdownItem href="/kontak">Kontak</DropdownItem>
                 </DropdownMenu>
               </UncontrolledDropdown>
-              <NavItem>
-                <NavLink to="/toko" className="nav-link">
-                  Toko
-                </NavLink>
-              </NavItem>
             </Nav>
             <NavbarText>
               <Button className="mr-3" href="/masuk">Masuk</Button>

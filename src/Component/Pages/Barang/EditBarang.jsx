@@ -65,9 +65,7 @@ export default function EditBarang(props) {
     let temporary = Array.from(e.target.files)[0];
     let result = await getBase64(temporary);
     setnewImage(result);
-    setData({...data,gambar:result});
-    // setData({...data, gambar : newImage});
-    // console.log(data.gambar);  
+    setbarang({...barang,gambar:result});  
   }
 
   const handle = (name) => (e) => {
