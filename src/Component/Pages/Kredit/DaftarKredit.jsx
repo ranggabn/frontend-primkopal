@@ -10,6 +10,7 @@ import { numberWithCommas } from "../../Fungsional/Koma";
 const api = "http://localhost:3001";
 
 export default function DaftarKredit(props) {
+  const { state } = useContext(AuthContext);
   const [kredit, setkredit] = useState([]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const toggle = () => setDropdownOpen((prevState) => !prevState);
@@ -40,8 +41,6 @@ export default function DaftarKredit(props) {
     console.log(id);
     props.history.push("/editkredit/" + id);
   }
-
-  const { state } = useContext(AuthContext);
 
   if (!state.isAuthenticated) {
     return <Redirect to="/masuk" />;

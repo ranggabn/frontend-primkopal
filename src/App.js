@@ -42,6 +42,7 @@ import EditPinjaman from "./Component/Pages/Pinjam/EditPinjaman";
 import EditSimpanan from "./Component/Pages/Simpan/EditSimpanan";
 import EditStatusKredit from "./Component/Pages/Kredit/EditStatusKredit";
 import EditStatusPinjaman from "./Component/Pages/Pinjam/EditStatusPinjaman";
+import DetailBarang from "./Component/Pages/Toko/DetailBarang";
 
 export const AuthContext = createContext();
 
@@ -131,6 +132,7 @@ function App() {
           <Route exact path="/tambahsimpanan" component={TambahSimpanan} />
           <Route exact path="/editstatuskredit/:id" component={EditStatusKredit} />
           <Route exact path="/editstatuspinjam/:id" component={EditStatusPinjaman} />
+          <Route exact path="/detailBarang/:id" component={DetailBarang} />
         </AuthContext.Provider>
       </Switch>
       <Footer />

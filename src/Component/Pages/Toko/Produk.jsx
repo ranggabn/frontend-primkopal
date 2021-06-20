@@ -26,11 +26,12 @@ import {
 import { numberWithCommas } from "../../Fungsional/Koma";
 import { Redirect } from "react-router";
 import { AuthContext } from "../../../App";
-import swal from 'sweetalert'
+import swal from "sweetalert";
+import ModalKeranjang from "./ModalKeranjang";
 
 const api = "http://localhost:3001";
 
-export default function Produk() {
+export default function Produk(props) {
   const { state } = useContext(AuthContext);
   const [produk, setproduk] = useState([]);
   const [data, setdata] = useState({
@@ -47,6 +48,26 @@ export default function Produk() {
     jumlah: "",
   });
   const [tampilkeranjang, settampilkeranjang] = useState([]);
+  const [modal, setmodal] = useState({
+    showModal: false,
+    jumlah: 0,
+    keterangan: "",
+  });
+
+  const handleShow = (id) => {    
+    axios.get(api + "/tampilKeranjangBarang/" + id).then((res) => {
+      setmodal({
+        showModal: true,
+        keterangan: res.data.values[0],
+      });
+    })
+  };
+
+  const handleClose = () => {
+    setmodal({
+      showModal: false,
+    });
+  };
 
   useEffect(() => {
     axios.get(api + "/tampilKategori").then((res) => {
@@ -121,8 +142,8 @@ export default function Produk() {
               text: "Cek Keranjang Anda!",
               icon: "success",
               button: false,
-              timer: 1200
-            })
+              timer: 1200,
+            });
             console.log(produk.nama);
             const myData = [...keranjangs, res.data.values];
             setkeranjangs(myData);
@@ -141,8 +162,8 @@ export default function Produk() {
               text: "Cek Keranjang Anda!",
               icon: "success",
               button: false,
-              timer: 1200
-            })
+              timer: 1200,
+            });
             const myData = [...keranjangs, res.data.values];
             setkeranjangs(myData);
             getListKeranjang();
@@ -164,6 +185,10 @@ export default function Produk() {
     });
   };
   const tamker = tampilkeranjang.map((tamker) => tamker);
+
+  function detailbarang(id) {
+    props.history.push("/detailBarang/" + id);
+  }
 
   if (!state.isAuthenticated) {
     return <Redirect to="/masuk" />;
@@ -233,7 +258,16 @@ export default function Produk() {
                     <CardText>{produks.kategori_barang}</CardText>
                     <Button
                       color="secondary"
-                      className="mt-3 mb-4"
+                      className="mt-3"
+                      type="button"
+                      onClick={() => detailbarang(produks.id_barang)}
+                      block
+                    >
+                      Detail Barang
+                    </Button>
+                    <Button
+                      color="info"
+                      className="mb-4"
                       type="button"
                       onClick={() => keranjang(produks.id_barang)}
                       block
@@ -250,12 +284,17 @@ export default function Produk() {
         <Col md={3} mt="2">
           <hr />
           <h4>
-            <strong>Hasil</strong>
+            <strong>Keranjang</strong>
           </h4>
           <hr />
           <ListGroup flush>
             {tamker.map((tamker, key) => (
-              <ListGroupItem key={key}>
+              <ListGroupItem
+                key={key}
+                type="button"
+                onClick={() => handleShow(tamker.id_barang)}
+                action
+              >
                 <Row>
                   <Col xs="1.5">
                     <Badge color="success" pill>
@@ -275,6 +314,7 @@ export default function Produk() {
                 </Row>
               </ListGroupItem>
             ))}
+            <ModalKeranjang handleClose={handleClose} handleShow={handleShow} {...modal}/>
             <br />
           </ListGroup>
           <ListGroup>
@@ -284,11 +324,18 @@ export default function Produk() {
                   <h5>Total : </h5>
                 </Col>
                 <Col>
-                <h5>Rp. {numberWithCommas(dataKeranjang.total_harga)}</h5>
+                  <h5>Rp. {numberWithCommas(dataKeranjang.total_harga)}</h5>
                 </Col>
               </Row>
             </ListGroupItem>
           </ListGroup>
+          <Row className="mt-3">
+            <Container>
+              <Button color="success" block>
+                Lanjutkan Pembayaran
+              </Button>
+            </Container>
+          </Row>
         </Col>
       </Row>
     </div>
