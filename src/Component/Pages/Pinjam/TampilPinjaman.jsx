@@ -54,7 +54,7 @@ export default function TampilPinjaman() {
             <tr>
               <th>Tanggal Awal Pinjaman</th>
               <th>Lama Cicilan</th>
-              <th>Jumlah Pembayaran</th>
+              <th>Jumlah Pembayaran / Bulan</th>
               <th>Total Pinjaman</th>
               <th>Status Pinjaman</th>
             </tr>
@@ -64,8 +64,8 @@ export default function TampilPinjaman() {
             <tr key={pinjaman.id_pinjaman}>
               <td>{moment(pinjaman.tanggal_pinjam).format('YYYY-MM-DD')}</td>
               <td>{pinjaman.id_cicil} Bulan</td>
-              <td>{numberWithCommas(pinjaman.besar_cicilan)}</td>
-              <td>{numberWithCommas(pinjaman.besar_pinjaman)}</td>
+              <td>Rp. {numberWithCommas(pinjaman.besar_cicilan)}</td>
+              <td>Rp. {numberWithCommas(pinjaman.besar_pinjaman)}</td>
               <td>{pinjaman.status}</td>
               </tr>
             ))}

@@ -17,7 +17,7 @@ import { numberWithCommasString } from "../../Fungsional/Koma";
 
 const api = "http://localhost:3001";
 
-export default function DetailBarang(props) {
+export default function DetailBarang() {
   let { id } = useParams();
   const { state } = useContext(AuthContext);
   const [barang, setbarang] = useState([]);
@@ -64,7 +64,7 @@ export default function DetailBarang(props) {
                 <Row className="mt-2">
                   <Container fluid>
                     <Card body>
-                      <CardTitle tag="h5">Detail Barang : </CardTitle>
+                      <CardTitle tag="h5">KETERANGAN : </CardTitle>
                       <CardText>{barang.keterangan}</CardText>
                     </Card>
                   </Container>

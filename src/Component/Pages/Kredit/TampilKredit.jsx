@@ -67,9 +67,9 @@ export default function TampilKredit() {
             <tr key={kredit.id_user}>
               <td>{moment(kredit.tanggal_kredit).format('YYYY-MM-DD')}</td>
               <td>{kredit.id_cicil} Bulan</td>
-              <td>{numberWithCommas(kredit.besar_cicilan)}</td>
+              <td>Rp. {numberWithCommas(kredit.besar_cicilan)}</td>
               <td>{kredit.nama_barang}</td>              
-              <td>{numberWithCommas(kredit.harga)}</td>
+              <td>Rp. {numberWithCommas(kredit.harga)}</td>
               <td>{kredit.status}</td>
             </tr>
           ))}

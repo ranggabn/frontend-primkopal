@@ -1,5 +1,5 @@
-import React from "react";
-import { ModalTitle } from "react-bootstrap";
+import React, { useState, useEffect } from "react";
+import { FormControl, ModalTitle } from "react-bootstrap";
 import {
   Button,
   Modal,
@@ -9,24 +9,110 @@ import {
   Form,
   FormGroup,
   Label,
-  Input,
 } from "reactstrap";
-import { numberWithCommas } from "../../Fungsional/Koma";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faPlus,
-  faMinus
-} from "@fortawesome/free-solid-svg-icons";
+  numberWithCommas,
+  numberWithCommasString,
+} from "../../Fungsional/Koma";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus, faMinus, faTrash } from "@fortawesome/free-solid-svg-icons";
+import axios from "axios";
+import swal from 'sweetalert'
+import qs from 'querystring'
 
-export default function ModalKeranjang({ showModal, handleClose, keterangan }) {
+const api = "http://localhost:3001";
+
+export default function ModalKeranjang({ showModal, handleClose, keterangan, toggle, jumlah, jumlah_harga, getListKeranjang }) {
+  const [keranjangs, setkeranjangs] = useState([])
+  const [dataKeranjang, setdataKeranjang] = useState({
+    id_user: "",
+    id_barang: "",
+    jumlah_harga: "",
+    total_harga: "",
+    jumlah: "",
+  });
+  const [data, setdata] = useState({
+    jumlahBarang: jumlah,
+    jumlahHarga: jumlah_harga,
+  });  
+
+  useEffect(() => {
+    setdata({
+      jumlahBarang: jumlah,
+      jumlahHarga: jumlah_harga,
+    });
+  }, [jumlah, jumlah_harga]);
+
+  const tambah = () => {
+    setdata({
+      jumlahBarang: data.jumlahBarang + 1,
+      jumlahHarga: keterangan.harga * (data.jumlahBarang + 1),
+    });
+  };
+
+  const kurang = () => {
+    if (data.jumlahBarang !== 1) {
+      setdata({
+        jumlahBarang: data.jumlahBarang - 1,
+        jumlahHarga: keterangan.harga * (data.jumlahBarang - 1),
+      });
+    }
+  };
+  
+  function handlesubmit() {
+    const dataKer = {
+      ...dataKeranjang,
+      id_barang: keterangan.id_barang,
+      jumlah_harga: data.jumlahHarga,
+      jumlah: data.jumlahBarang,
+    };
+    axios.put(api + "/ubahKeranjang", dataKer).then((res) => {
+      swal({
+        title: "Sukses Update Keranjang",
+        text: "Cek Keranjang Anda!",
+        icon: "success",
+        button: false,
+        timer: 1200,
+      });
+      const myData = [...keranjangs, res.data.values];
+      setkeranjangs(myData);
+      getListKeranjang();
+      handleClose()
+    });
+  }
+
+  function remove(id) {
+    // console.log(id);
+    const data = qs.stringify({ id_barang: id });
+    axios
+      .delete(api + "/hapusKeranjangId", {
+        data: data,
+        headers: { "Content-type": "application/x-www-form-urlencoded" },
+      })
+      .then((res) => {
+        swal({
+          title: "Sukses Menghapus Barang",
+          text: "Cek Keranjang Anda!",
+          icon: "success",
+          button: false,
+          timer: 1200,
+        });
+        const newData = keranjangs.filter((keranjangs) => keranjangs.id_barang !== id);
+        setkeranjangs(newData);
+        getListKeranjang()
+        handleClose()
+      })
+      .catch((err) => console.error(err));
+  }
+
   if (keterangan) {
     return (
       <div>
-        <Modal isOpen={showModal}>
-          <ModalHeader>
+        <Modal isOpen={showModal} toggle={toggle}>
+          <ModalHeader toggle={toggle}>
             <ModalTitle>
-              <strong>{keterangan.nama}</strong> (Rp.{" "}
-              {numberWithCommas(keterangan.harga)})
+              <strong>{keterangan.nama}</strong>
+              <h6>Rp. {numberWithCommas(keterangan.harga)}</h6>
             </ModalTitle>
           </ModalHeader>
           <ModalBody>
@@ -34,32 +120,49 @@ export default function ModalKeranjang({ showModal, handleClose, keterangan }) {
               <FormGroup>
                 <Label>Total Harga : </Label>
                 <strong>
-                  <p>Rp. {numberWithCommas(keterangan.jumlah_harga)}</p>
+                  <p>Rp. {numberWithCommasString(data.jumlahHarga)}</p>
                 </strong>
               </FormGroup>
-              <FormGroup >
+              <FormGroup>
                 <Label>Jumlah :</Label>
-                <br/>
-                <Button color="primary" size="sm">
-                  <FontAwesomeIcon icon={faPlus} />
-                </Button>
-                <strong>{keterangan.jumlah}</strong>
-                <Button color="primary" size="sm">
+                <br />
+                <Button
+                  color="primary"
+                  size="sm"
+                  className="mr-2"
+                  onClick={() => kurang()}
+                >
                   <FontAwesomeIcon icon={faMinus} />
+                </Button>
+                <strong>{data.jumlahBarang}</strong>
+                <Button
+                  color="primary"
+                  size="sm"
+                  className="ml-2"
+                  onClick={() => tambah()}
+                >
+                  <FontAwesomeIcon icon={faPlus} />
                 </Button>
               </FormGroup>
               <FormGroup>
-                <Label for="exampleText">Text Area</Label>
-                <Input type="textarea" name="text" id="exampleText" />
+                <Label>Keterangan : </Label>
+                <FormControl
+                  as="textarea"
+                  rows="3"
+                  name="keterangan"
+                  defaultValue={keterangan.keterangan}
+                  disabled
+                />
               </FormGroup>
-              <Button>Submit</Button>
             </Form>
           </ModalBody>
           <ModalFooter>
-            <Button color="secondary" onClick={handleClose}>
-              Cancel
+            <Button color="danger" toggle={toggle} onClick={() => remove(keterangan.id_barang)}>
+              <FontAwesomeIcon icon={faTrash} /> Hapus Pesanan
             </Button>{" "}
-            <Button color="primary">Save Changes</Button>
+            <Button color="primary" toggle={toggle} onClick={() => handlesubmit()}>
+              Simpan
+            </Button>
           </ModalFooter>
         </Modal>
       </div>
@@ -69,20 +172,12 @@ export default function ModalKeranjang({ showModal, handleClose, keterangan }) {
       <div>
         <Modal isOpen={showModal}>
           <ModalHeader>Kosong</ModalHeader>
-          <ModalBody>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum.
-          </ModalBody>
+          <ModalBody></ModalBody>
           <ModalFooter>
             <Button color="secondary" onClick={handleClose}>
               Cancel
             </Button>{" "}
-            <Button color="primary">Save Changes</Button>
+            <Button color="primary" onClick={() => handlesubmit()}>Save Changes</Button>
           </ModalFooter>
         </Modal>
       </div>

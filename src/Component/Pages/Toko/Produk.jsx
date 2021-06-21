@@ -12,6 +12,7 @@ import {
   CardTitle,
   Button,
   Badge,
+  FormText,
 } from "reactstrap";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -22,12 +23,17 @@ import {
   faBriefcase,
   faCar,
   faShoppingBag,
+  faInfoCircle
 } from "@fortawesome/free-solid-svg-icons";
-import { numberWithCommas } from "../../Fungsional/Koma";
+import {
+  numberWithCommas,
+  numberWithCommasString,
+} from "../../Fungsional/Koma";
 import { Redirect } from "react-router";
 import { AuthContext } from "../../../App";
 import swal from "sweetalert";
 import ModalKeranjang from "./ModalKeranjang";
+import qs from "querystring";
 
 const api = "http://localhost:3001";
 
@@ -52,15 +58,19 @@ export default function Produk(props) {
     showModal: false,
     jumlah: 0,
     keterangan: "",
+    jumlah_harga: 0,
   });
+  const toggle = () => setmodal(!modal);
 
-  const handleShow = (id) => {    
+  const handleShow = (id) => {
     axios.get(api + "/tampilKeranjangBarang/" + id).then((res) => {
       setmodal({
         showModal: true,
         keterangan: res.data.values[0],
+        jumlah: res.data.values[0].jumlah,
+        jumlah_harga: res.data.values[0].jumlah_harga,
       });
-    })
+    });
   };
 
   const handleClose = () => {
@@ -119,57 +129,61 @@ export default function Produk(props) {
   }
   const produks = produk.map((produks) => produks);
 
-  async function keranjang(id) {
+  function keranjang(id) {
     const newData = { ...data, id_barang: id };
     setdata(newData);
-    let response = await axios.get(api + "/tampilBarang/" + newData.id_barang);
-    response = response.data.values[0];
-    axios
-      .get(api + "/tampilKeranjangBarang/" + newData.id_barang)
-      .then((res) => {
-        if (res.data.values.length === 0) {
-          const dataKer = {
-            ...dataKeranjang,
-            id_barang: response.id_barang,
-            id_user: state.id,
-            jumlah_harga: response.harga,
-            jumlah: 1,
-          };
-          setdataKeranjang(dataKer);
-          axios.post(api + "/tambahKeranjang", dataKer).then((res) => {
-            swal({
-              title: "Sukses Masuk Keranjang",
-              text: "Cek Keranjang Anda!",
-              icon: "success",
-              button: false,
-              timer: 1200,
+    axios.get(api + "/tampilBarang/" + newData.id_barang).then((res) => {
+      const response = res.data.values[0];
+      axios
+        .get(api + "/tampilKeranjangBarang/" + newData.id_barang)
+        .then((res) => {
+          console.log(res.data.values);
+          if (res.data.values.length === 0) {
+            const dataKer = {
+              ...dataKeranjang,
+              id_barang: response.id_barang,
+              id_user: state.id,
+              jumlah_harga: response.harga,
+              total_harga: 0,
+              jumlah: 1,
+            };
+            console.log(dataKer);
+            setdataKeranjang(dataKer);
+            axios.post(api + "/tambahKeranjang", dataKer).then((res) => {
+              console.log(res.data.values);
+              swal({
+                title: "Sukses Masuk Keranjang",
+                text: "Cek Keranjang Anda!",
+                icon: "success",
+                button: false,
+                timer: 1200,
+              });
+              const myData = [...keranjangs, res.data.values];
+              setkeranjangs(myData);
+              getListKeranjang();
             });
-            console.log(produk.nama);
-            const myData = [...keranjangs, res.data.values];
-            setkeranjangs(myData);
-            getListKeranjang();
-          });
-        } else {
-          const dataKer = {
-            ...dataKeranjang,
-            id_barang: response.id_barang,
-            jumlah_harga: res.data.values[0].jumlah_harga + response.harga,
-            jumlah: res.data.values[0].jumlah + 1,
-          };
-          axios.put(api + "/ubahKeranjang", dataKer).then((res) => {
-            swal({
-              title: "Sukses Masuk Keranjang",
-              text: "Cek Keranjang Anda!",
-              icon: "success",
-              button: false,
-              timer: 1200,
+          } else {
+            const dataKer = {
+              ...dataKeranjang,
+              id_barang: response.id_barang,
+              jumlah_harga: res.data.values[0].jumlah_harga + response.harga,
+              jumlah: res.data.values[0].jumlah + 1,
+            };
+            axios.put(api + "/ubahKeranjang", dataKer).then((res) => {
+              swal({
+                title: "Sukses Masuk Keranjang",
+                text: "Cek Keranjang Anda!",
+                icon: "success",
+                button: false,
+                timer: 1200,
+              });
+              const myData = [...keranjangs, res.data.values];
+              setkeranjangs(myData);
+              getListKeranjang();
             });
-            const myData = [...keranjangs, res.data.values];
-            setkeranjangs(myData);
-            getListKeranjang();
-          });
-        }
-      });
+          }
+        });
+    });
   }
 
   const getListKeranjang = () => {
@@ -188,6 +202,31 @@ export default function Produk(props) {
 
   function detailbarang(id) {
     props.history.push("/detailBarang/" + id);
+  }
+
+  function remove(id) {
+    // console.log(id);
+    const data = qs.stringify({ id_user: id });
+    axios
+      .delete(api + "/hapusKeranjangIdUser", {
+        data: data,
+        headers: { "Content-type": "application/x-www-form-urlencoded" },
+      })
+      .then((res) => {
+        swal({
+          title: "Berhasil Membersihkan Keranjang",
+          text: "Cek Keranjang Anda!",
+          icon: "success",
+          button: false,
+          timer: 1200,
+        });
+        const newData = keranjangs.filter(
+          (keranjangs) => keranjangs.id_user !== id
+        );
+        setkeranjangs(newData);
+        getListKeranjang();
+      })
+      .catch((err) => console.error(err));
   }
 
   if (!state.isAuthenticated) {
@@ -254,11 +293,12 @@ export default function Produk(props) {
                   />
                   <CardBody>
                     <CardTitle tag="h5">{produks.nama}</CardTitle>
-                    <CardText>Rp. {numberWithCommas(produks.harga)}</CardText>
-                    <CardText>{produks.kategori_barang}</CardText>
+                    <CardText>
+                      <strong>Rp. {numberWithCommas(produks.harga)}</strong>
+                    </CardText>
                     <Button
                       color="secondary"
-                      className="mt-3"
+                      className="mt-4"
                       type="button"
                       onClick={() => detailbarang(produks.id_barang)}
                       block
@@ -267,7 +307,7 @@ export default function Produk(props) {
                     </Button>
                     <Button
                       color="info"
-                      className="mb-4"
+                      className="mb-1"
                       type="button"
                       onClick={() => keranjang(produks.id_barang)}
                       block
@@ -308,23 +348,36 @@ export default function Produk(props) {
                   <Col xs="4.5">
                     <strong>
                       {" "}
-                      <p>Rp. {numberWithCommas(tamker.jumlah_harga)}</p>
+                      <p>Rp. {numberWithCommasString(tamker.jumlah_harga)}</p>
                     </strong>
                   </Col>
                 </Row>
               </ListGroupItem>
             ))}
-            <ModalKeranjang handleClose={handleClose} handleShow={handleShow} {...modal}/>
+            <ModalKeranjang
+              handleClose={handleClose}
+              {...modal}
+              toggle={toggle}
+              getListKeranjang={getListKeranjang}
+            />
+            <FormText color="muted">
+              <FontAwesomeIcon icon={faInfoCircle} /> &nbsp;Tekan list barang untuk mengedit keranjang
+            </FormText>
             <br />
           </ListGroup>
           <ListGroup>
             <ListGroupItem color="success">
               <Row>
-                <Col xs="5">
+                <Col xs="4">
                   <h5>Total : </h5>
                 </Col>
                 <Col>
-                  <h5>Rp. {numberWithCommas(dataKeranjang.total_harga)}</h5>
+                  <h5>
+                    {dataKeranjang.total_harga
+                      ? "Rp. " +
+                        numberWithCommasString(dataKeranjang.total_harga)
+                      : ""}
+                  </h5>
                 </Col>
               </Row>
             </ListGroupItem>
@@ -333,6 +386,13 @@ export default function Produk(props) {
             <Container>
               <Button color="success" block>
                 Lanjutkan Pembayaran
+              </Button>
+            </Container>
+          </Row>
+          <Row className="mt-3">
+            <Container>
+              <Button color="danger" onClick={() => remove(state.id)} block>
+                Bersihkan Keranjang
               </Button>
             </Container>
           </Row>
