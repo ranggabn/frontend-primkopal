@@ -4,29 +4,30 @@ import axios from "axios";
 import qs from 'querystring'
 import { AuthContext } from "../../../App";
 import { Redirect } from "react-router";
+import moment from "moment";
 
 const api = "http://localhost:3001";
 
 export default function DaftarPenjualan(props) {
-  const [mahasiswa, setMahasiswa] = useState([]);
   const { state } = useContext(AuthContext);
+  const [penjualan, setpenjualan] = useState([])
 
   useEffect(() => {
-    axios.get(api + "/tampil").then((res) => {
-      setMahasiswa(res.data.values);
+    axios.get(api + "/tampilJual").then((res) => {
+      setpenjualan(res.data.values);
     });
   }, []);
 
   function remove(id) {
     // console.log(id);
-    const data = qs.stringify({id_mahasiswa: id})
-    axios.delete(api+"/hapus", {
+    const data = qs.stringify({ id_penjualan: id })
+    axios.delete(api+"/hapusJual", {
       data: data,
       headers: { "Content-type": "application/x-www-form-urlencoded" }
     }).then(res => {
       console.log(res.data.values);
-      const newData = mahasiswa.filter(mahasiswa => mahasiswa.id_mahasiswa !== id)
-      setMahasiswa(newData)
+      const newData = penjualan.filter(penjualan => penjualan.id_penjualan !== id)
+      setpenjualan(newData)
     }).catch(err=>console.error(err))
   }
 
@@ -52,7 +53,7 @@ export default function DaftarPenjualan(props) {
       <Table className="table-bordered">
         <thead>
           <tr>
-            <th colspan="4" className="text-center" bgcolor="#BABABA">
+            <th colSpan="7" className="text-center" bgcolor="#BABABA">
               <h5>
                 <b>Rincian Penjualan</b>
               </h5>
@@ -61,25 +62,31 @@ export default function DaftarPenjualan(props) {
           <tr>
             <th>Tanggal</th>
             <th>List Barang</th>
-            <th>Harga</th>
-            <th>Keterangan Pembayaran</th>
+            <th>Jumlah Barang</th>
+            <th>Nama Pembeli</th>
+            <th>Jumlah Harga</th>            
+            <th>Status</th>            
+            <th>Aksi</th>
           </tr>
         </thead>
         <tbody>
-          {mahasiswa.map((mahasiswa) => (
-            <tr key={mahasiswa.id_mahasiswa}>
-              <td>{mahasiswa.nim}</td>
-              <td>{mahasiswa.nama}</td>
-              <td>{mahasiswa.jurusan}</td>
+          {penjualan.map((penjualan) => (
+            <tr key={penjualan.id_penjualan}>
+              <td>{moment(penjualan.tanggal_penjualan).format('YYYY-MM-DD')}</td>
+              <td>{penjualan.nama}</td>
+              <td>{penjualan.jumlah}</td>
+              <td>{penjualan.username}</td>
+              <td>{penjualan.jumlah_harga}</td>
+              <td>{penjualan.status ? "Lunas" : "Hutang"}</td>
               <td>
               <Button
                   color="secondary"
-                  onClick={() => update(mahasiswa.id_mahasiswa)}
+                  onClick={() => update(penjualan.id_penjualan)}
                 >
                   Edit
                 </Button>
                 <span> </span>
-                <Button color="danger" onClick={() => remove(mahasiswa.id_mahasiswa)}>Hapus</Button>
+                <Button color="danger" onClick={() => remove(penjualan.id_penjualan)}>Hapus</Button>
               </td>
             </tr>
           ))}

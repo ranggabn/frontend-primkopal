@@ -30,7 +30,7 @@ export default function Tabungan() {
     <Table className="table-bordered">
       <thead>
         <tr>
-          <th colspan="4" className="text-center" bgcolor="#BABABA">
+          <th colSpan="4" className="text-center" bgcolor="#BABABA">
             <h5><b>BUKU TABUNGAN</b></h5>
           </th>
         </tr>
@@ -42,12 +42,12 @@ export default function Tabungan() {
             <br/>
             Satuan Kerja
           </th>
-          <th colspan="3">
+          <th colSpan="3">
             : {state.user}
             <br/>
             : {state.id}
             <br/>
-            : {state.role}
+            : {state.satker}
           </th>
         </tr>
         <tr>

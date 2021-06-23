@@ -21,7 +21,7 @@ export default function Masuk(props) {
   const { dispatch } = useContext(AuthContext);
 
   const initialState = {
-    email: "",
+    id: "",
     password: "",
     isSubmitting: false,
     errorMessage: null,
@@ -45,7 +45,7 @@ export default function Masuk(props) {
     });
 
     const requestBody = {
-      email: data.email,
+      id: data.id,
       password: data.password,
     };
 
@@ -96,12 +96,12 @@ export default function Masuk(props) {
                   <Row>
                     <Col>
                       <Input
-                        type="email"
+                        type="text"
                         name="nrp"
-                        value={data.email}
+                        value={data.id}
                         onChange={handleInputChange}
-                        name="email"
-                        id="exampleEmail"
+                        name="id"
+                        id="exampleId"
                       />
                     </Col>
                   </Row>

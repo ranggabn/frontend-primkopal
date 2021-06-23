@@ -62,8 +62,7 @@ export default function TambahBarang() {
         id_kategori: "",
         id_status: "",
       })
-    });
-    // console.log(data);
+    });    
   }
 
   async function handleUploadImage(e) {

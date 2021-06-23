@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Container,
   Row,
@@ -12,15 +12,17 @@ import {
   Label,
   Button,
 } from "reactstrap";
-import axios from 'axios'
+import axios from "axios";
+import moment from "moment";
+import { getBase64 } from "../../../Util/GetBase64";
 
 const api = "http://localhost:3001";
 
 export default function Daftar() {
   const [user, setUser] = useState([]);
   const [state, setState] = useState({
-    nama: "",
-    nrp: "",
+    username: "",
+    id: "",
     satker: "",
     tempat_lahir: "",
     tanggal_lahir: "",
@@ -29,20 +31,47 @@ export default function Daftar() {
     password_ulang: "",
     bukti_transfer: "",
   });
+  const [response, setresponse] = useState("");
 
   const [visible, setVisible] = useState(false);
 
   const onDismiss = () => setVisible(false);
 
+  useEffect(() => {
+    setState({
+      tanggal_lahir: moment(state.tanggal_lahir).format("YYYY-MM-DD"),
+    });
+  }, []);
+
   const submit = async (e) => {
-    e.preventDefault();
-    axios.post(api + "/registrasi", state).then((res) => {
+    axios.post(api + "/auth/api/v1/register", state).then((res) => {
       console.log(res.data.values);
+      setresponse(res.data.values);
       const myData = [...user, res.data.values, visible];
       setUser(myData);
       setVisible(myData);
+      e.preventDefault();
+      setState({
+        username: "",
+        id: "",
+        satker: "",
+        tempat_lahir: "",
+        tanggal_lahir: "",
+        nomor_telefon: "",
+        password: "",
+        password_ulang: "",
+        bukti_transfer: "",
+      });
     });
   };
+
+  async function handleUploadImage(e) {
+    e.preventDefault();
+    // console.log(Array.from(e.target.files)[0]);
+    let temporary = Array.from(e.target.files)[0];
+    let result = await getBase64(temporary);
+    setState({ ...state, bukti_transfer: result });
+  }
 
   function handle(e) {
     const newData = { ...state };
@@ -57,9 +86,6 @@ export default function Daftar() {
           <h3 className="text-center">
             <b>DAFTAR ANGGOTA</b>
           </h3>
-          <Alert color="info" isOpen={visible} toggle={onDismiss}>
-            Berhasil Ditambahkan!
-          </Alert>
         </Col>
       </Row>
       <Card className="container mt-5">
@@ -72,8 +98,8 @@ export default function Daftar() {
                   <Col>
                     <Input
                       type="text"
-                      name="nama"
-                      value={state.nama}
+                      name="username"
+                      value={state.username}
                       onChange={(e) => handle(e)}
                     />
                   </Col>
@@ -85,8 +111,8 @@ export default function Daftar() {
                   <Col>
                     <Input
                       type="text"
-                      name="nrp"
-                      value={state.nrp}
+                      name="id"
+                      value={state.id}
                       onChange={(e) => handle(e)}
                     />
                   </Col>
@@ -193,12 +219,14 @@ export default function Daftar() {
                 <Input
                   type="file"
                   name="bukti_transfer"
-                  value={state.bukti_transfer}
-                  onChange={(e) => handle(e)}
+                  onChange={(e) => handleUploadImage(e)}
                   accept="image/*"
                 />
               </FormGroup>
               <hr />
+              <Alert color="info" isOpen={visible} toggle={onDismiss}>
+                {response}
+              </Alert>
               <FormGroup>
                 <Row>
                   <Col>

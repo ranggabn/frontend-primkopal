@@ -52,7 +52,11 @@ const initialState = {
   token: localStorage.getItem("token"),
   tokenExpires: 0,
   role: localStorage.getItem("role"),
-  id: localStorage.getItem("id")
+  id: localStorage.getItem("id"),
+  satker: localStorage.getItem("satker"),
+  nomor_telefon: localStorage.getItem("nomor_telefon"),
+  tempat_lahir: localStorage.getItem("tempat_lahir"),
+  tanggal_lahir: localStorage.getItem("tanggal_lahir")
 };
 
 const reducer = (state, action) => {
@@ -62,6 +66,10 @@ const reducer = (state, action) => {
       localStorage.setItem("token", action.payload.token);
       localStorage.setItem("role", action.payload.role);
       localStorage.setItem("id", action.payload.id);
+      localStorage.setItem("satker", action.payload.satker);
+      localStorage.setItem("nomor_telefon", action.payload.nomor_telefon)
+      localStorage.setItem("tempat_lahir", action.payload.tempat_lahir)
+      localStorage.setItem("tanggal_lahir", action.payload.tanggal_lahir)
       return {
         ...state,
         isAuthenticated: true,
@@ -69,7 +77,11 @@ const reducer = (state, action) => {
         token: action.payload.token,
         tokenExpires: action.payload.expires,
         role: action.payload.role,
-        id: action.payload.id
+        id: action.payload.id,
+        satker: action.payload.satker,
+        nomor_telefon: action.payload.nomor_telefon,
+        tempat_lahir: action.payload.tempat_lahir,
+        tanggal_lahir: action.payload.tanggal_lahir
       };
     case "LOGOUT":
       localStorage.clear();

@@ -48,7 +48,7 @@ export default function TampilPinjaman() {
                 <br/>
                 : {state.id}
                 <br/>
-                : {state.role}
+                : {state.satker}
               </th>
             </tr>
             <tr>

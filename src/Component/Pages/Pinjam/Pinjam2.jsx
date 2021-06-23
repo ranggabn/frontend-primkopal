@@ -43,6 +43,8 @@ export default function Pinjam2() {
       tanggal_pinjam: moment().format("YYYY-MM-DD"),
       id_status: 1,
       id_user: state.id,
+      satker: state.satker,
+      nomor_telefon: state.nomor_telefon
     });
   }, []);
 

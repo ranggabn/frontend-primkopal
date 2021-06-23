@@ -50,7 +50,7 @@ export default function TampilKredit() {
               <br />
               : {state.id}
               <br />
-              : {state.role}
+              : {state.satker}
             </th>
           </tr>
           <tr>
