@@ -43,13 +43,6 @@ export default function DaftarPenjualan(props) {
     <Container className="mt-5">
       <h2>DAFTAR PENJUALAN</h2>
       <hr />
-      <Button
-        color="success"
-        href="/tambahpenjualan"
-        className="mt-1 mb-3 float-right"
-      >
-        Tambah Penjualan
-      </Button>
       <Table className="table-bordered">
         <thead>
           <tr>
@@ -79,13 +72,6 @@ export default function DaftarPenjualan(props) {
               <td>{penjualan.jumlah_harga}</td>
               <td>{penjualan.status ? "Lunas" : "Hutang"}</td>
               <td>
-              <Button
-                  color="secondary"
-                  onClick={() => update(penjualan.id_penjualan)}
-                >
-                  Edit
-                </Button>
-                <span> </span>
                 <Button color="danger" onClick={() => remove(penjualan.id_penjualan)}>Hapus</Button>
               </td>
             </tr>

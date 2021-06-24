@@ -55,7 +55,7 @@ export default function Produk(props) {
     total_harga: "",
     jumlah: "",
     tanggal_penjualan: "",
-    status: false
+    status: false,
   });
   const [tampilkeranjang, settampilkeranjang] = useState([]);
   const [modal, setmodal] = useState({
@@ -81,10 +81,10 @@ export default function Produk(props) {
   };
 
   const showSetuju = () => {
-      setsetuju({        
-        showModal: true,
-      });
-  };  
+    setsetuju({
+      showModal: true,
+    });
+  };
 
   const handleClose = () => {
     setmodal({
@@ -124,15 +124,15 @@ export default function Produk(props) {
       setproduk(res.data.values);
     });
     setdataKeranjang({
-      tanggal_penjualan: moment().format('YYYY-MM-DD')
-    })
+      tanggal_penjualan: moment().format("YYYY-MM-DD"),
+    });
     getListKeranjang();
   }, []);
 
   function semuaKategori(e) {
     axios.get(api + "/tampilBarang").then((res) => {
       setproduk(res.data.values);
-    })
+    });
     getListKeranjang();
   }
 
@@ -146,8 +146,7 @@ export default function Produk(props) {
       });
     getListKeranjang();
   }
-  const produks = produk.map((produks) => produks);
-  console.log(tampilkeranjang);
+  const produks = produk.map((produks) => produks);  
 
   function keranjang(id) {
     const newData = { ...data, id_barang: id };
@@ -165,9 +164,9 @@ export default function Produk(props) {
               jumlah_harga: response.harga,
               total_harga: 0,
               jumlah: 1,
-              tanggal_penjualan: moment().format('YYYY-MM-DD'),
-              status: false
-            };            
+              tanggal_penjualan: moment().format("YYYY-MM-DD"),
+              status: false,
+            };
             setdataKeranjang(dataKer);
             axios.post(api + "/tambahKeranjang", dataKer).then((res) => {
               swal({
@@ -208,7 +207,7 @@ export default function Produk(props) {
   const getListKeranjang = () => {
     axios.get(api + "/tampilKeranjang/" + state.id).then((res) => {
       settampilkeranjang(res.data.values);
-    });  
+    });
     axios.get(api + "/totalHarga/" + state.id).then((res) => {
       const dataKer = {
         ...dataKeranjang,
@@ -235,10 +234,10 @@ export default function Produk(props) {
           (keranjangs) => keranjangs.id_user !== id
         );
         setkeranjangs(newData);
-        getListKeranjang();        
+        getListKeranjang();
       })
       .catch((err) => console.error(err));
-  }
+  } 
 
   if (!state.isAuthenticated) {
     return <Redirect to="/masuk" />;
@@ -393,17 +392,21 @@ export default function Produk(props) {
                 </Col>
               </Row>
             </ListGroupItem>
-          </ListGroup>
+          </ListGroup>         
           <Row className="mt-3">
-            <Container>
-              <Button color="success" onClick={() => showSetuju(state.id)} block>
+            <Container>          
+              <Button
+                color="success"
+                onClick={() => showSetuju(state.id)}
+                block
+              >
                 <ModalSetuju
                   handleClose={handleClose}
                   {...setuju}
-                  getListKeranjang={getListKeranjang} 
+                  getListKeranjang={getListKeranjang}
                   tampilkeranjang={tampilkeranjang}
                   dataKeranjang={dataKeranjang}
-                  remove={remove}               
+                  remove={remove}
                 />
                 Lanjutkan Pembayaran
               </Button>
