@@ -3,7 +3,7 @@ import { Redirect } from "react-router";
 import { Jumbotron, Button } from "reactstrap";
 import { AuthContext } from "../../../App";
 
-export default function RoleStaff() {
+export default function RoleKasatker() {
 
   const { state } = useContext(AuthContext);
   
@@ -13,7 +13,7 @@ export default function RoleStaff() {
   return (
     <div>
       <Jumbotron>
-        <h1 className="display-3">Hello, Ketua Primkopal! Yth. {state.user}!</h1>
+        <h1 className="display-3">Hello, Ketua Satuan Kerja! Yth. {state.user}!</h1>
         <p className="lead">
           This is a simple hero unit, a simple Jumbotron-style component for
           calling extra attention to featured content or information.

@@ -22,6 +22,7 @@ export default function TambahBarang() {
   const [data, setData] = useState({
     nama: "",
     harga: "",
+    stok: "",
     gambar: "",
     keterangan: "",
     id_kategori: "",
@@ -57,6 +58,7 @@ export default function TambahBarang() {
       setData({
         nama: "",
         harga: "",
+        stok: "",
         gambar: "",
         keterangan: "",
         id_kategori: "",
@@ -115,6 +117,20 @@ export default function TambahBarang() {
                   value={data.harga}
                   onChange={(e) => handle(e)}
                   placeholder="Harga Barang"
+                />
+              </Col>
+            </Row>
+          </FormGroup>
+          <Label>Stok</Label>
+          <FormGroup>
+            <Row>
+              <Col>
+                <Input
+                  type="number"
+                  name="stok"
+                  value={data.stok}
+                  onChange={(e) => handle(e)}
+                  placeholder="Stok Barang"
                 />
               </Col>
             </Row>

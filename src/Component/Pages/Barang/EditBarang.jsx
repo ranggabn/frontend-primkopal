@@ -113,6 +113,19 @@ export default function EditBarang(props) {
                 </Col>
               </Row>
             </FormGroup>
+            <Label>Stok</Label>
+            <FormGroup>
+              <Row>
+                <Col>
+                  <Input
+                    type="number"
+                    name="stok"
+                    value={data.stok}
+                    onChange={handle("stok")}
+                  />
+                </Col>
+              </Row>
+            </FormGroup>
             <Label>Kategori</Label>
             <FormGroup>
               <Row>

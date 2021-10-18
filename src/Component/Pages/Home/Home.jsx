@@ -8,6 +8,9 @@ import {
   Card,
 } from "react-bootstrap";
 import logo from "./Images/Logo.png";
+import toko from "./Images/toko.png";
+import usipa from "./Images/usipa.png";
+import jasa from "./Images/jasa.png";
 
 export default class Home extends Component {
   constructor(props) {
@@ -42,49 +45,55 @@ export default class Home extends Component {
           </Row>
 
           <Row className="mt-5"></Row>
+          <Row className="mt-5"></Row>
 
           <Jumbotron>
-            <h2><b>Informasi</b></h2>
-            <hr/>
-            <CardDeck className="mt-5">
+            <h4>
+              <b>LAYANAN PRIMKOPAL AAL</b>
+            </h4>
+            <hr />
+            <CardDeck className="mt-4">
               <Card>
                 <Card.Img
                   variant="top"
-                  src="https://placeimg.com/640/480/tech"
+                  src={toko}
+                  className="mt-4"
                 />
                 <Card.Body>
-                  <Card.Title>Card title</Card.Title>
-                  <Card.Text>
-                    This is a wider card with supporting text below as a natural
-                    lead-in to additional content. This content is a little bit
-                    longer.
+                  <Card.Title className="text-center">UNIT TOKO</Card.Title>
+                  <Card.Text className="mt-4 text-center">
+                    Menyediakan keperluan Kantor, Rapat, Elektronik, dan
+                    Kebutuhan Sehari-hari
                   </Card.Text>
                 </Card.Body>
               </Card>
               <Card>
                 <Card.Img
                   variant="top"
-                  src="https://placeimg.com/640/480/tech"
+                  src={usipa}
                 />
                 <Card.Body>
-                  <Card.Title>Card title</Card.Title>
-                  <Card.Text>
-                    This card has supporting text below as a natural lead-in to
-                    additional content.{" "}
+                  <Card.Title className="text-center">
+                    UNIT SIMPAN PINJAM
+                  </Card.Title>
+                  <Card.Text className="mt-4 text-center">
+                    Menyediakan layanan tabungan dan peminjaman kebutuhan
+                    anggota Primkopal AAL
                   </Card.Text>
                 </Card.Body>
               </Card>
               <Card>
                 <Card.Img
                   variant="top"
-                  src="https://placeimg.com/640/480/tech"
+                  src={jasa}
+                  className="mt-3"
                 />
                 <Card.Body>
-                  <Card.Title>Card title</Card.Title>
-                  <Card.Text>
-                    This is a wider card with supporting text below as a natural
-                    lead-in to additional content. This card has even longer
-                    content than the first to show that equal height action.
+                  <Card.Title className="text-center">UNIT JASA</Card.Title>
+                  <Card.Text className="mt-4 text-center">
+                    Menyediakan Jasa Laundry, Menyediakan Jasa Pembayaran
+                    Listrik, Air, Telepon Pajak (PPOB), Menjadi Rekanan
+                    Penyediaan barang dan Kebutuhan kantor
                   </Card.Text>
                 </Card.Body>
               </Card>

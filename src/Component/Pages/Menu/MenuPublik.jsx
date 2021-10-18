@@ -38,15 +38,19 @@ export default function MenuPublik() {
                 </DropdownToggle>
                 <DropdownMenu>
                   <DropdownItem href="/visimisi">Visi & Misi</DropdownItem>
-                  <DropdownItem href="/struktur">
-                    Struktur Organisasi
-                  </DropdownItem>
                   <DropdownItem href="/kontak">Kontak</DropdownItem>
                 </DropdownMenu>
               </UncontrolledDropdown>
+              <NavItem>
+                <NavLink to="/tokopublik" className="nav-link">
+                  Toko
+                </NavLink>
+              </NavItem>
             </Nav>
             <NavbarText>
-              <Button className="mr-3" href="/masuk">Masuk</Button>
+              <Button className="mr-3" href="/masuk">
+                Masuk
+              </Button>
               <Button href="/daftar">Daftar</Button>
             </NavbarText>
           </Collapse>

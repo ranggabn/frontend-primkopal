@@ -13,6 +13,7 @@ import {
   Button,
   Badge,
   FormText,
+  Input,
 } from "reactstrap";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -68,6 +69,7 @@ export default function Produk(props) {
   const [setuju, setsetuju] = useState({
     showModal: false,
   });
+  const [searchTerm, setsearchTerm] = useState("");
 
   const handleShow = (id) => {
     axios.get(api + "/tampilKeranjangBarang/" + id).then((res) => {
@@ -95,13 +97,6 @@ export default function Produk(props) {
     });
   };
 
-  useEffect(() => {
-    axios.get(api + "/tampilKategori").then((res) => {
-      setkategori(res.data.values);
-    });
-  }, []);
-  const kb = kategori.map((kb) => kb);
-
   const Icon = ({ nama }) => {
     if (nama === "Bahan Pokok")
       return <FontAwesomeIcon icon={faUtensils} className="mr-3" />;
@@ -119,7 +114,11 @@ export default function Produk(props) {
     return <FontAwesomeIcon icon={faUtensils} className="mr-3" />;
   };
 
+  const kb = kategori.map((kb) => kb);
   useEffect(() => {
+    axios.get(api + "/tampilKategori").then((res) => {
+      setkategori(res.data.values);
+    });
     axios.get(api + "/tampilBarang").then((res) => {
       setproduk(res.data.values);
     });
@@ -146,7 +145,7 @@ export default function Produk(props) {
       });
     getListKeranjang();
   }
-  const produks = produk.map((produks) => produks);  
+  const produks = produk.map((produks) => produks);
 
   function keranjang(id) {
     const newData = { ...data, id_barang: id };
@@ -205,6 +204,9 @@ export default function Produk(props) {
   }
 
   const getListKeranjang = () => {
+    axios.get(api + "/tampilBarang").then((res) => {
+      setproduk(res.data.values);      
+    });
     axios.get(api + "/tampilKeranjang/" + state.id).then((res) => {
       settampilkeranjang(res.data.values);
     });
@@ -237,7 +239,7 @@ export default function Produk(props) {
         getListKeranjang();
       })
       .catch((err) => console.error(err));
-  } 
+  }
 
   if (!state.isAuthenticated) {
     return <Redirect to="/masuk" />;
@@ -290,45 +292,65 @@ export default function Produk(props) {
             <strong>Daftar Produk</strong>
           </h4>
           <hr />
+          <Input
+            type="text"
+            className="mb-3"
+            placeholder="Cari Nama Barang"
+            onChange={(event) => {
+              setsearchTerm(event.target.value);
+            }}
+          />
           <Row>
-            {produks.map((produks, key) => (
-              <Col md={4} xs={6} className="mb-4" key={key}>
-                <Card className="shadow">
-                  <CardImg
-                    top
-                    width="100%"
-                    height="200vw"
-                    src={produks.gambar}
-                    alt="gambar"
-                  />
-                  <CardBody>
-                    <CardTitle tag="h5">{produks.nama}</CardTitle>
-                    <CardText>
-                      <strong>Rp. {numberWithCommas(produks.harga)}</strong>
-                    </CardText>
-                    <Button
-                      color="secondary"
-                      className="mt-4"
-                      type="button"
-                      onClick={() => detailbarang(produks.id_barang)}
-                      block
-                    >
-                      Detail Barang
-                    </Button>
-                    <Button
-                      color="info"
-                      className="mb-1"
-                      type="button"
-                      onClick={() => keranjang(produks.id_barang)}
-                      block
-                    >
-                      {" "}
-                      Tambah Keranjang{" "}
-                    </Button>
-                  </CardBody>
-                </Card>
-              </Col>
-            ))}
+            {produks
+              .filter((produks) => {
+                if (searchTerm === "") {
+                  return produks;
+                } else if (
+                  produks.nama.toLowerCase().includes(searchTerm.toLowerCase())
+                ) {
+                  return produks;
+                }
+              })
+              .map((produks, key) => (
+                <Col md={4} xs={6} className="mb-4" key={key}>
+                  <Card className="shadow">
+                    <CardImg
+                      top
+                      width="100%"
+                      height="200vw"
+                      src={produks.gambar}
+                      alt="gambar"
+                    />
+                    <CardBody>
+                      <CardTitle tag="h5">{produks.nama}</CardTitle>
+                      <CardText>
+                        <hr/>
+                        <strong>Rp. {numberWithCommas(produks.harga)}</strong>                        
+                        <p>Stok : {produks.stok}</p>
+                      </CardText>
+                      <Button
+                        color="secondary"
+                        className="mt-3"
+                        type="button"
+                        onClick={() => detailbarang(produks.id_barang)}
+                        block
+                      >
+                        Detail Barang
+                      </Button>
+                      <Button
+                        color="info"
+                        className="mb-1"
+                        type="button"
+                        onClick={() => keranjang(produks.id_barang)}
+                        block
+                      >
+                        {" "}
+                        Tambah Keranjang{" "}
+                      </Button>
+                    </CardBody>
+                  </Card>
+                </Col>
+              ))}
           </Row>
         </Col>
         <Col md={3} mt="2">
@@ -392,9 +414,9 @@ export default function Produk(props) {
                 </Col>
               </Row>
             </ListGroupItem>
-          </ListGroup>         
+          </ListGroup>
           <Row className="mt-3">
-            <Container>          
+            <Container>
               <Button
                 color="success"
                 onClick={() => showSetuju(state.id)}

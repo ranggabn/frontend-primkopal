@@ -11,6 +11,7 @@ import {
   Alert,
   Label,
   Button,
+  FormFeedback,
 } from "reactstrap";
 import axios from "axios";
 import moment from "moment";
@@ -32,6 +33,8 @@ export default function Daftar() {
     bukti_transfer: "",
   });
   const [response, setresponse] = useState("");
+
+  const [retype, setretype] = useState("");
 
   const [visible, setVisible] = useState(false);
 
@@ -74,6 +77,11 @@ export default function Daftar() {
   }
 
   function handle(e) {
+    if (state.password !== e.target.value) {
+      setretype("Password anda tidak sama");
+    } else {
+      setretype("");
+    }
     const newData = { ...state };
     newData[e.target.name] = e.target.value;
     setState(newData);
@@ -198,7 +206,9 @@ export default function Daftar() {
                       name="password_ulang"
                       value={state.password_ulang}
                       onChange={(e) => handle(e)}
+                      invalid={retype ? true : false}
                     />
+                    <FormFeedback>{retype}</FormFeedback>
                   </Col>
                 </Row>
               </FormGroup>

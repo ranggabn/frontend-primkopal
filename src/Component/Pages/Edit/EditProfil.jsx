@@ -17,7 +17,7 @@ import moment from "moment";
 
 const api = "http://localhost:3001";
 
-export default function EditAnggota(props) {
+export default function EditProfil(props) {
   let { id } = useParams();
   const { state } = useContext(AuthContext);
   const [anggota, setanggota] = useState([]);
@@ -27,15 +27,10 @@ export default function EditAnggota(props) {
     satker: "",
     tempat_lahir: "",
     tanggal_lahir: "",
-    nomor_telefon: "",
-    role: ""
+    nomor_telefon: "",    
   });
-  const [role, setrole] = useState([]);
 
   useEffect(() => {
-    axios.get(api + "/tampilRole").then((res) => {
-      setrole(res.data.values);
-    });
     async function getData() {
       let response = await axios.get(api + "/tampil/" + id);
       console.log(response.data.values);
@@ -44,13 +39,12 @@ export default function EditAnggota(props) {
     }
     getData();
   }, []);
-  const roles = role.map((roles) => roles);
 
   const submit = async (e) => {
     e.preventDefault();
-    await axios.put(api + "/ubah", data).catch((err) => console.error(err));
+    await axios.put(api + "/ubahProfil", data).catch((err) => console.error(err));
     setanggota(data);
-    props.history.push("/daftaranggota");
+    props.history.push("/Home");
   };
 
   const handle = (name) => (e) => {
@@ -65,7 +59,7 @@ export default function EditAnggota(props) {
       <Row>
         <Col>
           <h3 className="text-center">
-            <b>EDIT ANGGOTA</b>
+            <b>EDIT PROFIL</b>
           </h3>
         </Col>
       </Row>
@@ -161,28 +155,6 @@ export default function EditAnggota(props) {
                   </Col>
                 </Row>
               </FormGroup>
-              <Label>Jenis Keanggotaan</Label>
-              <FormGroup>
-                <Row>
-                  <Col>
-                    <Input
-                      type="select"
-                      name="role"
-                      value={data.role}
-                      onChange={(e) => handle(e)}
-                    >
-                      <option value="" disabled selected>
-                        Pilih Role
-                      </option>
-                      {roles.map((roles, key) => (
-                        <option key={key} value={roles.id_role}>
-                          {roles.nama_role}
-                        </option>
-                      ))}
-                    </Input>
-                  </Col>
-                </Row>
-              </FormGroup>              
               <FormGroup>
                 <Row>
                   <Col>

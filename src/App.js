@@ -19,7 +19,7 @@ import HomeComp from "./Component/Pages/HomeComp/HomeComp";
 import Register from "./Component/Pages/Register/Register";
 import RoleAdmin from "./Component/Pages/RoleAkses/RoleAdmin";
 import RoleMember from "./Component/Pages/RoleAkses/RoleMember";
-import RoleStaff from "./Component/Pages/RoleAkses/RoleStaff";
+import RoleStaff from "./Component/Pages/RoleAkses/RoleKaprim";
 import DaftarAnggota from "./Component/Pages/Anggota/DaftarAnggota";
 import DaftarPinjaman from "./Component/Pages/Pinjam/DaftarPinjaman";
 import DaftarBarang from "./Component/Pages/Barang/DaftarBarang";
@@ -43,6 +43,13 @@ import EditSimpanan from "./Component/Pages/Simpan/EditSimpanan";
 import EditStatusKredit from "./Component/Pages/Kredit/EditStatusKredit";
 import EditStatusPinjaman from "./Component/Pages/Pinjam/EditStatusPinjaman";
 import DetailBarang from "./Component/Pages/Toko/DetailBarang";
+import RoleKaprim from "./Component/Pages/RoleAkses/RoleKaprim";
+import RoleKasatker from "./Component/Pages/RoleAkses/RoleKasatker";
+import EditProfil from "./Component/Pages/Edit/EditProfil";
+import Toko from "./Component/Pages/Toko/Toko";
+import DetailBarang2 from "./Component/Pages/Toko/DetailBarang2";
+import Ubahprofil from "./Component/Pages/UbahProfil/Ubahprofil";
+import Ubahpassword from "./Component/Pages/UbahProfil/Ubahpassword";
 
 export const AuthContext = createContext();
 
@@ -108,7 +115,10 @@ function App() {
           <Route exact path="/" component={Home} />
           <Route exact path="/Home" component={HomeComp} />
           <Route exact path="/Register" component={Register} />
+          <Route exact path="/ubahprofil" component={Ubahprofil} />
+          <Route exact path="/ubahpassword" component={Ubahpassword} />
           <Route exact path="/visimisi" component={Visimisi} />
+          <Route exact path="/tokopublik" component={Toko} />
           <Route exact path="/kredit" component={Kredit1} />          
           <Route exact path="/masuk" component={Masuk} />
           <Route exact path="/daftar" component={Daftar} />
@@ -121,7 +131,8 @@ function App() {
           <Route exact path="/toko" component={Produk} />
           <Route exact path="/admin" component={RoleAdmin} />
           <Route exact path="/member" component={RoleMember} />
-          <Route exact path="/staff" component={RoleStaff} />
+          <Route exact path="/kaprim" component={RoleKaprim} />
+          <Route exact path="/kasatker" component={RoleKasatker} />
           <Route exact path="/daftaranggota" component={DaftarAnggota} />
           <Route exact path="/daftarpinjaman" component={DaftarPinjaman} />
           <Route exact path="/daftarbarang" component={DaftarBarang} />
@@ -145,6 +156,8 @@ function App() {
           <Route exact path="/editstatuskredit/:id" component={EditStatusKredit} />
           <Route exact path="/editstatuspinjam/:id" component={EditStatusPinjaman} />
           <Route exact path="/detailBarang/:id" component={DetailBarang} />
+          <Route exact path="/editprofil/:id" component={EditProfil} />
+          <Route exact path="/detailBarang2/:id" component={DetailBarang2} />
         </AuthContext.Provider>
       </Switch>
       <Footer />

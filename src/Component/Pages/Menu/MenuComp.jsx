@@ -3,7 +3,8 @@ import { AuthContext } from "../../../App";
 import MenuAdmin from "./MenuAdmin";
 import MenuMember from "./MenuMember";
 import MenuPublik from "./MenuPublik";
-import MenuStaff from "./MenuStaff";
+import MenuKaprim from "./MenuKaprim";
+import MenuKasatker from "./MenuKasatker";
 
 export default function MenuComp() {
   const { state } = useContext(AuthContext);
@@ -21,8 +22,10 @@ export default function MenuComp() {
   if (user && state.role == 1) {
     return <MenuAdmin />;
   }else if (user && state.role == 2) {
-    return <MenuStaff />;
+    return <MenuKaprim />;
   }else if (user && state.role == 3) {
+    return <MenuKasatker />;
+  }else if (user && state.role == 4) {
     return <MenuMember />;
   }else {return <MenuPublik/>}
 }

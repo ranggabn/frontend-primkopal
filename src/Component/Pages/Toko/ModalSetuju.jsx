@@ -42,9 +42,17 @@ export default function ModalSetuju({
     });
   }, []);
 
+  const arr = [];
+  tampilkeranjang.map((lb) =>
+    arr.push({
+      id_barang: lb.id_barang,
+      stok: lb.stok - lb.jumlah,
+    })
+  );
+  console.log(arr);
   function handleSubmit(e) {
     e.preventDefault();
-    data.map(
+    tampilkeranjang.map(
       (newData) => axios.post(api + "/tambahJual", newData).then((res) => {}),
       swal({
         title: "Pembelian Sukses!",
@@ -54,6 +62,7 @@ export default function ModalSetuju({
         timer: 1200,
       })
     );
+    arr.map((arr) => axios.put(api + "/ubahBarang2", arr));
     handleClose();
     remove(state.id);
   }

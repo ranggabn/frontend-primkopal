@@ -12,7 +12,7 @@ import {
 } from "reactstrap";
 import { AuthContext } from "../../../App";
 
-export default function MenuStaff() {
+export default function MenuKaprim() {
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
   const { dispatch } = useContext(AuthContext);
@@ -20,7 +20,7 @@ export default function MenuStaff() {
   return (
     <div>
       <Navbar className="navbar-dark bg-dark" light expand="md">
-        <NavbarBrand href="/">KAPRIM | KASATKER</NavbarBrand>
+        <NavbarBrand href="/">KETUA PRIMKOPAL</NavbarBrand>
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
           <Nav className="mr-auto" navbar>

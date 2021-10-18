@@ -13,10 +13,16 @@ import {
 } from "reactstrap";
 import { AuthContext } from "../../../App";
 
-export default function MenuMember() {
+export default function MenuMember(props) {
+  const { state } = useContext(AuthContext);
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
   const { dispatch } = useContext(AuthContext);
+
+  function update(id) {
+    console.log(id);
+    props.history.push("/editanggota/"+state.id)
+  }
 
   return (
     <div>
@@ -68,6 +74,9 @@ export default function MenuMember() {
               </NavItem>
             </Nav>
             <NavbarText>
+            <Button className="mr-3" href="/ubahprofil">
+                Ubah Profil
+              </Button>
             <Button onClick={() => dispatch({ type: "LOGOUT" })} href="/masuk">Keluar</Button>
             </NavbarText>
           </Collapse>

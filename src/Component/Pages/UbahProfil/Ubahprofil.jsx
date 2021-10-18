@@ -9,6 +9,7 @@ import {
   Label,
   Input,
   Card,
+  Alert,
 } from "reactstrap";
 import axios from "axios";
 import { Redirect, useParams } from "react-router";
@@ -17,27 +18,29 @@ import moment from "moment";
 
 const api = "http://localhost:3001";
 
-export default function EditAnggota(props) {
-  let { id } = useParams();
+export default function Ubahprofil() {
+  // let { id } = useParams();
   const { state } = useContext(AuthContext);
   const [anggota, setanggota] = useState([]);
   const [data, setData] = useState({
-    id: "",
+    id: state.id,
     username: "",
     satker: "",
     tempat_lahir: "",
     tanggal_lahir: "",
     nomor_telefon: "",
-    role: ""
+    role: "",
   });
   const [role, setrole] = useState([]);
+  const [visible, setVisible] = useState(false);
+  const onDismiss = () => setVisible(false);
 
   useEffect(() => {
     axios.get(api + "/tampilRole").then((res) => {
       setrole(res.data.values);
     });
     async function getData() {
-      let response = await axios.get(api + "/tampil/" + id);
+      let response = await axios.get(api + "/tampil/" + data.id);
       console.log(response.data.values);
       response = response.data.values[0];
       setData(response);
@@ -49,8 +52,9 @@ export default function EditAnggota(props) {
   const submit = async (e) => {
     e.preventDefault();
     await axios.put(api + "/ubah", data).catch((err) => console.error(err));
+    const myData = [...anggota, visible];
     setanggota(data);
-    props.history.push("/daftaranggota");
+    setVisible(myData);
   };
 
   const handle = (name) => (e) => {
@@ -65,11 +69,19 @@ export default function EditAnggota(props) {
       <Row>
         <Col>
           <h3 className="text-center">
-            <b>EDIT ANGGOTA</b>
+            <b>UBAH PROFIL</b>
           </h3>
+          <Button
+            color="secondary"
+            className="mt-4 float-right"
+            href="/ubahpassword"
+          >
+            {" "}
+            Ubah Password{" "}
+          </Button>
         </Col>
       </Row>
-      <Card className="container mt-5">
+      <Card className="container mt-2">
         <Row>
           <Col>
             <Form className="mt-4" onSubmit={submit}>
@@ -125,6 +137,7 @@ export default function EditAnggota(props) {
                           name="tempat_lahir"
                           value={data.tempat_lahir}
                           onChange={handle("tempat_lahir")}
+                          disabled
                         />
                       </Col>
                     </Row>
@@ -142,6 +155,7 @@ export default function EditAnggota(props) {
                             "YYYY-MM-DD"
                           )}
                           onChange={handle("tanggal_lahir")}
+                          disabled
                         />
                       </Col>
                     </Row>
@@ -161,46 +175,11 @@ export default function EditAnggota(props) {
                   </Col>
                 </Row>
               </FormGroup>
-              <Label>Jenis Keanggotaan</Label>
+              <Alert color="info" isOpen={visible} toggle={onDismiss}>
+                Berhasil mengubah data!
+              </Alert>
               <FormGroup>
                 <Row>
-                  <Col>
-                    <Input
-                      type="select"
-                      name="role"
-                      value={data.role}
-                      onChange={(e) => handle(e)}
-                    >
-                      <option value="" disabled selected>
-                        Pilih Role
-                      </option>
-                      {roles.map((roles, key) => (
-                        <option key={key} value={roles.id_role}>
-                          {roles.nama_role}
-                        </option>
-                      ))}
-                    </Input>
-                  </Col>
-                </Row>
-              </FormGroup>              
-              <FormGroup>
-                <Row>
-                  <Col>
-                    <FormGroup>
-                      <Row>
-                        <Col>
-                          <Button
-                            className="fa fa-chevron-left mt-3"
-                            type="button"
-                            href="/daftaranggota"
-                          >
-                            {" "}
-                            Kembali{" "}
-                          </Button>
-                        </Col>
-                      </Row>
-                    </FormGroup>
-                  </Col>
                   <Col>
                     <Button
                       color="primary"

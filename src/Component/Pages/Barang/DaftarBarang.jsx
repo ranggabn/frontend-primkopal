@@ -3,23 +3,20 @@ import {
   Container,
   Button,
   Table,
-  Dropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem
+  Input,
 } from "reactstrap";
 import axios from "axios";
 import qs from "querystring";
 import { AuthContext } from "../../../App";
 import { Redirect } from "react-router";
+import { numberWithCommasString } from "../../Fungsional/Koma";
 
 const api = "http://localhost:3001";
 
 export default function DaftarBarang(props) {
   const [barang, setbarang] = useState([]);
   const { state } = useContext(AuthContext);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const toggle = () => setDropdownOpen((prevState) => !prevState);
+  const [searchTerm, setsearchTerm] = useState("");
 
   useEffect(() => {
     axios.get(api + "/tampilBarang").then((res) => {
@@ -62,33 +59,27 @@ export default function DaftarBarang(props) {
       >
         Tambah Barang
       </Button>
+      <Input
+        type="text"
+        className="mb-3"
+        placeholder="Cari Nama Barang"
+        onChange={(event) => {
+          setsearchTerm(event.target.value);
+        }}
+      />
       <Table className="table-bordered">
         <thead>
           <tr>
-            <th colSpan="6" className="text-center" bgcolor="#BABABA">
+            <th colSpan="7" className="text-center" bgcolor="#BABABA">
               <h5>
                 <b>Rincian Data Barang</b>
-                <Dropdown
-                  group
-                  size="sm"
-                  className="float-right"
-                  isOpen={dropdownOpen}
-                  toggle={toggle}
-                >
-                  <DropdownToggle caret>Urutkan Berdasarkan</DropdownToggle>
-                  <DropdownMenu>
-                    <DropdownItem>Nama</DropdownItem>
-                    <DropdownItem>Harga</DropdownItem>
-                    <DropdownItem>Kategori</DropdownItem>
-                    <DropdownItem>Status</DropdownItem>
-                  </DropdownMenu>
-                </Dropdown>
               </h5>
             </th>
           </tr>
           <tr>
             <th>Nama Barang</th>
             <th>Harga</th>
+            <th>Stok</th>
             <th>Keterangan</th>
             <th>Kategori</th>
             <th>Status</th>
@@ -96,27 +87,41 @@ export default function DaftarBarang(props) {
           </tr>
         </thead>
         <tbody>
-          {barang.map((barang) => (
-            <tr key={barang.id_barang}>
-              <td>{barang.nama}</td>
-              <td>{barang.harga}</td>
-              <td>{barang.keterangan}</td>
-              <td>{barang.kategori_barang}</td>
-              <td>{barang.status_barang}</td>
-              <td>
-                <Button
-                  color="secondary"
-                  onClick={() => update(barang.id_barang)}
-                >
-                  Edit
-                </Button>
-                <span> </span>
-                <Button color="danger" onClick={() => remove(barang.id_barang)}>
-                  Hapus
-                </Button>
-              </td>
-            </tr>
-          ))}
+          {barang
+            .filter((barang) => {
+              if (searchTerm === "") {
+                return barang;
+              } else if (
+                barang.nama.toLowerCase().includes(searchTerm.toLowerCase())
+              ) {
+                return barang;
+              }
+            })
+            .map((barang) => (
+              <tr key={barang.id_barang}>
+                <td>{barang.nama}</td>
+                <td>Rp. {numberWithCommasString(barang.harga)}</td>
+                <td>{barang.stok}</td>
+                <td>{barang.keterangan}</td>
+                <td>{barang.kategori_barang}</td>
+                <td>{barang.status_barang}</td>
+                <td>
+                  <Button
+                    color="secondary"
+                    onClick={() => update(barang.id_barang)}
+                  >
+                    Edit
+                  </Button>
+                  <span> </span>
+                  <Button
+                    color="danger"
+                    onClick={() => remove(barang.id_barang)}
+                  >
+                    Hapus
+                  </Button>
+                </td>
+              </tr>
+            ))}
         </tbody>
       </Table>
     </Container>

@@ -15,6 +15,7 @@ import axios from "axios";
 import { Redirect } from "react-router";
 import { AuthContext } from "../../../App";
 import moment from "moment";
+import { getBase64 } from "../../../Util/GetBase64";
 
 const api = "http://localhost:3001";
 
@@ -52,6 +53,14 @@ export default function Simpan() {
     });
   }
 
+  async function handleUploadImage(e) {
+    e.preventDefault()
+    // console.log(Array.from(e.target.files)[0]);
+    let temporary =  Array.from(e.target.files)[0];
+    let result = await getBase64(temporary)
+    setData({...data,bukti_transfer:result});
+  }
+
   function handle(e) {
     const newData = { ...data };
     newData[e.target.name] = e.target.value;
@@ -83,6 +92,7 @@ export default function Simpan() {
                       name="nama"
                       value={state.user}
                       onChange={(e) => handle(e)}
+                      disabled
                     />
                   </Col>
                 </Row>
@@ -96,6 +106,7 @@ export default function Simpan() {
                       name="id_user"
                       value={data.id_user}
                       onChange={(e) => handle(e)}
+                      disabled
                     />
                   </Col>
                 </Row>
@@ -144,9 +155,8 @@ export default function Simpan() {
                 <Label for="bukti_transfer">Unggah Bukti Transfer</Label>
                 <Input
                   type="file"
-                  name="bukti_transfer"
-                  value=""
-                  onChange={(e) => handle(e)}
+                  name="bukti_transfer"                  
+                  onChange={(e) => handleUploadImage(e)}
                   accept="image/*"
                 />
               </FormGroup>

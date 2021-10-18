@@ -13,7 +13,7 @@ export default function RoleMember() {
   return (
     <div>
       <Jumbotron>
-        <h1 className="display-3">Hello, Anggota Koperasi atas nama {state.user}!</h1>
+        <h1 className="display-3">Hello, Anggota Koperasi! Yth. {state.user}!</h1>
         <p className="lead">
           This is a simple hero unit, a simple Jumbotron-style component for
           calling extra attention to featured content or information.

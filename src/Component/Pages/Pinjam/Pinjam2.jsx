@@ -121,6 +121,7 @@ export default function Pinjam2() {
                     name="nama"
                     value={state.user}
                     onChange={(e) => handle(e)}
+                    disabled
                   />
                 </Col>
               </Row>
@@ -134,6 +135,7 @@ export default function Pinjam2() {
                     name="id_user"
                     value={data.id_user}
                     onChange={(e) => handle(e)}
+                    disabled
                   />
                 </Col>
               </Row>

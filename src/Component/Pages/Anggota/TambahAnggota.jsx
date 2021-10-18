@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import {
   Container,
   Row,
@@ -11,16 +11,19 @@ import {
   Alert,
   Label,
   Button,
+  FormFeedback,
 } from "reactstrap";
 import axios from "axios";
+import { Redirect } from "react-router";
 import moment from "moment";
-import { getBase64 } from "../../../Util/GetBase64";
+import { AuthContext } from "../../../App";
 
 const api = "http://localhost:3001";
 
 export default function TambahAnggota() {
+  const { state } = useContext(AuthContext);
   const [user, setUser] = useState([]);
-  const [state, setState] = useState({
+  const [data, setData] = useState({
     username: "",
     id: "",
     satker: "",
@@ -29,31 +32,34 @@ export default function TambahAnggota() {
     nomor_telefon: "",
     password: "",
     password_ulang: "",
-    bukti_transfer: "",
+    role: "",
+    tanggal_daftar: "",
+    error: {},
   });
-  const [response, setresponse] = useState("");
-
+  const [role, setrole] = useState([]);
   const [visible, setVisible] = useState(false);
-
   const onDismiss = () => setVisible(false);
 
   useEffect(() => {
-    setState({
+    axios.get(api + "/tampilRole").then((res) => {
+      setrole(res.data.values);
+    });
+    setData({
       tanggal_lahir: moment(state.tanggal_lahir).format("YYYY-MM-DD"),
+      tanggal_daftar: moment().format("YYYY-MM-DD"),
     });
   }, []);
-
+  const roles = role.map((roles) => roles);
+  const [retype, setretype] = useState("");
   const submit = async (e) => {
     axios
-      .post(api + "/auth/api/v1/register", state)
+      .post(api + "/tambahAnggota", data)
       .then((res) => {
-        console.log(res.data.values);
-        setresponse(res.data.values);
         const myData = [...user, res.data.values, visible];
         setUser(myData);
         setVisible(myData);
         e.preventDefault();
-        setState({
+        setData({
           username: "",
           id: "",
           satker: "",
@@ -62,26 +68,26 @@ export default function TambahAnggota() {
           nomor_telefon: "",
           password: "",
           password_ulang: "",
-          bukti_transfer: "",
+          role: "",
         });
       })
-      .catch((err) => console.error(err));
+      .catch((error) => console.log(error));
   };
 
-  async function handleUploadImage(e) {
-    e.preventDefault();
-    // console.log(Array.from(e.target.files)[0]);
-    let temporary = Array.from(e.target.files)[0];
-    let result = await getBase64(temporary);
-    setState({ ...state, bukti_transfer: result });
-  }
-
   function handle(e) {
-    const newData = { ...state };
+    if (data.password !== e.target.value) {
+      setretype("Password anda tidak sama");
+    } else {
+      setretype("");
+    }
+    const newData = { ...data };
     newData[e.target.name] = e.target.value;
-    setState(newData);
+    setData(newData);
   }
 
+  if (!state.isAuthenticated) {
+    return <Redirect to="/masuk" />;
+  }
   return (
     <Container className="mt-5">
       <Row>
@@ -102,8 +108,9 @@ export default function TambahAnggota() {
                     <Input
                       type="text"
                       name="username"
-                      value={state.username}
+                      value={data.username}
                       onChange={(e) => handle(e)}
+                      required
                     />
                   </Col>
                 </Row>
@@ -115,8 +122,9 @@ export default function TambahAnggota() {
                     <Input
                       type="text"
                       name="id"
-                      value={state.id}
+                      value={data.id}
                       onChange={(e) => handle(e)}
+                      required
                     />
                   </Col>
                 </Row>
@@ -128,8 +136,9 @@ export default function TambahAnggota() {
                     <Input
                       type="text"
                       name="satker"
-                      value={state.satker}
+                      value={data.satker}
                       onChange={(e) => handle(e)}
+                      required
                     />
                   </Col>
                 </Row>
@@ -143,8 +152,9 @@ export default function TambahAnggota() {
                         <Input
                           type="text"
                           name="tempat_lahir"
-                          value={state.tempat_lahir}
+                          value={data.tempat_lahir}
                           onChange={(e) => handle(e)}
+                          required
                         />
                       </Col>
                     </Row>
@@ -158,8 +168,9 @@ export default function TambahAnggota() {
                         <Input
                           type="date"
                           name="tanggal_lahir"
-                          value={state.tanggal_lahir}
+                          value={data.tanggal_lahir}
                           onChange={(e) => handle(e)}
+                          required
                         />
                       </Col>
                     </Row>
@@ -173,8 +184,9 @@ export default function TambahAnggota() {
                     <Input
                       type="number"
                       name="nomor_telefon"
-                      value={state.nomor_telefon}
+                      value={data.nomor_telefon}
                       onChange={(e) => handle(e)}
+                      required
                     />
                   </Col>
                 </Row>
@@ -186,8 +198,9 @@ export default function TambahAnggota() {
                     <Input
                       type="password"
                       name="password"
-                      value={state.password}
+                      value={data.password}
                       onChange={(e) => handle(e)}
+                      required
                     />
                   </Col>
                 </Row>
@@ -199,36 +212,40 @@ export default function TambahAnggota() {
                     <Input
                       type="password"
                       name="password_ulang"
-                      value={state.password_ulang}
+                      value={data.password_ulang}
                       onChange={(e) => handle(e)}
+                      required
+                      invalid={retype ? true : false}
                     />
+                    <FormFeedback>{retype}</FormFeedback>
                   </Col>
                 </Row>
               </FormGroup>
-              <hr />
-              <p className="text-center">UNTUK PENDAFTARAN ANGGOTA</p>
-              <p className="text-center">
-                SILAHKAN MEMBAYAR IURAN WAJIB SEJUMLAH RP 10.000
-              </p>
-              <p className="text-center">
-                PEMBAYARAN BISA DILAKUKAN DENGAN TRANSFER KE NOMOR REKENING
-              </p>
-              <p className="text-center">
-                <b>34343241212341 BANK BTN (A.N PRIMKOPAL AAL SURABAYA)</b>
-              </p>
-              <hr />
+              <Label>Jenis Keanggotaan</Label>
               <FormGroup>
-                <Label for="bukti_transfer">Unggah Bukti Transfer</Label>
-                <Input
-                  type="file"
-                  name="bukti_transfer"
-                  onChange={(e) => handleUploadImage(e)}
-                  accept="image/*"
-                />
+                <Row>
+                  <Col>
+                    <Input
+                      type="select"
+                      name="role"
+                      value={data.role}
+                      onChange={(e) => handle(e)}
+                      required
+                    >
+                      <option value="" disabled selected>
+                        Pilih Role
+                      </option>
+                      {roles.map((roles, key) => (
+                        <option key={key} value={roles.id_role}>
+                          {roles.nama_role}
+                        </option>
+                      ))}
+                    </Input>
+                  </Col>
+                </Row>
               </FormGroup>
-              <hr />
               <Alert color="info" isOpen={visible} toggle={onDismiss}>
-                {response}
+                Data Berhasil Ditambahkan!
               </Alert>
               <FormGroup>
                 <Row>
@@ -252,8 +269,7 @@ export default function TambahAnggota() {
                     <Button
                       color="primary"
                       className="mt-3 float-right"
-                      type="button"
-                      onClick={(e) => submit(e)}
+                      type="submit"
                     >
                       {" "}
                       Tambah Anggota{" "}

@@ -25,8 +25,6 @@ export default function Kredit1(props) {
     id_user: "",
     id_status: "",
     id_cicilan: "",
-    satker: "",
-    nomor_telefon: "",
     nama_barang: "",
     harga: "",
     terbilang: "",
@@ -62,8 +60,6 @@ export default function Kredit1(props) {
       e.preventDefault();
       setData({
         id_cicilan: "",
-        satker: "",
-        nomor_telefon: "",
         nama_barang: "",
         harga: "",
         terbilang: "",
@@ -108,6 +104,7 @@ export default function Kredit1(props) {
                     name="nama"
                     value={state.user}
                     onChange={(e) => handle(e)}
+                    disabled
                   />
                 </Col>
               </Row>
@@ -121,6 +118,7 @@ export default function Kredit1(props) {
                     name="id_user"
                     value={data.id_user}
                     onChange={(e) => handle(e)}
+                    disabled
                   />
                 </Col>
               </Row>
@@ -132,7 +130,7 @@ export default function Kredit1(props) {
                   <Input
                     type="text"
                     name="satker"
-                    value={data.satker}
+                    value={state.satker}
                     onChange={(e) => handle(e)}
                   />
                 </Col>
@@ -145,7 +143,7 @@ export default function Kredit1(props) {
                   <Input
                     type="number"
                     name="nomor_telefon"
-                    value={data.nomor_telefon}
+                    value={state.nomor_telefon}
                     onChange={(e) => handle(e)}
                   />
                 </Col>

@@ -1,17 +1,17 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Container, Button, Table, Dropdown, DropdownItem, DropdownToggle, DropdownMenu } from "reactstrap";
+import { Container, Button, Table, Input } from "reactstrap";
 import axios from "axios";
 import qs from "querystring";
 import { AuthContext } from "../../../App";
 import { Redirect } from "react-router";
 import moment from "moment";
+import { numberWithCommasString } from "../../Fungsional/Koma";
 
 const api = "http://localhost:3001";
 
 export default function DaftarPinjaman(props) {
   const [pinjaman, setpinjaman] = useState([]);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const toggle = () => setDropdownOpen((prevState) => !prevState);
+  const [searchTerm, setsearchTerm] = useState("");
 
   useEffect(() => {
     axios.get(api + "/tampilPinjaman").then((res) => {
@@ -19,7 +19,7 @@ export default function DaftarPinjaman(props) {
     });
   }, []);
 
-  function remove(id) {    
+  function remove(id) {
     const data = qs.stringify({ id_pinjaman: id });
     axios
       .delete(api + "/hapusPinjaman", {
@@ -28,7 +28,9 @@ export default function DaftarPinjaman(props) {
       })
       .then((res) => {
         console.log(res.data.values);
-        const newData = pinjaman.filter((pinjaman) => pinjaman.id_pinjaman !== id);
+        const newData = pinjaman.filter(
+          (pinjaman) => pinjaman.id_pinjaman !== id
+        );
         setpinjaman(newData);
       })
       .catch((err) => console.error(err));
@@ -55,27 +57,20 @@ export default function DaftarPinjaman(props) {
       >
         Tambah Data pinjaman
       </Button>
+      <Input
+        type="text"
+        className="mb-3"
+        placeholder="Cari Nama Peminjam"
+        onChange={(event) => {
+          setsearchTerm(event.target.value);
+        }}
+      />
       <Table className="table-bordered">
         <thead>
           <tr>
             <th colSpan="8" className="text-center" bgcolor="#BABABA">
               <h5>
                 <b>Rincian pinjaman Anggota</b>
-                <Dropdown
-                  group
-                  size="sm"
-                  className="float-right"
-                  isOpen={dropdownOpen}
-                  toggle={toggle}
-                >
-                  <DropdownToggle caret>Urutkan Berdasarkan</DropdownToggle>
-                  <DropdownMenu>
-                    <DropdownItem>Tanggal</DropdownItem>
-                    <DropdownItem>Nama</DropdownItem>
-                    <DropdownItem>NRP / NIP</DropdownItem>
-                    <DropdownItem>Status</DropdownItem>
-                  </DropdownMenu>
-                </Dropdown>
               </h5>
             </th>
           </tr>
@@ -91,29 +86,44 @@ export default function DaftarPinjaman(props) {
           </tr>
         </thead>
         <tbody>
-          {pinjaman.map((pinjaman) => (
-            <tr key={pinjaman.id_pinjaman}>
-              <td>{moment(pinjaman.tanggal_pinjam).format('YYYY-MM-DD')}</td>
-              <td>{pinjaman.username}</td>
-              <td>{pinjaman.id_user}</td>
-              <td>{pinjaman.besar_pinjaman}</td>
-              <td>{pinjaman.besar_cicilan}</td>
-              <td>{pinjaman.cicilan} Bulan</td>
-              <td>{pinjaman.status}</td>
-              <td>
-                <Button
-                  color="secondary"
-                  onClick={() => update(pinjaman.id_pinjaman)}
-                >
-                  Detail
-                </Button>
-                <span> </span>
-                <Button color="danger" onClick={() => remove(pinjaman.id_pinjaman)}>
-                  Hapus
-                </Button>
-              </td>
-            </tr>
-          ))}
+          {pinjaman
+            .filter((pinjaman) => {
+              if (searchTerm === "") {
+                return pinjaman;
+              } else if (
+                pinjaman.username
+                  .toLowerCase()
+                  .includes(searchTerm.toLowerCase())
+              ) {
+                return pinjaman;
+              }
+            })
+            .map((pinjaman) => (
+              <tr key={pinjaman.id_pinjaman}>
+                <td>{moment(pinjaman.tanggal_pinjam).format("YYYY-MM-DD")}</td>
+                <td>{pinjaman.username}</td>
+                <td>{pinjaman.id_user}</td>
+                <td>Rp. {numberWithCommasString(pinjaman.besar_pinjaman)}</td>
+                <td>Rp. {numberWithCommasString(pinjaman.besar_cicilan)}</td>
+                <td>{pinjaman.cicilan} Bulan</td>
+                <td>{pinjaman.status}</td>
+                <td>
+                  <Button
+                    color="secondary"
+                    onClick={() => update(pinjaman.id_pinjaman)}
+                  >
+                    Detail
+                  </Button>
+                  <span> </span>
+                  <Button
+                    color="danger"
+                    onClick={() => remove(pinjaman.id_pinjaman)}
+                  >
+                    Hapus
+                  </Button>
+                </td>
+              </tr>
+            ))}
         </tbody>
       </Table>
     </Container>

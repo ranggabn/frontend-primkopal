@@ -1,19 +1,18 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Container, Button, Table, Dropdown, DropdownItem, DropdownToggle, DropdownMenu } from "reactstrap";
+import { Container, Button, Table, Input } from "reactstrap";
 import axios from "axios";
 import qs from "querystring";
 import { AuthContext } from "../../../App";
 import { Redirect } from "react-router";
 import moment from "moment";
-import { numberWithCommas } from "../../Fungsional/Koma";
+import { numberWithCommasString } from "../../Fungsional/Koma";
 
 const api = "http://localhost:3001";
 
 export default function DaftarKredit(props) {
   const { state } = useContext(AuthContext);
   const [kredit, setkredit] = useState([]);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const toggle = () => setDropdownOpen((prevState) => !prevState);
+  const [searchTerm, setsearchTerm] = useState("");
 
   useEffect(() => {
     axios.get(api + "/tampilKredit").then((res) => {
@@ -56,27 +55,20 @@ export default function DaftarKredit(props) {
       >
         Tambah Data Kredit
       </Button>
+      <Input
+        type="text"
+        className="mb-3"
+        placeholder="Cari Nama Kreditur"
+        onChange={(event) => {
+          setsearchTerm(event.target.value);
+        }}
+      />
       <Table className="table-bordered">
         <thead>
           <tr>
             <th colSpan="8" className="text-center" bgcolor="#BABABA">
               <h5>
                 <b>Rincian Kredit Anggota</b>
-                <Dropdown
-                  group
-                  size="sm"
-                  className="float-right"
-                  isOpen={dropdownOpen}
-                  toggle={toggle}
-                >
-                  <DropdownToggle caret>Urutkan Berdasarkan</DropdownToggle>
-                  <DropdownMenu>
-                    <DropdownItem>Tanggal</DropdownItem>
-                    <DropdownItem>Nama</DropdownItem>
-                    <DropdownItem>NRP / NIP</DropdownItem>
-                    <DropdownItem>Status</DropdownItem>
-                  </DropdownMenu>
-                </Dropdown>
               </h5>
             </th>
           </tr>
@@ -92,13 +84,22 @@ export default function DaftarKredit(props) {
           </tr>
         </thead>
         <tbody>
-          {kredit.map((kredit) => (
+        {kredit
+            .filter((kredit) => {
+              if (searchTerm === "") {
+                return kredit;
+              } else if (
+                kredit.username.toLowerCase().includes(searchTerm.toLowerCase())
+              ) {
+                return kredit;
+              }
+            }).map((kredit) => (
             <tr key={kredit.id_kredit}>
               <td>{moment(kredit.tanggal_kredit).format('YYYY-MM-DD')}</td>
               <td>{kredit.username}</td>
               <td>{kredit.id_user}</td>
               <td>{kredit.nama_barang}</td>
-              <td>{numberWithCommas(kredit.besar_cicilan)}</td>
+              <td>Rp. {numberWithCommasString(kredit.besar_cicilan)}</td>
               <td>{kredit.cicilan} Bulan</td>
               <td>{kredit.status}</td>
               <td>

@@ -16,7 +16,7 @@ import { numberWithCommasString } from "../../Fungsional/Koma";
 
 const api = "http://localhost:3001";
 
-export default function DetailBarang() {
+export default function DetailBarang2() {
   let { id } = useParams();
   const [barang, setbarang] = useState([]);
 
@@ -72,7 +72,7 @@ export default function DetailBarang() {
             </Jumbotron>
             <Row>
               <Col>
-                <Button color="secondary" className="float-right" href="/toko">
+                <Button color="secondary" className="float-right" href="/tokopublik">
                   Kembali
                 </Button>
               </Col>
