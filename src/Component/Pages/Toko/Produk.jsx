@@ -25,6 +25,7 @@ import {
   faCar,
   faShoppingBag,
   faInfoCircle,
+  faGlobeAmericas,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   numberWithCommas,
@@ -46,6 +47,10 @@ export default function Produk(props) {
   const [data, setdata] = useState({
     id_kategori: "1",
     id_barang: "",
+  });
+  const [disable, setdisable] = useState({
+    isDisabled: true,
+    noDisabled: false,
   });
   const [kategori, setkategori] = useState([]);
   const [keranjangs, setkeranjangs] = useState([]);
@@ -128,11 +133,10 @@ export default function Produk(props) {
     getListKeranjang();
   }, []);
 
-  function semuaKategori(e) {
+  function semuaKategori() {
     axios.get(api + "/tampilBarang").then((res) => {
       setproduk(res.data.values);
     });
-    getListKeranjang();
   }
 
   function handle(id) {
@@ -199,14 +203,17 @@ export default function Produk(props) {
               getListKeranjang();
             });
           }
+          semuaKategori();
         });
+      const dataUbah = {
+        id_barang: response.id_barang,
+        stok: response.stok - 1,
+      };
+      axios.put(api + "/ubahBarang2", dataUbah);
     });
   }
 
   const getListKeranjang = () => {
-    axios.get(api + "/tampilBarang").then((res) => {
-      setproduk(res.data.values);      
-    });
     axios.get(api + "/tampilKeranjang/" + state.id).then((res) => {
       settampilkeranjang(res.data.values);
     });
@@ -224,6 +231,13 @@ export default function Produk(props) {
     props.history.push("/detailBarang/" + id);
   }
 
+  const arr = [];
+  tampilkeranjang.map((lb) =>
+    arr.push({
+      id_barang: lb.id_barang,
+      stok: lb.stok + lb.jumlah,
+    })
+  );
   function remove(id) {
     const data = qs.stringify({ id_user: id });
     axios
@@ -235,8 +249,10 @@ export default function Produk(props) {
         const newData = keranjangs.filter(
           (keranjangs) => keranjangs.id_user !== id
         );
+        arr.map((arr) => axios.put(api + "/ubahBarang2", arr));
         setkeranjangs(newData);
         getListKeranjang();
+        semuaKategori();
       })
       .catch((err) => console.error(err));
   }
@@ -324,8 +340,7 @@ export default function Produk(props) {
                     <CardBody>
                       <CardTitle tag="h5">{produks.nama}</CardTitle>
                       <CardText>
-                        <hr/>
-                        <strong>Rp. {numberWithCommas(produks.harga)}</strong>                        
+                        <strong>Rp. {numberWithCommas(produks.harga)}</strong>
                         <p>Stok : {produks.stok}</p>
                       </CardText>
                       <Button
@@ -343,6 +358,9 @@ export default function Produk(props) {
                         type="button"
                         onClick={() => keranjang(produks.id_barang)}
                         block
+                        disabled={
+                          produks.stok ? disable.noDisabled : disable.isDisabled
+                        }
                       >
                         {" "}
                         Tambah Keranjang{" "}
@@ -391,6 +409,8 @@ export default function Produk(props) {
               {...modal}
               toggle={toggle}
               getListKeranjang={getListKeranjang}
+              produks={produks}
+              semuaKategori={semuaKategori}
             />
             <FormText color="muted">
               <FontAwesomeIcon icon={faInfoCircle} /> &nbsp;Tekan list barang

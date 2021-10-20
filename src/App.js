@@ -50,6 +50,7 @@ import Toko from "./Component/Pages/Toko/Toko";
 import DetailBarang2 from "./Component/Pages/Toko/DetailBarang2";
 import Ubahprofil from "./Component/Pages/UbahProfil/Ubahprofil";
 import Ubahpassword from "./Component/Pages/UbahProfil/Ubahpassword";
+import Pengambilan from "./Component/Pages/Pengambilan/Pengambilan";
 
 export const AuthContext = createContext();
 
@@ -126,6 +127,7 @@ function App() {
           <Route exact path="/pinjam" component={Pinjam1} />
           <Route exact path="/pinjam2" component={Pinjam2} />          
           <Route exact path="/tabungan" component={Tabungan} />
+          <Route exact path="/pengambilan" component={Pengambilan} />
           <Route exact path="/tampilpinjaman" component={TampilPinjaman} />
           <Route exact path="/tampilkredit" component={TampilKredit} />
           <Route exact path="/toko" component={Produk} />

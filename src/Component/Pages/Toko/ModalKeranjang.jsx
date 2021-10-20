@@ -17,13 +17,23 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faMinus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
-import swal from 'sweetalert'
-import qs from 'querystring'
+import swal from "sweetalert";
+import qs from "querystring";
 
 const api = "http://localhost:3001";
 
-export default function ModalKeranjang({ showModal, handleClose, keterangan, toggle, jumlah, jumlah_harga, getListKeranjang }) {
-  const [keranjangs, setkeranjangs] = useState([])
+export default function ModalKeranjang({
+  showModal,
+  handleClose,
+  keterangan,
+  toggle,
+  jumlah,
+  jumlah_harga,
+  getListKeranjang,
+  produks,
+  semuaKategori
+}) {
+  const [keranjangs, setkeranjangs] = useState([]);
   const [dataKeranjang, setdataKeranjang] = useState({
     id_user: "",
     id_barang: "",
@@ -34,7 +44,7 @@ export default function ModalKeranjang({ showModal, handleClose, keterangan, tog
   const [data, setdata] = useState({
     jumlahBarang: jumlah,
     jumlahHarga: jumlah_harga,
-  });  
+  });
 
   useEffect(() => {
     setdata({
@@ -43,11 +53,11 @@ export default function ModalKeranjang({ showModal, handleClose, keterangan, tog
     });
   }, [jumlah, jumlah_harga]);
 
-  const tambah = () => {
-    setdata({
-      jumlahBarang: data.jumlahBarang + 1,
-      jumlahHarga: keterangan.harga * (data.jumlahBarang + 1),
-    });
+  const tambah = () => {    
+      setdata({
+        jumlahBarang: data.jumlahBarang + 1,
+        jumlahHarga: keterangan.harga * (data.jumlahBarang + 1),
+      });
   };
 
   const kurang = () => {
@@ -58,7 +68,7 @@ export default function ModalKeranjang({ showModal, handleClose, keterangan, tog
       });
     }
   };
-  
+
   function handlesubmit() {
     const dataKer = {
       ...dataKeranjang,
@@ -77,7 +87,7 @@ export default function ModalKeranjang({ showModal, handleClose, keterangan, tog
       const myData = [...keranjangs, res.data.values];
       setkeranjangs(myData);
       getListKeranjang();
-      handleClose()
+      handleClose();
     });
   }
 
@@ -97,12 +107,32 @@ export default function ModalKeranjang({ showModal, handleClose, keterangan, tog
           button: false,
           timer: 1200,
         });
-        const newData = keranjangs.filter((keranjangs) => keranjangs.id_barang !== id);
+        const newData = keranjangs.filter(
+          (keranjangs) => keranjangs.id_barang !== id
+        );
         setkeranjangs(newData);
         getListKeranjang()
-        handleClose()
+        handleClose();
       })
       .catch((err) => console.error(err));
+  }
+
+  function batal(id) {
+    const newData = { ...data, id: id };
+    setdata(newData);
+    axios.get(api + "/tampilKeranjang/" + newData.id).then((res) => {
+      const response = res.data.values[0];
+      axios.get(api + "/tampilBarang/" + response.id_barang).then((res) => {
+        const barang = res.data.values[0];
+        const dataBaru = {
+          id_barang: barang.id_barang,
+          stok: barang.stok + response.jumlah,
+        };
+        axios.put(api + "/ubahBarang2", dataBaru);
+        semuaKategori()
+        remove(response.id_barang); 
+      });     
+    });
   }
 
   if (keterangan) {
@@ -157,10 +187,18 @@ export default function ModalKeranjang({ showModal, handleClose, keterangan, tog
             </Form>
           </ModalBody>
           <ModalFooter>
-            <Button color="danger" toggle={toggle} onClick={() => remove(keterangan.id_barang)}>
+            <Button
+              color="danger"
+              toggle={toggle}
+              onClick={() => batal(keterangan.id)}
+            >
               <FontAwesomeIcon icon={faTrash} /> Hapus Pesanan
             </Button>{" "}
-            <Button color="primary" toggle={toggle} onClick={() => handlesubmit()}>
+            <Button
+              color="primary"
+              toggle={toggle}
+              onClick={() => handlesubmit()}
+            >
               Simpan
             </Button>
           </ModalFooter>
@@ -177,7 +215,9 @@ export default function ModalKeranjang({ showModal, handleClose, keterangan, tog
             <Button color="secondary" onClick={handleClose}>
               Cancel
             </Button>{" "}
-            <Button color="primary" onClick={() => handlesubmit()}>Save Changes</Button>
+            <Button color="primary" onClick={() => handlesubmit()}>
+              Save Changes
+            </Button>
           </ModalFooter>
         </Modal>
       </div>

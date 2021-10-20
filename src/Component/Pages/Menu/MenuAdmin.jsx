@@ -35,6 +35,11 @@ export default function MenuAdmin() {
               </NavLink>
             </NavItem>
             <NavItem>
+              <NavLink to="/pengambilan" className="nav-link">
+                Pengambilan Barang
+              </NavLink>
+            </NavItem>
+            <NavItem>
               <NavLink to="/daftarpenjualan" className="nav-link">
                 Daftar Penjualan
               </NavLink>
