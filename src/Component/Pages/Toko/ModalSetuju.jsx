@@ -42,6 +42,13 @@ export default function ModalSetuju({
     });
   }, []);
 
+  const arr = [];
+  tampilkeranjang.map((lb) =>
+    arr.push({
+      id_barang: lb.id_barang,
+      stok: lb.stok - lb.jumlah
+    })
+  );
   function handleSubmit(e) {
     e.preventDefault();
     tampilkeranjang.map(
@@ -54,6 +61,7 @@ export default function ModalSetuju({
         timer: 1200,
       })
     );
+    arr.map(arr => axios.put(api + "/ubahBarang2", arr))
     handleClose();
     remove(state.id);
   }
@@ -122,12 +130,12 @@ export default function ModalSetuju({
           <br />
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={handleClose}>
+          <Button color="secondary" onClick={handleClose}>
             Kembali
           </Button>{" "}
           <Pdf targetRef={ref} filename="struk.pdf">
             {({ toPdf }) => (
-              <Button onClick={(e) => handleSubmit(e)} onClickCapture={toPdf}>
+              <Button color="primary" onClick={(e) => handleSubmit(e)} onClickCapture={toPdf}>
                 Setuju
               </Button>
             )}

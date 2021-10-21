@@ -83,6 +83,7 @@ export default function Produk(props) {
         keterangan: res.data.values[0],
         jumlah: res.data.values[0].jumlah,
         jumlah_harga: res.data.values[0].jumlah_harga,
+        stok: res.data.values[0].stok,
       });
     });
   };
@@ -205,11 +206,6 @@ export default function Produk(props) {
           }
           semuaKategori();
         });
-      const dataUbah = {
-        id_barang: response.id_barang,
-        stok: response.stok - 1,
-      };
-      axios.put(api + "/ubahBarang2", dataUbah);
     });
   }
 
@@ -231,13 +227,6 @@ export default function Produk(props) {
     props.history.push("/detailBarang/" + id);
   }
 
-  const arr = [];
-  tampilkeranjang.map((lb) =>
-    arr.push({
-      id_barang: lb.id_barang,
-      stok: lb.stok + lb.jumlah,
-    })
-  );
   function remove(id) {
     const data = qs.stringify({ id_user: id });
     axios
@@ -249,7 +238,6 @@ export default function Produk(props) {
         const newData = keranjangs.filter(
           (keranjangs) => keranjangs.id_user !== id
         );
-        arr.map((arr) => axios.put(api + "/ubahBarang2", arr));
         setkeranjangs(newData);
         getListKeranjang();
         semuaKategori();
@@ -409,7 +397,6 @@ export default function Produk(props) {
               {...modal}
               toggle={toggle}
               getListKeranjang={getListKeranjang}
-              produks={produks}
               semuaKategori={semuaKategori}
             />
             <FormText color="muted">

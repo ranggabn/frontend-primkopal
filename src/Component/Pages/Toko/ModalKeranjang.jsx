@@ -30,8 +30,7 @@ export default function ModalKeranjang({
   jumlah,
   jumlah_harga,
   getListKeranjang,
-  produks,
-  semuaKategori
+  semuaKategori,
 }) {
   const [keranjangs, setkeranjangs] = useState([]);
   const [dataKeranjang, setdataKeranjang] = useState({
@@ -53,11 +52,14 @@ export default function ModalKeranjang({
     });
   }, [jumlah, jumlah_harga]);
 
-  const tambah = () => {    
+  const tambah = () => {
+    if (data.jumlahBarang !== keterangan.stok) {
       setdata({
         jumlahBarang: data.jumlahBarang + 1,
         jumlahHarga: keterangan.harga * (data.jumlahBarang + 1),
       });
+      semuaKategori();
+    }
   };
 
   const kurang = () => {
@@ -66,6 +68,7 @@ export default function ModalKeranjang({
         jumlahBarang: data.jumlahBarang - 1,
         jumlahHarga: keterangan.harga * (data.jumlahBarang - 1),
       });
+      semuaKategori();
     }
   };
 
@@ -84,6 +87,7 @@ export default function ModalKeranjang({
         button: false,
         timer: 1200,
       });
+      semuaKategori();
       const myData = [...keranjangs, res.data.values];
       setkeranjangs(myData);
       getListKeranjang();
@@ -91,8 +95,7 @@ export default function ModalKeranjang({
     });
   }
 
-  function remove(id) {
-    // console.log(id);
+  function remove(id) {    
     const data = qs.stringify({ id_barang: id });
     axios
       .delete(api + "/hapusKeranjangId", {
@@ -111,28 +114,10 @@ export default function ModalKeranjang({
           (keranjangs) => keranjangs.id_barang !== id
         );
         setkeranjangs(newData);
-        getListKeranjang()
+        getListKeranjang();
         handleClose();
       })
       .catch((err) => console.error(err));
-  }
-
-  function batal(id) {
-    const newData = { ...data, id: id };
-    setdata(newData);
-    axios.get(api + "/tampilKeranjang/" + newData.id).then((res) => {
-      const response = res.data.values[0];
-      axios.get(api + "/tampilBarang/" + response.id_barang).then((res) => {
-        const barang = res.data.values[0];
-        const dataBaru = {
-          id_barang: barang.id_barang,
-          stok: barang.stok + response.jumlah,
-        };
-        axios.put(api + "/ubahBarang2", dataBaru);
-        semuaKategori()
-        remove(response.id_barang); 
-      });     
-    });
   }
 
   if (keterangan) {
@@ -190,7 +175,7 @@ export default function ModalKeranjang({
             <Button
               color="danger"
               toggle={toggle}
-              onClick={() => batal(keterangan.id)}
+              onClick={() => remove(keterangan.id_barang)}
             >
               <FontAwesomeIcon icon={faTrash} /> Hapus Pesanan
             </Button>{" "}
