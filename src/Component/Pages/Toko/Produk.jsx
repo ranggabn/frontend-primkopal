@@ -83,7 +83,6 @@ export default function Produk(props) {
         keterangan: res.data.values[0],
         jumlah: res.data.values[0].jumlah,
         jumlah_harga: res.data.values[0].jumlah_harga,
-        stok: res.data.values[0].stok,
       });
     });
   };
@@ -157,53 +156,62 @@ export default function Produk(props) {
     setdata(newData);
     axios.get(api + "/tampilBarang/" + newData.id_barang).then((res) => {
       const response = res.data.values[0];
+      console.log(response);
       axios
         .get(api + "/tampilKeranjangBarang/" + newData.id_barang)
-        .then((res) => {
-          if (res.data.values.length === 0) {
-            const dataKer = {
-              ...dataKeranjang,
-              id_barang: response.id_barang,
-              id_user: state.id,
-              jumlah_harga: response.harga,
-              total_harga: 0,
-              jumlah: 1,
-              tanggal_penjualan: moment().format("YYYY-MM-DD"),
-              status: false,
-            };
-            setdataKeranjang(dataKer);
-            axios.post(api + "/tambahKeranjang", dataKer).then((res) => {
-              swal({
-                title: "Sukses Masuk Keranjang",
-                text: "Cek Keranjang Anda!",
-                icon: "success",
-                button: false,
-                timer: 1200,
+        .then((res) => {            
+            if (res.data.values.length === 0) {
+              const dataKer = {
+                ...dataKeranjang,
+                id_barang: response.id_barang,
+                id_user: state.id,
+                jumlah_harga: response.harga,
+                total_harga: 0,
+                jumlah: 1,
+                tanggal_penjualan: moment().format("YYYY-MM-DD"),
+                status: false,
+              };
+              setdataKeranjang(dataKer);
+              axios.post(api + "/tambahKeranjang", dataKer).then((res) => {
+                swal({
+                  title: "Sukses Masuk Keranjang",
+                  text: "Cek Keranjang Anda!",
+                  icon: "success",
+                  button: false,
+                  timer: 1200,
+                });
+                const myData = [...keranjangs, res.data.values];
+                setkeranjangs(myData);
+                getListKeranjang();
               });
-              const myData = [...keranjangs, res.data.values];
-              setkeranjangs(myData);
-              getListKeranjang();
-            });
-          } else {
-            const dataKer = {
-              ...dataKeranjang,
-              id_barang: response.id_barang,
-              jumlah_harga: res.data.values[0].jumlah_harga + response.harga,
-              jumlah: res.data.values[0].jumlah + 1,
-            };
-            axios.put(api + "/ubahKeranjang", dataKer).then((res) => {
-              swal({
-                title: "Sukses Masuk Keranjang",
-                text: "Cek Keranjang Anda!",
-                icon: "success",
-                button: false,
-                timer: 1200,
+            } else if (res.data.values[0].jumlah !== response.stok) {
+              const dataKer = {
+                ...dataKeranjang,
+                id_barang: response.id_barang,
+                jumlah_harga: res.data.values[0].jumlah_harga + response.harga,
+                jumlah: res.data.values[0].jumlah + 1,
+              };
+              axios.put(api + "/ubahKeranjang", dataKer).then((res) => {
+                swal({
+                  title: "Sukses Masuk Keranjang",
+                  text: "Cek Keranjang Anda!",
+                  icon: "success",
+                  button: false,
+                  timer: 1200,
+                });
+                const myData = [...keranjangs, res.data.values];
+                setkeranjangs(myData);
+                getListKeranjang();
               });
-              const myData = [...keranjangs, res.data.values];
-              setkeranjangs(myData);
-              getListKeranjang();
-            });
-          }
+            } else {
+              swal({
+                title: "Gagal Masuk Keranjang",
+                text: "Barang Yang Dibeli Tidak Dapat Melebihi Stok Tersedia!",
+                icon: "error",
+                button: false,
+                timer: 1500,
+              });
+            }
           semuaKategori();
         });
     });

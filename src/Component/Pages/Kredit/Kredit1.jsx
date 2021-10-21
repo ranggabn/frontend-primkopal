@@ -12,6 +12,7 @@ import {
   Card,
 } from "reactstrap";
 import axios from "axios";
+import Select from "react-select";
 import { Redirect } from "react-router";
 import { AuthContext } from "../../../App";
 import moment from "moment";
@@ -31,8 +32,14 @@ export default function Kredit1(props) {
     besar_cicilan: "",
     tanggal_kredit: "",
   });
+  const [databaru, setdatabaru] = useState({    
+    nama_barang: "",      
+  })
   const [visible, setVisible] = useState(false);
   const onDismiss = () => setVisible(false);
+  const [listbarang, setlistbarang] = useState([]);
+  const [cicilan, setCicilan] = useState([]);
+  const cicil = cicilan.map((cicil) => cicil);
 
   useEffect(() => {
     setData({
@@ -41,15 +48,13 @@ export default function Kredit1(props) {
       id_status: 1,
       cicil: 1999
     });
-  }, []);
-
-  const [cicilan, setCicilan] = useState([]);
-  useEffect(() => {
     axios.get(api + "/tampilCicilan").then((res) => {
       setCicilan(res.data.values);
     });
+    axios.get(api + "/tampilBarang").then((res) => {
+      setlistbarang(res.data.values);
+    });
   }, []);
-  const cicil = cicilan.map((cicil) => cicil);
 
   function submit(e) {
     axios.post(api + "/tambahKredit", data).then((res) => {
@@ -68,12 +73,28 @@ export default function Kredit1(props) {
     });
   }
 
+  const arr = [];
+  listbarang.map((lb) =>
+    arr.push({ value: lb.nama, label: lb.nama, harga: lb.harga})
+  );
+
+  const handleChange = (e) => {    
+    setData({
+      nama_barang: e.value,
+      harga: e.harga
+    });    
+    setdatabaru({      
+      nama_barang: e.value,
+    })
+  };
+
   let besarCicilan;
   function handle(e) {
     const newData = { ...data };
     newData[e.target.name] = e.target.value;
-    besarCicilan = parseInt(newData.harga, 10) / parseInt(newData.id_cicil, 10) + parseInt(newData.harga, 10) * 0.01;
-    console.log(newData.harga, newData.id_cicil);
+    besarCicilan = parseInt(data.harga, 10) / parseInt(newData.id_cicilan, 10) + parseInt(data.harga, 10) * 0.01;
+    console.log(data.harga);
+    console.log(besarCicilan);
     setData({...newData, besar_cicilan:besarCicilan})
   }
 
@@ -132,6 +153,7 @@ export default function Kredit1(props) {
                     name="satker"
                     value={state.satker}
                     onChange={(e) => handle(e)}
+                    disabled
                   />
                 </Col>
               </Row>
@@ -151,17 +173,17 @@ export default function Kredit1(props) {
             </FormGroup>
             <Label>Nama Barang</Label>
             <FormGroup>
-              <Row>
-                <Col>
-                  <Input
-                    type="textarea"
-                    name="nama_barang"
-                    value={data.nama_barang}
-                    onChange={(e) => handle(e)}
-                  />
-                </Col>
-              </Row>
-            </FormGroup>
+            <Row>
+              <Col>
+                <Select
+                  name="nama_barang"                  
+                  onChange={(e) => handleChange(e)}
+                  options={arr}
+                  placeholder=" "
+                />
+              </Col>
+            </Row>
+          </FormGroup>
             <Row>
               <Col>
                 <Label>Harga Barang</Label>
@@ -172,6 +194,7 @@ export default function Kredit1(props) {
                     value={data.harga}
                     onChange={(e) => handle(e)}
                     placeholder="Rp."
+                    disabled
                   />
                 </FormGroup>
               </Col>
