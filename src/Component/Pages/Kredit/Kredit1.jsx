@@ -167,6 +167,7 @@ export default function Kredit1(props) {
                     name="nomor_telefon"
                     value={state.nomor_telefon}
                     onChange={(e) => handle(e)}
+                    required
                   />
                 </Col>
               </Row>
@@ -180,6 +181,7 @@ export default function Kredit1(props) {
                   onChange={(e) => handleChange(e)}
                   options={arr}
                   placeholder=" "
+                  required
                 />
               </Col>
             </Row>
@@ -206,6 +208,7 @@ export default function Kredit1(props) {
                     name="terbilang"
                     value={data.terbilang}
                     onChange={(e) => handle(e)}
+                    required
                   />
                 </FormGroup>
               </Col>
@@ -219,6 +222,7 @@ export default function Kredit1(props) {
                     name="id_cicilan"
                     value={data.id_cicilan}
                     onChange={(e) => handle(e)}
+                    required
                   >
                     <option value="" disabled selected>
                       Pilih Cicilan
@@ -256,8 +260,7 @@ export default function Kredit1(props) {
                   <Button
                     color="primary"
                     className="mt-3 float-right"
-                    type="button"
-                    onClick={(e) => submit(e)}
+                    type="submit"                    
                   >
                     {" "}
                     Ajukan Kredit{" "}

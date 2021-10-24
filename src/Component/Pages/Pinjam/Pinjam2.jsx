@@ -16,6 +16,10 @@ import { Redirect } from "react-router";
 import { AuthContext } from "../../../App";
 import moment from "moment";
 import { getBase64 } from "../../../Util/GetBase64";
+import { Viewer, Worker } from "@react-pdf-viewer/core";
+import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
+import "@react-pdf-viewer/core/lib/styles/index.css";
+import "@react-pdf-viewer/default-layout/lib/styles/index.css";
 
 const api = "http://localhost:3001";
 
@@ -31,6 +35,8 @@ export default function Pinjam2() {
     besar_pinjaman: "",
     terbilang: "",
     keperluan: "",
+    persyaratan: "",
+    surat: "",
     tanggal_pinjam: "",
     besar_cicilan: "",
     nama: "",
@@ -38,31 +44,29 @@ export default function Pinjam2() {
   const [visible, setVisible] = useState(false);
   const onDismiss = () => setVisible(false);
 
+  const [cicilan, setCicilan] = useState([]);
+  const cicil = cicilan.map((cicil) => cicil);
+
   useEffect(() => {
     setData({
       tanggal_pinjam: moment().format("YYYY-MM-DD"),
       id_status: 1,
       id_user: state.id,
       satker: state.satker,
-      nomor_telefon: state.nomor_telefon
+      nomor_telefon: state.nomor_telefon,
     });
-  }, []);
-
-  const [cicilan, setCicilan] = useState([]);
-  useEffect(() => {
     axios.get(api + "/tampilCicilan").then((res) => {
       setCicilan(res.data.values);
     });
   }, []);
-  const cicil = cicilan.map((cicil) => cicil);
 
   function submit(e) {
+    e.preventDefault();
     axios.post(api + "/tambahPinjaman", data).then((res) => {
       console.log(res.data.values);
       const myData = [...pinjam, res.data.values, visible];
       setpinjam(myData);
       setVisible(myData);
-      e.preventDefault();
       setData({
         id_cicil: "",
         satker: "",
@@ -70,6 +74,8 @@ export default function Pinjam2() {
         besar_pinjaman: "",
         terbilang: "",
         keperluan: "",
+        persyaratan: "",
+        surat: "",
         tanggal_pinjam: "",
         besar_cicilan: "",
       });
@@ -83,16 +89,27 @@ export default function Pinjam2() {
     besarCicilan =
       parseInt(newData.besar_pinjaman, 10) / parseInt(newData.id_cicil, 10) +
       parseInt(newData.besar_pinjaman, 10) * 0.01;
-    console.log(newData.besar_pinjaman, newData.id_cicil);
-    setData({ ...newData, besar_cicilan: besarCicilan });
+    setData({ ...data, besar_cicilan: besarCicilan });
   }
 
-  async function handleUploadImage(e) {
-    e.preventDefault();
-    let temporary = Array.from(e.target.files)[0];
-    let result = await getBase64(temporary);
-    setData({ ...data, [e.target.value]: result });
-  }
+  const fileType = ["application/pdf"];
+  const handlePdfFileChange = (e) => {
+    let selectedFile = e.target.files[0];
+    if (selectedFile) {
+      if (selectedFile && fileType.includes(selectedFile.type)) {
+        let reader = new FileReader();
+        reader.readAsDataURL(selectedFile);
+        reader.onloadend = (e) => {
+          // setviewPdf(e.target.result)
+          setData({ ...data, persyaratan: e.target.result });
+        };
+      } else {
+        // setviewPdf(null)
+      }
+    } else {
+      console.log("select your file");
+    }
+  };
 
   if (!state.isAuthenticated) {
     return <Redirect to="/masuk" />;
@@ -114,57 +131,47 @@ export default function Pinjam2() {
           <Col>
             <Label>Nama Lengkap</Label>
             <FormGroup>
-              <Row>
-                <Col>
-                  <Input
-                    type="text"
-                    name="nama"
-                    value={state.user}
-                    onChange={(e) => handle(e)}
-                    disabled
-                  />
-                </Col>
-              </Row>
+              <Input
+                type="text"
+                name="nama"
+                id="nama"
+                value={state.user}
+                onChange={(e) => handle(e)}
+                disabled
+              />
             </FormGroup>
             <Label>NRP / NIP</Label>
             <FormGroup>
-              <Row>
-                <Col>
-                  <Input
-                    type="text"
-                    name="id_user"
-                    value={data.id_user}
-                    onChange={(e) => handle(e)}
-                    disabled
-                  />
-                </Col>
-              </Row>
+              <Input
+                type="text"
+                name="id_user"
+                id="id_user"
+                value={data.id_user}
+                onChange={(e) => handle(e)}
+                disabled
+              />
             </FormGroup>
             <Label>Satuan Kerja</Label>
             <FormGroup>
-              <Row>
-                <Col>
-                  <Input
-                    type="text"
-                    name="satker"
-                    value={data.satker}
-                    onChange={(e) => handle(e)}
-                  />
-                </Col>
-              </Row>
+              <Input
+                type="text"
+                name="satker"
+                id="satker"
+                value={data.satker}
+                onChange={(e) => handle(e)}
+                disabled
+              />
             </FormGroup>
             <Label>No. HP / Telefon</Label>
             <FormGroup>
-              <Row>
-                <Col>
-                  <Input
-                    type="number"
-                    name="nomor_telefon"
-                    value={data.nomor_telefon}
-                    onChange={(e) => handle(e)}
-                  />
-                </Col>
-              </Row>
+              <Input
+                type="number"
+                name="nomor_telefon"
+                id="nomor_telefon"
+                value={data.nomor_telefon}
+                onChange={(e) => handle(e)}
+                required
+              />
             </FormGroup>
             <Row>
               <Col>
@@ -173,9 +180,11 @@ export default function Pinjam2() {
                   <Input
                     type="number"
                     name="besar_pinjaman"
+                    id="besar_pinjaman"
                     value={data.besar_pinjaman}
                     onChange={(e) => handle(e)}
                     placeholder="Rp."
+                    required
                   />
                 </FormGroup>
               </Col>
@@ -185,188 +194,68 @@ export default function Pinjam2() {
                   <Input
                     type="text"
                     name="terbilang"
+                    id="terbilang"
                     value={data.terbilang}
                     onChange={(e) => handle(e)}
+                    required
                   />
                 </FormGroup>
               </Col>
             </Row>
             <Label>Keperluan</Label>
             <FormGroup>
-              <Row>
-                <Col>
-                  <Input
-                    type="textarea"
-                    name="keperluan"
-                    value={data.keperluan}
-                    onChange={(e) => handle(e)}
-                  />
-                </Col>
-              </Row>
+              <Input
+                type="textarea"
+                name="keperluan"
+                id="keperluan"
+                value={data.keperluan}
+                onChange={(e) => handle(e)}
+                required
+              />
             </FormGroup>
             <Label>Lama Cicilan</Label>
             <FormGroup>
-              <Row>
-                <Col>
-                  <Input
-                    type="select"
-                    name="id_cicil"
-                    value={data.id_cicil}
-                    onChange={(e) => handle(e)}
-                  >
-                    <option value="" disabled selected>
-                      Pilih Cicilan
-                    </option>
-                    {cicil.map((cicil, key) => (
-                      <option key={key} value={cicil.id_cicil}>
-                        {cicil.cicilan} Bulan
-                      </option>
-                    ))}
-                  </Input>
-                </Col>
-              </Row>
+              <Input
+                type="select"
+                name="id_cicil"
+                id="id_cicil"
+                value={data.id_cicil}
+                onChange={(e) => handle(e)}
+                required
+              >
+                <option value="" disabled selected>
+                  Pilih Cicilan
+                </option>
+                {cicil.map((cicil, key) => (
+                  <option key={key} value={cicil.id_cicil}>
+                    {cicil.cicilan} Bulan
+                  </option>
+                ))}
+              </Input>
             </FormGroup>
             <Label>Jumlah Cicilan / Bulan</Label>
             <FormGroup>
-              <Row>
-                <Col>
-                  <Input
-                    type="number"
-                    name="besar_cicilan"
-                    value={data.besar_cicilan}
-                    onChange={(e) => handle(e)}
-                    disabled
-                  />
-                </Col>
-              </Row>
+              <Input
+                type="number"
+                name="besar_cicilan"
+                id="besar_cicilan"
+                value={data.besar_cicilan}
+                onChange={(e) => handle(e)}
+                disabled
+              />
             </FormGroup>
             <hr />
-            <Label>KTA</Label>
+            <Label>Persyaratan Pinjaman</Label>
             <FormGroup>
-              <Row>
-                <Col>
-                  <Input
-                    type="file"
-                    name="gambar"
-                    onChange={(e) => handleUploadImage(e)}
-                    accept="image/*"
-                  />
-                </Col>
-              </Row>
+              <Input
+                type="file"
+                name="persyaratan"
+                id="persyaratan"
+                onChange={(e) => handlePdfFileChange(e)}
+                accept="application/pdf"
+                required
+              />
             </FormGroup>
-            <hr />
-            <Label>KTP Pemohon</Label>
-            <FormGroup>
-              <Row>
-                <Col>
-                  <Input
-                    type="file"
-                    name="gambar"
-                    onChange={(e) => handleUploadImage(e)}
-                    accept="image/*"
-                  />
-                </Col>
-              </Row>
-            </FormGroup>
-            <hr />
-            <Label>KTP Suami / Istri</Label>
-            <FormGroup>
-              <Row>
-                <Col>
-                  <Input
-                    type="file"
-                    name="gambar"
-                    onChange={(e) => handleUploadImage(e)}
-                    accept="image/*"
-                  />
-                </Col>
-              </Row>
-            </FormGroup>
-            <hr />
-            <Label>Slip Gaji</Label>
-            <FormGroup>
-              <Row>
-                <Col>
-                  <Input
-                    type="file"
-                    name="gambar"
-                    onChange={(e) => handleUploadImage(e)}
-                    accept="image/*"
-                  />
-                </Col>
-              </Row>
-            </FormGroup>
-            <hr />
-            <Label>Rincian Gaji Juru Bayar</Label>
-            <FormGroup>
-              <Row>
-                <Col>
-                  <Input
-                    type="file"
-                    name="gambar"
-                    onChange={(e) => handleUploadImage(e)}
-                    accept="image/*"
-                  />
-                </Col>
-              </Row>
-            </FormGroup>
-            <hr />
-            <Label>Kartu Keluarga Non Dinas</Label>
-            <FormGroup>
-              <Row>
-                <Col>
-                  <Input
-                    type="file"
-                    name="gambar"
-                    onChange={(e) => handleUploadImage(e)}
-                    accept="image/*"
-                  />
-                </Col>
-              </Row>
-            </FormGroup>
-            <hr />
-            <Label>Surat Pernyataan Kesehatan</Label>
-            <FormGroup>
-              <Row>
-                <Col>
-                  <Input
-                    type="file"
-                    name="gambar"
-                    onChange={(e) => handleUploadImage(e)}
-                    accept="image/*"
-                  />
-                </Col>
-              </Row>
-            </FormGroup>
-            <hr />
-            <Label>Asuransi BP Jiwa Asri</Label>
-            <FormGroup>
-              <Row>
-                <Col>
-                  <Input
-                    type="file"
-                    name="gambar"
-                    onChange={(e) => handleUploadImage(e)}
-                    accept="image/*"
-                  />
-                </Col>
-              </Row>
-            </FormGroup>
-            <hr />
-            <Label>SK Bebas Hutang Bank</Label>
-            <FormGroup>
-              <Row>
-                <Col>
-                  <Input
-                    type="file"
-                    name="gambar"
-                    onChange={(e) => handleUploadImage(e)}
-                    accept="image/*"
-                  />
-                </Col>
-              </Row>
-            </FormGroup>
-            <hr />
             <Alert color="info" isOpen={visible} toggle={onDismiss}>
               Pinjaman berhasil diajukan, Untuk informasi lebih lengkap silahkan
               dilihat pada halaman data Pinjaman!
@@ -393,8 +282,7 @@ export default function Pinjam2() {
                   <Button
                     color="primary"
                     className="mt-3 float-right"
-                    type="button"
-                    onClick={(e) => submit(e)}
+                    type="submit"
                   >
                     {" "}
                     Ajukan Pinjaman{" "}

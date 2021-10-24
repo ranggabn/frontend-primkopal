@@ -9,6 +9,7 @@ import {
   Row,
   Label,
   Input,
+  CardImg,
 } from "reactstrap";
 import axios from "axios";
 import { Redirect, useParams } from "react-router";
@@ -24,20 +25,19 @@ export default function EditBarang(props) {
   const [newImage, setnewImage] = useState("");
 
   const [statusSelect, setStatusSelect] = useState([]);
+  const ss = statusSelect.map((ss) => ss);
+  const [kategoriSelect, setkategoriSelect] = useState([]);
+  const ks = kategoriSelect.map((ks) => ks);
+
   useEffect(() => {
     axios.get(api + "/tampilStatus").then((res) => {
       setStatusSelect(res.data.values);
     });
-  }, []);
-  const ss = statusSelect.map((ss) => ss);
-
-  const [kategoriSelect, setkategoriSelect] = useState([]);
-  useEffect(() => {
     axios.get(api + "/tampilKategori").then((res) => {
       setkategoriSelect(res.data.values);
     });
+    console.log(data.gambar);
   }, []);
-  const ks = kategoriSelect.map((ks) => ks);
 
   useEffect(() => {
     async function getData() {
@@ -47,8 +47,6 @@ export default function EditBarang(props) {
     }
     getData();
   }, []);
-
-  // console.log(data.gambar);
 
   const submit = async (e) => {
     e.preventDefault();
@@ -65,7 +63,7 @@ export default function EditBarang(props) {
     let temporary = Array.from(e.target.files)[0];
     let result = await getBase64(temporary);
     setnewImage(result);
-    setbarang({...barang,gambar:result});  
+    setbarang({ ...barang, gambar: result });
   }
 
   const handle = (name) => (e) => {
@@ -195,12 +193,17 @@ export default function EditBarang(props) {
                     onChange={(e) => handleUploadImage(e)}
                     accept="image/*"
                   />
-                  <img
-                    src={data.gambar || newImage}
-                    alt="gambar"
-                    width={200}
-                    height={200}
-                  />
+                  <br />
+                  <Row>
+                    <Col xs="6" sm="4">
+                      <CardImg
+                        src={data.gambar || newImage}
+                        alt="gambar"
+                        width={300}
+                        height={300}
+                      />
+                    </Col>
+                  </Row>
                 </Col>
               </Row>
             </FormGroup>
@@ -228,8 +231,7 @@ export default function EditBarang(props) {
                       <Button
                         color="primary"
                         className="mt-3 float-right"
-                        type="button"
-                        onClick={submit}
+                        type="submit"
                       >
                         {" "}
                         Simpan{" "}

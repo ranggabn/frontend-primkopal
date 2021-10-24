@@ -10,6 +10,7 @@ import {
   Label,
   Button,
   Alert,
+  CardImg,
 } from "reactstrap";
 import axios from "axios";
 import { Redirect } from "react-router";
@@ -30,6 +31,7 @@ export default function Simpan() {
   });
   const [visible, setVisible] = useState(false);
   const onDismiss = () => setVisible(false);
+  const [imgData, setImgData] = useState("");
 
   useEffect(() => {
     setData({
@@ -45,7 +47,7 @@ export default function Simpan() {
       setsimpanan(myData);
       setVisible(myData);
       e.preventDefault();
-      setData({        
+      setData({
         jumlah_simpanan: "",
         terbilang: "",
         tanggal_simpan: "",
@@ -54,11 +56,16 @@ export default function Simpan() {
   }
 
   async function handleUploadImage(e) {
-    e.preventDefault()
+    e.preventDefault();
     // console.log(Array.from(e.target.files)[0]);
-    let temporary =  Array.from(e.target.files)[0];
-    let result = await getBase64(temporary)
-    setData({...data,bukti_transfer:result});
+    let temporary = Array.from(e.target.files)[0];
+    let result = await getBase64(temporary);
+    const reader = new FileReader();
+    reader.addEventListener("load", () => {
+      setImgData(reader.result);
+    });
+    reader.readAsDataURL(e.target.files[0]);
+    setData({ ...data, bukti_transfer: result });
   }
 
   function handle(e) {
@@ -155,10 +162,16 @@ export default function Simpan() {
                 <Label for="bukti_transfer">Unggah Bukti Transfer</Label>
                 <Input
                   type="file"
-                  name="bukti_transfer"                  
+                  name="bukti_transfer"
                   onChange={(e) => handleUploadImage(e)}
                   accept="image/*"
                 />
+                <br />
+                <Row>
+                  <Col xs="6" sm="4">
+                    <CardImg top width={300} height={300} src={imgData} />
+                  </Col>
+                </Row>
               </FormGroup>
               <hr />
               <Alert color="info" isOpen={visible} toggle={onDismiss}>

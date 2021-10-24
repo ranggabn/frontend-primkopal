@@ -31,7 +31,7 @@ export default function MenuAdmin() {
             </NavItem>
             <NavItem>
               <NavLink to="/daftaranggota" className="nav-link">
-                Daftar Anggota
+                Anggota
               </NavLink>
             </NavItem>
             <NavItem>
@@ -41,12 +41,12 @@ export default function MenuAdmin() {
             </NavItem>
             <NavItem>
               <NavLink to="/daftarpenjualan" className="nav-link">
-                Daftar Penjualan
+                Penjualan
               </NavLink>
             </NavItem>
             <NavItem>
               <NavLink to="/daftarbarang" className="nav-link">
-                Daftar Barang
+                Barang
               </NavLink>
             </NavItem>
             <NavItem>

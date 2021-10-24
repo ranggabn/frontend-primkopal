@@ -9,6 +9,7 @@ import {
   Row,
   Label,
   Input,
+  CardImg,
 } from "reactstrap";
 import axios from "axios";
 import { Redirect } from "react-router";
@@ -28,7 +29,7 @@ export default function TambahBarang() {
     id_kategori: "",
     id_status: "",
   });
-
+  const [imgData, setImgData] = useState("");
   const [statusSelect, setStatusSelect] = useState([]);
   useEffect(() => {
     axios.get(api + "/tampilStatus").then((res) => {
@@ -63,20 +64,25 @@ export default function TambahBarang() {
         keterangan: "",
         id_kategori: "",
         id_status: "",
-      })
-    });    
+      });
+    });
   }
 
   async function handleUploadImage(e) {
-    e.preventDefault()
+    e.preventDefault();
     // console.log(Array.from(e.target.files)[0]);
-    let temporary =  Array.from(e.target.files)[0];
-    let result = await getBase64(temporary)
-    setData({...data,gambar:result});
+    let temporary = Array.from(e.target.files)[0];
+    let result = await getBase64(temporary);
+    const reader = new FileReader();
+    reader.addEventListener("load", () => {
+      setImgData(reader.result);
+    });
+    reader.readAsDataURL(e.target.files[0]);
+    setData({ ...data, gambar: result });
   }
 
   function handle(e) {
-    e.preventDefault()
+    e.preventDefault();
     const newData = { ...data };
     newData[e.target.name] = e.target.value;
     setData(newData);
@@ -103,6 +109,7 @@ export default function TambahBarang() {
                   value={data.nama}
                   onChange={(e) => handle(e)}
                   placeholder="Nama Barang"
+                  required
                 />
               </Col>
             </Row>
@@ -117,6 +124,7 @@ export default function TambahBarang() {
                   value={data.harga}
                   onChange={(e) => handle(e)}
                   placeholder="Harga Barang"
+                  required
                 />
               </Col>
             </Row>
@@ -131,6 +139,7 @@ export default function TambahBarang() {
                   value={data.stok}
                   onChange={(e) => handle(e)}
                   placeholder="Stok Barang"
+                  required
                 />
               </Col>
             </Row>
@@ -145,6 +154,7 @@ export default function TambahBarang() {
                   value={data.keterangan}
                   onChange={(e) => handle(e)}
                   placeholder="Keterangan Barang"
+                  required
                 />
               </Col>
             </Row>
@@ -158,6 +168,7 @@ export default function TambahBarang() {
                   name="id_kategori"
                   value={data.id_kategori}
                   onChange={(e) => handle(e)}
+                  required
                 >
                   <option value="" disabled selected>
                     Pilih Kategori
@@ -180,6 +191,7 @@ export default function TambahBarang() {
                   name="id_status"
                   value={data.id_status}
                   onChange={(e) => handle(e)}
+                  required
                 >
                   <option value="" disabled selected>
                     Pilih Status
@@ -203,6 +215,12 @@ export default function TambahBarang() {
                   onChange={(e) => handleUploadImage(e)}
                   accept="image/*"
                 />
+                <br />
+                <Row>
+                  <Col xs="6" sm="4">
+                    <CardImg top width={300} height={300} src={imgData} />
+                  </Col>
+                </Row>
               </Col>
             </Row>
           </FormGroup>
@@ -233,8 +251,7 @@ export default function TambahBarang() {
                     <Button
                       color="primary"
                       className="mt-3 float-right"
-                      type="button"
-                      onClick={(e) => submit(e)}
+                      type="submit"
                     >
                       {" "}
                       Simpan{" "}

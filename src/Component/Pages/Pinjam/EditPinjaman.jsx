@@ -13,6 +13,10 @@ import {
 import axios from "axios";
 import { Redirect, useParams } from "react-router";
 import { AuthContext } from "../../../App";
+import { Viewer, Worker } from "@react-pdf-viewer/core";
+import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
+import "@react-pdf-viewer/core/lib/styles/index.css";
+import "@react-pdf-viewer/default-layout/lib/styles/index.css";
 
 const api = "http://localhost:3001";
 
@@ -21,6 +25,9 @@ export default function EditPinjaman(props) {
   const { state } = useContext(AuthContext);
   const [pinjam, setpinjam] = useState([]);
   const [data, setData] = useState({});
+  
+  const [viewPdf, setviewPdf] = useState(null);
+  const defaultLayoutPluginInstance = defaultLayoutPlugin();
 
   useEffect(() => {
     setData({
@@ -35,12 +42,14 @@ export default function EditPinjaman(props) {
     });
   }, []);
   const cicil = cicilan.map((cicil) => cicil);
-
+  
   useEffect(() => {
     async function getData() {
       let response = await axios.get(api + "/tampilPinjaman/" + id);
       response = await response.data.values[0];
       setData(response);
+      setviewPdf(response.persyaratan)
+      console.log(response);
     }
     getData();
   }, []);
@@ -61,11 +70,9 @@ export default function EditPinjaman(props) {
     besarCicilan =
       parseInt(newData.besar_pinjaman, 10) / parseInt(newData.id_cicil, 10) +
       parseInt(newData.besar_pinjaman, 10) * 0.01;
-    console.log(newData.besar_pinjaman, newData.id_cicil);
     setData({ ...newData, besar_cicilan: besarCicilan });
-    console.log(besarCicilan);
   }
-  
+
   if (!state.isAuthenticated) {
     return <Redirect to="/masuk" />;
   }
@@ -211,6 +218,21 @@ export default function EditPinjaman(props) {
                   </Col>
                 </Row>
               </FormGroup>
+              <br></br>
+              <h4>File Persyaratan</h4>
+              <div className="pdf-container">
+                {viewPdf && (
+                  <>
+                    <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.6.347/build/pdf.worker.min.js">
+                      <Viewer
+                        fileUrl={viewPdf}
+                        plugins={[defaultLayoutPluginInstance]}
+                      />
+                    </Worker>
+                  </>
+                )}
+                {!viewPdf && <>No PDF file selected</>}
+              </div>
               <FormGroup>
                 <Row>
                   <Col>
@@ -233,8 +255,7 @@ export default function EditPinjaman(props) {
                     <Button
                       color="primary"
                       className="mt-3 float-right"
-                      type="button"
-                      onClick={(e) => submit(e)}
+                      type="submit"
                     >
                       {" "}
                       Simpan{" "}
