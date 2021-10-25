@@ -15,9 +15,6 @@ import axios from "axios";
 import { Redirect } from "react-router";
 import { AuthContext } from "../../../App";
 import moment from "moment";
-import { getBase64 } from "../../../Util/GetBase64";
-import { Viewer, Worker } from "@react-pdf-viewer/core";
-import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
 import "@react-pdf-viewer/core/lib/styles/index.css";
 import "@react-pdf-viewer/default-layout/lib/styles/index.css";
 
@@ -36,7 +33,6 @@ export default function Pinjam2() {
     terbilang: "",
     keperluan: "",
     persyaratan: "",
-    surat: "",
     tanggal_pinjam: "",
     besar_cicilan: "",
     nama: "",
@@ -62,8 +58,7 @@ export default function Pinjam2() {
 
   function submit(e) {
     e.preventDefault();
-    axios.post(api + "/tambahPinjaman", data).then((res) => {
-      console.log(res.data.values);
+    axios.post(api + "/tambahPinjaman", data).then((res) => {      
       const myData = [...pinjam, res.data.values, visible];
       setpinjam(myData);
       setVisible(myData);
@@ -75,7 +70,6 @@ export default function Pinjam2() {
         terbilang: "",
         keperluan: "",
         persyaratan: "",
-        surat: "",
         tanggal_pinjam: "",
         besar_cicilan: "",
       });
@@ -89,7 +83,7 @@ export default function Pinjam2() {
     besarCicilan =
       parseInt(newData.besar_pinjaman, 10) / parseInt(newData.id_cicil, 10) +
       parseInt(newData.besar_pinjaman, 10) * 0.01;
-    setData({ ...data, besar_cicilan: besarCicilan });
+    setData({ ...newData, besar_cicilan: besarCicilan });
   }
 
   const fileType = ["application/pdf"];
@@ -245,12 +239,21 @@ export default function Pinjam2() {
               />
             </FormGroup>
             <hr />
-            <Label>Persyaratan Pinjaman</Label>
+            <h4><strong>Persyaratan Pinjaman</strong></h4>
+            <p>1. KTA</p>
+            <p>2. KTP Pemohon Usipa</p>
+            <p>3. KTP suami / istri</p>
+            <p>4. Slip gaji</p>
+            <p>5. Rincian gaji Juru bayar</p>
+            <p>6. KK non dinas</p>
+            <p>7. Surat Pernyataan Kesehatan</p>
+            <p>8. Formulir Surat Permintaan Asuransi Jiwa BP ASRI</p>
+            <p>9. <strong>Untuk pinjaman Rp 21.000.000,00 s.d. Rp 25.000.000,00</strong> melampirkan surat pernyataan bebas hutang bank mengetahui Kepala Bagian.</p>
             <FormGroup>
               <Input
                 type="file"
                 name="persyaratan"
-                id="persyaratan"
+                id="persyaratan"                
                 onChange={(e) => handlePdfFileChange(e)}
                 accept="application/pdf"
                 required

@@ -169,7 +169,7 @@ export default function EditAnggota(props) {
                       type="select"
                       name="role"
                       value={data.role}
-                      onChange={(e) => handle(e)}
+                      onChange={handle("role")}
                     >
                       <option value="" disabled selected>
                         Pilih Role

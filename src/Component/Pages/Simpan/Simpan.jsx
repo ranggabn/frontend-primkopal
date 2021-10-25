@@ -41,12 +41,12 @@ export default function Simpan() {
   }, []);
 
   function submit(e) {
+    e.preventDefault();
     axios.post(api + "/tambahSimpanan", data).then((res) => {
       console.log(res.data.values);
       const myData = [...simpanan, res.data.values, visible];
       setsimpanan(myData);
-      setVisible(myData);
-      e.preventDefault();
+      setVisible(myData);      
       setData({
         jumlah_simpanan: "",
         terbilang: "",
@@ -130,6 +130,7 @@ export default function Simpan() {
                           value={data.jumlah_simpanan}
                           onChange={(e) => handle(e)}
                           placeholder="Rp."
+                          required
                         />
                       </Col>
                     </Row>
@@ -145,6 +146,7 @@ export default function Simpan() {
                           name="terbilang"
                           value={data.terbilang}
                           onChange={(e) => handle(e)}
+                          required
                         />
                       </Col>
                     </Row>
@@ -165,6 +167,7 @@ export default function Simpan() {
                   name="bukti_transfer"
                   onChange={(e) => handleUploadImage(e)}
                   accept="image/*"
+                  required
                 />
                 <br />
                 <Row>
@@ -183,8 +186,7 @@ export default function Simpan() {
                     <Button
                       color="primary"
                       className="mt-3 float-right"
-                      type="button"
-                      onClick={(e) => submit(e)}
+                      type="submit"
                     >
                       {" "}
                       Simpan{" "}

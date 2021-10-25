@@ -86,7 +86,7 @@ export default function DaftarAnggota(props) {
               if (searchTerm === "") {
                 return user;
               } else if (
-                user.nama.toLowerCase().includes(searchTerm.toLowerCase())
+                user.username.toLowerCase().includes(searchTerm.toLowerCase())
               ) {
                 return user;
               }

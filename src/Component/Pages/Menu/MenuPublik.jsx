@@ -41,6 +41,17 @@ export default function MenuPublik() {
                   <DropdownItem href="/kontak">Kontak</DropdownItem>
                 </DropdownMenu>
               </UncontrolledDropdown>
+              <UncontrolledDropdown nav inNavbar>
+                <DropdownToggle nav caret>
+                  Informasi
+                </DropdownToggle>
+                <DropdownMenu>
+                  <DropdownItem href="/visimisi">Pembelian</DropdownItem>
+                  <DropdownItem href="/kontak">Simpanan Sukarela</DropdownItem>
+                  <DropdownItem href="/kontak">Kredit</DropdownItem>
+                  <DropdownItem href="/kontak">Pinjaman</DropdownItem>
+                </DropdownMenu>
+              </UncontrolledDropdown>
               <NavItem>
                 <NavLink to="/tokopublik" className="nav-link">
                   Toko

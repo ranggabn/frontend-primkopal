@@ -99,6 +99,13 @@ export default function DaftarPenjualan(props) {
                 <td>Rp. {numberWithCommasString(penjualan.jumlah_harga)}</td>
                 <td>{penjualan.status ? "Lunas" : "Hutang"}</td>
                 <td>
+                <Button
+                    color="secondary"
+                    onClick={() => update(penjualan.id_penjualan)}                    
+                  >
+                    Edit
+                  </Button>
+                  <span> </span>
                   <Button
                     color="danger"
                     onClick={() => remove(penjualan.id_penjualan)}

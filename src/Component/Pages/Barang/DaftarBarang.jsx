@@ -82,7 +82,6 @@ export default function DaftarBarang(props) {
             <th>Stok</th>
             <th>Keterangan</th>
             <th>Kategori</th>
-            <th>Status</th>
             <th>Aksi</th>
           </tr>
         </thead>
@@ -103,8 +102,7 @@ export default function DaftarBarang(props) {
                 <td>Rp. {numberWithCommasString(barang.harga)}</td>
                 <td>{barang.stok}</td>
                 <td>{barang.keterangan}</td>
-                <td>{barang.kategori_barang}</td>
-                <td>{barang.status_barang}</td>
+                <td>{barang.kategori_barang}</td>                
                 <td>
                   <Button
                     color="secondary"

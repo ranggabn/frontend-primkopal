@@ -23,20 +23,13 @@ export default function EditBarang(props) {
   const [barang, setbarang] = useState([]);
   const [data, setData] = useState({});
   const [newImage, setnewImage] = useState("");
-
-  const [statusSelect, setStatusSelect] = useState([]);
-  const ss = statusSelect.map((ss) => ss);
   const [kategoriSelect, setkategoriSelect] = useState([]);
   const ks = kategoriSelect.map((ks) => ks);
 
   useEffect(() => {
-    axios.get(api + "/tampilStatus").then((res) => {
-      setStatusSelect(res.data.values);
-    });
     axios.get(api + "/tampilKategori").then((res) => {
       setkategoriSelect(res.data.values);
     });
-    console.log(data.gambar);
   }, []);
 
   useEffect(() => {
@@ -141,29 +134,6 @@ export default function EditBarang(props) {
                     {ks.map((ks, key) => (
                       <option key={key} value={ks.id}>
                         {ks.kategori_barang}
-                      </option>
-                    ))}
-                  </Input>
-                </Col>
-              </Row>
-            </FormGroup>
-            <Label>Status</Label>
-            <FormGroup>
-              <Row>
-                <Col>
-                  <Input
-                    type="select"
-                    name="id_status"
-                    value={data.id_status}
-                    defaultValue={"DEFAULT"}
-                    onChange={handle("id_status")}
-                  >
-                    <option value="DEFAULT" disabled>
-                      Pilih Status
-                    </option>
-                    {ss.map((ss, key) => (
-                      <option key={key} value={ss.id_status}>
-                        {ss.status_barang}
                       </option>
                     ))}
                   </Input>

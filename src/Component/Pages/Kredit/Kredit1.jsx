@@ -32,9 +32,9 @@ export default function Kredit1(props) {
     besar_cicilan: "",
     tanggal_kredit: "",
   });
-  const [databaru, setdatabaru] = useState({    
-    nama_barang: "",      
-  })
+  const [databaru, setdatabaru] = useState({
+    nama_barang: "",
+  });
   const [visible, setVisible] = useState(false);
   const onDismiss = () => setVisible(false);
   const [listbarang, setlistbarang] = useState([]);
@@ -43,10 +43,9 @@ export default function Kredit1(props) {
 
   useEffect(() => {
     setData({
-      id_user: state.id,
       tanggal_kredit: moment().format("YYYY-MM-DD"),
       id_status: 1,
-      cicil: 1999
+      id_user: state.id,
     });
     axios.get(api + "/tampilCicilan").then((res) => {
       setCicilan(res.data.values);
@@ -57,45 +56,47 @@ export default function Kredit1(props) {
   }, []);
 
   function submit(e) {
-    axios.post(api + "/tambahKredit", data).then((res) => {
-      console.log(res.data.values);
+    e.preventDefault();
+    axios.post(api + "/tambahKredit", data).then((res) => {        
       const myData = [...kredit, res.data.values, visible];
       setKredit(myData);
       setVisible(myData);
-      e.preventDefault();
       setData({
         id_cicilan: "",
         nama_barang: "",
         harga: "",
         terbilang: "",
-        besar_cicilan: ""
+        besar_cicilan: "",
       });
     });
   }
 
   const arr = [];
   listbarang.map((lb) =>
-    arr.push({ value: lb.nama, label: lb.nama, harga: lb.harga})
+    arr.push({ value: lb.nama, label: lb.nama, harga: lb.harga })
   );
 
-  const handleChange = (e) => {    
+  const handleChange = (e) => {
     setData({
       nama_barang: e.value,
-      harga: e.harga
-    });    
-    setdatabaru({      
+      harga: e.harga,
+      tanggal_kredit: moment().format("YYYY-MM-DD"),
+      id_status: 1,
+      id_user: state.id,
+    });
+    setdatabaru({
       nama_barang: e.value,
-    })
+    });
   };
 
   let besarCicilan;
   function handle(e) {
     const newData = { ...data };
     newData[e.target.name] = e.target.value;
-    besarCicilan = parseInt(data.harga, 10) / parseInt(newData.id_cicilan, 10) + parseInt(data.harga, 10) * 0.01;
-    console.log(data.harga);
-    console.log(besarCicilan);
-    setData({...newData, besar_cicilan:besarCicilan})
+    besarCicilan =
+      parseInt(data.harga, 10) / parseInt(newData.id_cicilan, 10) +
+      parseInt(data.harga, 10) * 0.01;
+    setData({ ...newData, besar_cicilan: besarCicilan });
   }
 
   if (!state.isAuthenticated) {
@@ -139,7 +140,7 @@ export default function Kredit1(props) {
                     name="id_user"
                     value={data.id_user}
                     onChange={(e) => handle(e)}
-                    disabled
+                    required
                   />
                 </Col>
               </Row>
@@ -174,18 +175,18 @@ export default function Kredit1(props) {
             </FormGroup>
             <Label>Nama Barang</Label>
             <FormGroup>
-            <Row>
-              <Col>
-                <Select
-                  name="nama_barang"                  
-                  onChange={(e) => handleChange(e)}
-                  options={arr}
-                  placeholder=" "
-                  required
-                />
-              </Col>
-            </Row>
-          </FormGroup>
+              <Row>
+                <Col>
+                  <Select
+                    name="nama_barang"
+                    onChange={(e) => handleChange(e)}
+                    options={arr}
+                    placeholder=" "
+                    required
+                  />
+                </Col>
+              </Row>
+            </FormGroup>
             <Row>
               <Col>
                 <Label>Harga Barang</Label>
@@ -260,7 +261,7 @@ export default function Kredit1(props) {
                   <Button
                     color="primary"
                     className="mt-3 float-right"
-                    type="submit"                    
+                    type="submit"
                   >
                     {" "}
                     Ajukan Kredit{" "}

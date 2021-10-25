@@ -18,18 +18,12 @@ const api = "http://localhost:3001";
 
 export default function EditPenjualan(props) {
   let { id } = useParams();
-  const [mahasiswa, setMahasiswa] = useState([]);
-  const [data, setData] = useState({
-    id: "",
-    nim: "",
-    nama: "",
-    jurusan: "",
-  });
-
+  const [penjualan, setpenjualan] = useState([])
+  const [data, setData] = useState({});
 
   useEffect(() => {
     async function getData() {
-      let response = await axios.get(api + "/tampil/" + id);
+      let response = await axios.get(api + "/tampilPenjualan/" + id);
       response = await response.data.values[0];
       setData(response);
     }
@@ -37,10 +31,10 @@ export default function EditPenjualan(props) {
   }, []);
 
   const submit = async (e) => {
-    e.preventDefault()
-    await axios.put(api + "/edit", data).catch((err) => console.error(err));
-    setMahasiswa(data);
-    props.history.push("/daftarpenjualan")
+    e.preventDefault();
+    await axios.put(api + "/ubahPenjualan", data).catch((err) => console.error(err));
+    setpenjualan(data);
+    props.history.push("/daftarpenjualan");
   };
 
   const handle = (name) => (e) => {
@@ -52,91 +46,131 @@ export default function EditPenjualan(props) {
   if (!state.isAuthenticated) {
     return <Redirect to="/masuk" />;
   }
-  return (
-    <Container className="mt-5">
-      <h4>Formulir Edit Data Penjualan</h4>
-      <hr />
-      {/* <Alert color="info" isOpen={visible} toggle={onDismiss}>
-        Berhasil Diubah!
-      </Alert> */}
-      <Form className="form" onSubmit={submit}>
-        <Col>
-          <Label>NIM</Label>
-          <FormGroup>
+  if (data) {
+    return (
+      <Container className="mt-5">
+        <h4>Formulir Edit Data Penjualan</h4>
+        <hr />
+        <Form className="form" onSubmit={submit}>
+          <Col>
+            <Label>Nama Barang</Label>
+            <FormGroup>
+              <Row>
+                <Col>
+                  <Input
+                    type="text"
+                    name="nama"
+                    value={data.nama}
+                    onChange={handle("nama")}
+                  />
+                </Col>
+              </Row>
+            </FormGroup>
+            <Label>Nama Pembeli</Label>
+            <FormGroup>
+              <Row>
+                <Col>
+                  <Input
+                    type="text"
+                    name="username"
+                    value={data.username}
+                    onChange={handle("username")}
+                  />
+                </Col>
+              </Row>
+            </FormGroup>
+            <Label>NIP / NRP</Label>
+            <FormGroup>
+              <Row>
+                <Col>
+                  <Input
+                    type="number"
+                    name="id_user"
+                    value={data.id_user}
+                    onChange={handle("id_user")}
+                  />
+                </Col>
+              </Row>
+            </FormGroup>
+            <Label>Jumlah Barang</Label>
+            <FormGroup>
+              <Row>
+                <Col>
+                  <Input
+                    type="number"
+                    name="jumlah"
+                    value={data.jumlah}
+                    onChange={handle("jumlah")}
+                  />
+                </Col>
+              </Row>
+            </FormGroup>
+            <Label>Jumlah Harga</Label>
+            <FormGroup>
+              <Row>
+                <Col>
+                  <Input
+                    type="number"
+                    name="jumlah_harga"
+                    value={data.jumlah_harga}
+                    onChange={handle("jumlah_harga")}
+                  />
+                </Col>
+              </Row>
+            </FormGroup>
+            <Label>Status</Label>
+            <FormGroup>
+              <Row>
+                <Col>
+                  <Input
+                    type="select"
+                    name="status"
+                    value={data.status}
+                    onChange={handle("status")}
+                  >
+                    <option value="0">Hutang</option>
+                    <option value="1">Lunas</option>
+                  </Input>
+                </Col>
+              </Row>
+            </FormGroup>
             <Row>
               <Col>
-                <Input
-                  type="text"
-                  name="nim"
-                  value={data.nim}
-                  onChange={handle("nim")}
-                />
+                <FormGroup>
+                  <Row>
+                    <Col>
+                      <Button
+                        className="fa fa-chevron-left mt-3"
+                        type="button"
+                        href="/daftarpenjualan"
+                      >
+                        {" "}
+                        Kembali{" "}
+                      </Button>
+                    </Col>
+                  </Row>
+                </FormGroup>
               </Col>
-            </Row>
-          </FormGroup>
-          <Label>Nama</Label>
-          <FormGroup>
-            <Row>
               <Col>
-                <Input
-                  type="text"
-                  name="nama"
-                  value={data.nama}
-                  onChange={handle("nama")}
-                />
+                <FormGroup>
+                  <Row>
+                    <Col>
+                      <Button
+                        color="primary"
+                        className="mt-3 float-right"
+                        type="submit"
+                      >
+                        {" "}
+                        Simpan{" "}
+                      </Button>
+                    </Col>
+                  </Row>
+                </FormGroup>
               </Col>
             </Row>
-          </FormGroup>
-          <Label>Jurusan</Label>
-          <FormGroup>
-            <Row>
-              <Col>
-                <Input
-                  type="text"
-                  name="jurusan"
-                  value={data.jurusan}
-                  onChange={handle("jurusan")}
-                />
-              </Col>
-            </Row>
-          </FormGroup>
-          <Row>
-            <Col>
-              <FormGroup>
-                <Row>
-                  <Col>
-                    <Button
-                      className="fa fa-chevron-left mt-3"
-                      type="button"
-                      href="/daftarpenjualan"
-                    >
-                      {" "}
-                      Kembali{" "}
-                    </Button>
-                  </Col>
-                </Row>
-              </FormGroup>
-            </Col>
-            <Col>
-              <FormGroup>
-                <Row>
-                  <Col>
-                    <Button
-                      color="primary"
-                      className="mt-3 float-right"
-                      type="button"
-                      onClick={submit}
-                    >
-                      {" "}
-                      Simpan{" "}
-                    </Button>
-                  </Col>
-                </Row>
-              </FormGroup>
-            </Col>
-          </Row>
-        </Col>
-      </Form>
-    </Container>
-  );
+          </Col>
+        </Form>
+      </Container>
+    );
+  }
 }

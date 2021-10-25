@@ -19,7 +19,8 @@ import HomeComp from "./Component/Pages/HomeComp/HomeComp";
 import Register from "./Component/Pages/Register/Register";
 import RoleAdmin from "./Component/Pages/RoleAkses/RoleAdmin";
 import RoleMember from "./Component/Pages/RoleAkses/RoleMember";
-import RoleStaff from "./Component/Pages/RoleAkses/RoleKaprim";
+import RoleKaprim from "./Component/Pages/RoleAkses/RoleKaprim";
+import RoleKasatker from "./Component/Pages/RoleAkses/RoleKasatker";
 import DaftarAnggota from "./Component/Pages/Anggota/DaftarAnggota";
 import DaftarPinjaman from "./Component/Pages/Pinjam/DaftarPinjaman";
 import DaftarBarang from "./Component/Pages/Barang/DaftarBarang";
@@ -30,10 +31,8 @@ import DaftarPinjamanSementara from "./Component/Pages/Pinjam/DaftarPinjamanSeme
 import DaftarKreditSementara from "./Component/Pages/Kredit/DaftarKreditSementara";
 import EditAnggota from "./Component/Pages/Anggota/EditAnggota";
 import TambahAnggota from "./Component/Pages/Anggota/TambahAnggota";
-import TambahKredit from "./Component/Pages/Kredit/TambahKredit";
 import TambahPenjualan from "./Component/Pages/Penjualan/TambahPenjualan";
 import TambahBarang from "./Component/Pages/Barang/TambahBarang";
-import TambahPinjaman from "./Component/Pages/Pinjam/TambahPinjaman";
 import TambahSimpanan from "./Component/Pages/Simpan/TambahSimpanan";
 import EditBarang from "./Component/Pages/Barang/EditBarang";
 import EditKredit from "./Component/Pages/Kredit/EditKredit";
@@ -43,8 +42,6 @@ import EditSimpanan from "./Component/Pages/Simpan/EditSimpanan";
 import EditStatusKredit from "./Component/Pages/Kredit/EditStatusKredit";
 import EditStatusPinjaman from "./Component/Pages/Pinjam/EditStatusPinjaman";
 import DetailBarang from "./Component/Pages/Toko/DetailBarang";
-import RoleKaprim from "./Component/Pages/RoleAkses/RoleKaprim";
-import RoleKasatker from "./Component/Pages/RoleAkses/RoleKasatker";
 import EditProfil from "./Component/Pages/Edit/EditProfil";
 import Toko from "./Component/Pages/Toko/Toko";
 import DetailBarang2 from "./Component/Pages/Toko/DetailBarang2";
@@ -150,10 +147,8 @@ function App() {
           <Route exact path="/editpinjaman/:id" component={EditPinjaman} />
           <Route exact path="/editsimpanan/:id" component={EditSimpanan} />
           <Route exact path="/tambahanggota" component={TambahAnggota} />
-          <Route exact path="/tambahkredit" component={TambahKredit} />
           <Route exact path="/tambahpenjualan" component={TambahPenjualan} />
-          <Route exact path="/tambahbarang" component={TambahBarang} />
-          <Route exact path="/tambahpinjaman" component={TambahPinjaman} />
+          <Route exact path="/tambahbarang" component={TambahBarang} />          
           <Route exact path="/tambahsimpanan" component={TambahSimpanan} />
           <Route exact path="/editstatuskredit/:id" component={EditStatusKredit} />
           <Route exact path="/editstatuspinjam/:id" component={EditStatusPinjaman} />

@@ -50,13 +50,6 @@ export default function DaftarPinjaman(props) {
     <Container className="mt-5">
       <h2>DAFTAR PINJAMAN</h2>
       <hr />
-      <Button
-        color="success"
-        href="/tambahPinjaman"
-        className="mt-1 mb-3 float-right"
-      >
-        Tambah Data pinjaman
-      </Button>
       <Input
         type="text"
         className="mb-3"
