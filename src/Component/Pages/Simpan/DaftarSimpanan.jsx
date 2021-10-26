@@ -50,6 +50,13 @@ export default function DaftarSimpanan(props) {
     <Container className="mt-5">
       <h2>DAFTAR SIMPANAN</h2>
       <hr />
+      <Button
+        color="success"
+        href="/penarikan"
+        className="mt-1 mb-3 float-right"
+      >
+        Penarikan Dana
+      </Button>
       <Input
         type="text"
         className="mb-3"
@@ -61,7 +68,7 @@ export default function DaftarSimpanan(props) {
       <Table className="table-bordered">
         <thead>
           <tr>
-            <th colSpan="6" className="text-center" bgcolor="#BABABA">
+            <th colSpan="8" className="text-center" bgcolor="#BABABA">
               <h5>
                 <b>Rincian Simpanan Anggota</b>
               </h5>
@@ -72,8 +79,9 @@ export default function DaftarSimpanan(props) {
             <th>Nama</th>
             <th>NRP / NIP</th>
             <th>Jumlah Simpanan</th>
-            <th>Terbilang</th>
+            <th>Penarikan</th>
             <th>Keterangan</th>
+            <th>Aksi</th>
           </tr>
         </thead>
         <tbody>
@@ -95,7 +103,8 @@ export default function DaftarSimpanan(props) {
                 <td>{simpanan.username}</td>
                 <td>{simpanan.id_user}</td>
                 <td>Rp. {numberWithCommasString(simpanan.jumlah_simpanan)}</td>
-                <td>{simpanan.terbilang}</td>
+                <td>Rp. {numberWithCommasString(simpanan.penarikan)}</td>
+                <td>{simpanan.keterangan ? simpanan.keterangan : "-"}</td>
                 <td>
                   <Button
                     color="secondary"

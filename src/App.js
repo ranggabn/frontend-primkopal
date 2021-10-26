@@ -16,7 +16,6 @@ import TampilKredit from "./Component/Pages/Kredit/TampilKredit";
 import Produk from "./Component/Pages/Toko/Produk";
 import MenuComp from "./Component/Pages/Menu/MenuComp";
 import HomeComp from "./Component/Pages/HomeComp/HomeComp";
-import Register from "./Component/Pages/Register/Register";
 import RoleAdmin from "./Component/Pages/RoleAkses/RoleAdmin";
 import RoleMember from "./Component/Pages/RoleAkses/RoleMember";
 import RoleKaprim from "./Component/Pages/RoleAkses/RoleKaprim";
@@ -33,7 +32,7 @@ import EditAnggota from "./Component/Pages/Anggota/EditAnggota";
 import TambahAnggota from "./Component/Pages/Anggota/TambahAnggota";
 import TambahPenjualan from "./Component/Pages/Penjualan/TambahPenjualan";
 import TambahBarang from "./Component/Pages/Barang/TambahBarang";
-import TambahSimpanan from "./Component/Pages/Simpan/TambahSimpanan";
+import Penarikan from "./Component/Pages/Simpan/Penarikan";
 import EditBarang from "./Component/Pages/Barang/EditBarang";
 import EditKredit from "./Component/Pages/Kredit/EditKredit";
 import EditPenjualan from "./Component/Pages/Penjualan/EditPenjualan";
@@ -48,6 +47,10 @@ import DetailBarang2 from "./Component/Pages/Toko/DetailBarang2";
 import Ubahprofil from "./Component/Pages/UbahProfil/Ubahprofil";
 import Ubahpassword from "./Component/Pages/UbahProfil/Ubahpassword";
 import Pengambilan from "./Component/Pages/Pengambilan/Pengambilan";
+import InfoKredit from "./Component/Pages/Informasi/InfoKredit";
+import InfoSimpanan from "./Component/Pages/Informasi/InfoSimpanan";
+import InfoPinjaman from "./Component/Pages/Informasi/InfoPinjaman";
+import InfoPembelian from "./Component/Pages/Informasi/InfoPembelian";
 
 export const AuthContext = createContext();
 
@@ -112,9 +115,12 @@ function App() {
 
           <Route exact path="/" component={Home} />
           <Route exact path="/Home" component={HomeComp} />
-          <Route exact path="/Register" component={Register} />
           <Route exact path="/ubahprofil" component={Ubahprofil} />
           <Route exact path="/ubahpassword" component={Ubahpassword} />
+          <Route exact path="/infokredit" component={InfoKredit} />
+          <Route exact path="/infosimpanan" component={InfoSimpanan} />
+          <Route exact path="/infopinjaman" component={InfoPinjaman} />
+          <Route exact path="/infopembelian" component={InfoPembelian} />
           <Route exact path="/visimisi" component={Visimisi} />
           <Route exact path="/tokopublik" component={Toko} />
           <Route exact path="/kredit" component={Kredit1} />          
@@ -149,7 +155,7 @@ function App() {
           <Route exact path="/tambahanggota" component={TambahAnggota} />
           <Route exact path="/tambahpenjualan" component={TambahPenjualan} />
           <Route exact path="/tambahbarang" component={TambahBarang} />          
-          <Route exact path="/tambahsimpanan" component={TambahSimpanan} />
+          <Route exact path="/penarikan" component={Penarikan} />
           <Route exact path="/editstatuskredit/:id" component={EditStatusKredit} />
           <Route exact path="/editstatuspinjam/:id" component={EditStatusPinjaman} />
           <Route exact path="/detailBarang/:id" component={DetailBarang} />

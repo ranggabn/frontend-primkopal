@@ -9,11 +9,13 @@ import {
   Label,
   Input,
   Card,
+  CardImg
 } from "reactstrap";
 import axios from "axios";
 import { Redirect, useParams } from "react-router";
 import { AuthContext } from "../../../App";
 import moment from "moment";
+import { getBase64 } from "../../../Util/GetBase64";
 
 const api = "http://localhost:3001";
 
@@ -21,6 +23,7 @@ export default function EditAnggota(props) {
   let { id } = useParams();
   const { state } = useContext(AuthContext);
   const [anggota, setanggota] = useState([]);
+  const [newImage, setnewImage] = useState("");
   const [data, setData] = useState({
     id: "",
     username: "",
@@ -28,7 +31,7 @@ export default function EditAnggota(props) {
     tempat_lahir: "",
     tanggal_lahir: "",
     nomor_telefon: "",
-    role: ""
+    role: "",
   });
   const [role, setrole] = useState([]);
 
@@ -45,6 +48,15 @@ export default function EditAnggota(props) {
     getData();
   }, []);
   const roles = role.map((roles) => roles);
+
+  async function handleUploadImage(e) {
+    e.preventDefault();
+    // console.log(Array.from(e.target.files)[0]);
+    let temporary = Array.from(e.target.files)[0];
+    let result = await getBase64(temporary);
+    setnewImage(result);
+    setanggota({ ...anggota, bukti_transfer: result });
+  }
 
   const submit = async (e) => {
     e.preventDefault();
@@ -182,7 +194,30 @@ export default function EditAnggota(props) {
                     </Input>
                   </Col>
                 </Row>
-              </FormGroup>              
+              </FormGroup>
+              <Label>Bukti Transfer</Label>
+              <FormGroup>
+                <Row>
+                  <Col>
+                    <Input
+                      type="file"
+                      name="bukti_transfer"
+                      onChange={handle("bukti_transfer")}
+                    />
+                    <br />
+                    <Row>
+                      <Col xs="6" sm="4">
+                        <CardImg
+                          src={data.bukti_transfer || newImage}
+                          alt="bukti_transfer"
+                          width={300}
+                          height={300}
+                        />
+                      </Col>
+                    </Row>
+                  </Col>
+                </Row>
+              </FormGroup>
               <FormGroup>
                 <Row>
                   <Col>

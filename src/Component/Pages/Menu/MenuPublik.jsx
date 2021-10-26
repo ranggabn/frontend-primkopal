@@ -46,10 +46,10 @@ export default function MenuPublik() {
                   Informasi
                 </DropdownToggle>
                 <DropdownMenu>
-                  <DropdownItem href="/visimisi">Pembelian</DropdownItem>
-                  <DropdownItem href="/kontak">Simpanan Sukarela</DropdownItem>
-                  <DropdownItem href="/kontak">Kredit</DropdownItem>
-                  <DropdownItem href="/kontak">Pinjaman</DropdownItem>
+                  <DropdownItem href="/infopembelian">Pembelian</DropdownItem>
+                  <DropdownItem href="/infosimpanan">Simpanan Sukarela</DropdownItem>
+                  <DropdownItem href="/infokredit">Kredit</DropdownItem>
+                  <DropdownItem href="infopinjaman">Pinjaman</DropdownItem>
                 </DropdownMenu>
               </UncontrolledDropdown>
               <NavItem>

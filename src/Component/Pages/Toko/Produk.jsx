@@ -25,7 +25,6 @@ import {
   faCar,
   faShoppingBag,
   faInfoCircle,
-  faGlobeAmericas,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   numberWithCommas,
