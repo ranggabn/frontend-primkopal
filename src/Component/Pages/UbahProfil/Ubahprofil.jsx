@@ -12,7 +12,7 @@ import {
   Alert,
 } from "reactstrap";
 import axios from "axios";
-import { Redirect, useParams } from "react-router";
+import { Redirect } from "react-router";
 import { AuthContext } from "../../../App";
 import moment from "moment";
 
@@ -94,7 +94,7 @@ export default function Ubahprofil() {
                       name="username"
                       value={data.username}
                       onChange={handle("username")}
-                      disabled
+                      required
                     />
                   </Col>
                 </Row>
@@ -108,7 +108,7 @@ export default function Ubahprofil() {
                       name="id"
                       value={data.id}
                       onChange={handle("id")}
-                      disabled
+                      required
                     />
                   </Col>
                 </Row>
@@ -122,6 +122,7 @@ export default function Ubahprofil() {
                       name="satker"
                       value={data.satker}
                       onChange={handle("satker")}
+                      required
                     />
                   </Col>
                 </Row>
@@ -137,7 +138,7 @@ export default function Ubahprofil() {
                           name="tempat_lahir"
                           value={data.tempat_lahir}
                           onChange={handle("tempat_lahir")}
-                          disabled
+                          required
                         />
                       </Col>
                     </Row>
@@ -155,7 +156,7 @@ export default function Ubahprofil() {
                             "YYYY-MM-DD"
                           )}
                           onChange={handle("tanggal_lahir")}
-                          disabled
+                          required                       
                         />
                       </Col>
                     </Row>
@@ -171,6 +172,7 @@ export default function Ubahprofil() {
                       name="nomor_telefon"
                       value={data.nomor_telefon}
                       onChange={handle("nomor_telefon")}
+                      required
                     />
                   </Col>
                 </Row>
@@ -184,8 +186,7 @@ export default function Ubahprofil() {
                     <Button
                       color="primary"
                       className="mt-3 float-right"
-                      type="button"
-                      onClick={submit}
+                      type="submit"                      
                     >
                       {" "}
                       Simpan{" "}

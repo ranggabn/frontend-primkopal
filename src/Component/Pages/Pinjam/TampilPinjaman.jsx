@@ -31,7 +31,7 @@ export default function TampilPinjaman() {
         <Table className="table-bordered">
           <thead>
             <tr>
-              <th colSpan="5" className="text-center" bgcolor="#BABABA">
+              <th colSpan="10" className="text-center" bgcolor="#BABABA">
                 <h5><b>RINCIAN PINJAMAN</b></h5>
               </th>
             </tr>
@@ -43,7 +43,7 @@ export default function TampilPinjaman() {
                 <br/>
                 Satuan Kerja
               </th>
-              <th colSpan="4">
+              <th colSpan="10">
                 : {state.user}
                 <br/>
                 : {state.id}
@@ -56,7 +56,8 @@ export default function TampilPinjaman() {
               <th>Lama Cicilan</th>
               <th>Jumlah Pembayaran / Bulan</th>
               <th>Total Pinjaman</th>
-              <th>Status Pinjaman</th>
+              <th>Status Kaprim</th>
+              <th>Status Kasatker</th>
             </tr>
           </thead>
           <tbody>
@@ -66,7 +67,8 @@ export default function TampilPinjaman() {
               <td>{pinjaman.id_cicil} Bulan</td>
               <td>Rp. {numberWithCommas(pinjaman.besar_cicilan)}</td>
               <td>Rp. {numberWithCommas(pinjaman.besar_pinjaman)}</td>
-              <td>{pinjaman.status}</td>
+              <td>{pinjaman.status_kaprim ? "Disetujui" : "Belum Disetujui"}</td>
+              <td>{pinjaman.status_kasatker ? "Disetujui" : "Belum Disetujui"}</td>
               </tr>
             ))}
           </tbody>

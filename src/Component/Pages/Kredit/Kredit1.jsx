@@ -140,7 +140,7 @@ export default function Kredit1(props) {
                     name="id_user"
                     value={data.id_user}
                     onChange={(e) => handle(e)}
-                    required
+                    disabled
                   />
                 </Col>
               </Row>

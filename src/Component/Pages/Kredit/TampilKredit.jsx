@@ -31,7 +31,7 @@ export default function TampilKredit() {
       <Table className="table-bordered">
         <thead>
           <tr>
-            <th colSpan="6" className="text-center" bgcolor="#BABABA">
+            <th colSpan="10" className="text-center" bgcolor="#BABABA">
               <h5>
                 <b>RINCIAN KREDIT</b>
               </h5>
@@ -45,7 +45,7 @@ export default function TampilKredit() {
               <br />
               Satuan Kerja
             </th>
-            <th colSpan="5">
+            <th colSpan="10">
               : {state.user}
               <br />
               : {state.id}
@@ -70,7 +70,7 @@ export default function TampilKredit() {
               <td>Rp. {numberWithCommas(kredit.besar_cicilan)}</td>
               <td>{kredit.nama_barang}</td>              
               <td>Rp. {numberWithCommas(kredit.harga)}</td>
-              <td>{kredit.status}</td>
+              <td>{kredit.status ? "Disetujui" : "Belum Disetujui"}</td>
             </tr>
           ))}
         </tbody>

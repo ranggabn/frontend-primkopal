@@ -38,7 +38,6 @@ export default function MenuPublik() {
                 </DropdownToggle>
                 <DropdownMenu>
                   <DropdownItem href="/visimisi">Visi & Misi</DropdownItem>
-                  <DropdownItem href="/kontak">Kontak</DropdownItem>
                 </DropdownMenu>
               </UncontrolledDropdown>
               <UncontrolledDropdown nav inNavbar>

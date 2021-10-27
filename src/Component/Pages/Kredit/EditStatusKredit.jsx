@@ -22,14 +22,6 @@ export default function EditStatusKredit(props) {
   const [kredit, setKredit] = useState([]);
   const [data, setData] = useState({});
 
-  const [status, setStatus] = useState([]);
-  useEffect(() => {
-    axios.get(api + "/tampilStatusKP/").then((res) => {
-      setStatus(res.data.values);
-    });
-  }, []);
-  const statusKP = status.map((statusKP) => statusKP);
-
   useEffect(() => {
     async function getData() {
       let response = await axios.get(api + "/tampilKredit/" + id);
@@ -45,7 +37,7 @@ export default function EditStatusKredit(props) {
       .put(api + "/ubahKredit", data)
       .catch((err) => console.error(err));
     setKredit(data);
-    props.history.push("/daftarKredit");
+    props.history.push("/kreditsementara");
   };
 
   let besarCicilan;
@@ -206,15 +198,12 @@ export default function EditStatusKredit(props) {
                   <Col>
                     <Input
                       type="select"
-                      name="id_status"
-                      value={data.id_status}
+                      name="status"
+                      value={data.status}
                       onChange={(e) => handle(e)}
                     >
-                      {statusKP.map((statusKP, key) => (
-                        <option key={key} value={statusKP.id_statusKP}>
-                          {statusKP.status}
-                        </option>
-                      ))}
+                      <option value="0">Belum Disetujui</option>
+                      <option value="1">Disetujui</option>
                     </Input>
                   </Col>
                 </Row>
@@ -243,7 +232,7 @@ export default function EditStatusKredit(props) {
                         <Button
                           color="primary"
                           className="mt-3 float-right"
-                          type="button"
+                          type="submit"
                           onClick={(e) => submit(e)}
                         >
                           {" "}

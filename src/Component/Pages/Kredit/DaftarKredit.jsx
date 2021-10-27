@@ -94,7 +94,7 @@ export default function DaftarKredit(props) {
               <td>{kredit.nama_barang}</td>
               <td>Rp. {numberWithCommasString(kredit.besar_cicilan)}</td>
               <td>{kredit.cicilan} Bulan</td>
-              <td>{kredit.status}</td>
+              <td>{kredit.status ? "Disetujui" : "Belum Disetujui"}</td>
               <td>
                 <Button
                   color="secondary"

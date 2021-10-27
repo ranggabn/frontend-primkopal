@@ -20,7 +20,7 @@ export default function MenuKaprim() {
   return (
     <div>
       <Navbar className="navbar-dark bg-dark" light expand="md">
-        <NavbarBrand href="/">KETUA PRIMKOPAL</NavbarBrand>
+        <NavbarBrand>KETUA PRIMKOPAL</NavbarBrand>
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
           <Nav className="mr-auto" navbar>
@@ -41,7 +41,12 @@ export default function MenuKaprim() {
             </NavItem>
           </Nav>
           <NavbarText>
-            <Button href="/masuk" onClick={() => dispatch({ type: "LOGOUT" })}>Keluar</Button>
+            <Button className="mr-3" href="/ubahprofil">
+              Ubah Profil
+            </Button>
+            <Button href="/masuk" onClick={() => dispatch({ type: "LOGOUT" })}>
+              Keluar
+            </Button>
           </NavbarText>
         </Collapse>
       </Navbar>

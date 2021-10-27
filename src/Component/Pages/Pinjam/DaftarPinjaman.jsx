@@ -61,7 +61,7 @@ export default function DaftarPinjaman(props) {
       <Table className="table-bordered">
         <thead>
           <tr>
-            <th colSpan="8" className="text-center" bgcolor="#BABABA">
+            <th colSpan="10" className="text-center" bgcolor="#BABABA">
               <h5>
                 <b>Rincian pinjaman Anggota</b>
               </h5>
@@ -74,7 +74,8 @@ export default function DaftarPinjaman(props) {
             <th>Jumlah Pinjaman</th>
             <th>Cicilan / Bulan</th>
             <th>Lama Cicilan</th>
-            <th>Status</th>
+            <th>Status Kaprim</th>
+            <th>Status Kasatker</th>
             <th>Aksi</th>
           </tr>
         </thead>
@@ -99,7 +100,8 @@ export default function DaftarPinjaman(props) {
                 <td>Rp. {numberWithCommasString(pinjaman.besar_pinjaman)}</td>
                 <td>Rp. {numberWithCommasString(pinjaman.besar_cicilan)}</td>
                 <td>{pinjaman.cicilan} Bulan</td>
-                <td>{pinjaman.status}</td>
+                <td>{pinjaman.status_kaprim ? "Disetujui" : "Belum Disetujui"}</td>
+                <td>{pinjaman.status_kasatker ? "Disetujui" : "Belum Disetujui"}</td>
                 <td>
                   <Button
                     color="secondary"

@@ -20,7 +20,7 @@ export default function MenuKasatker() {
   return (
     <div>
       <Navbar className="navbar-dark bg-dark" light expand="md">
-        <NavbarBrand href="/">KETUA SATUAN KERJA</NavbarBrand>
+        <NavbarBrand>KETUA SATUAN KERJA</NavbarBrand>
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
           <Nav className="mr-auto" navbar>
@@ -36,7 +36,12 @@ export default function MenuKasatker() {
             </NavItem>
           </Nav>
           <NavbarText>
-            <Button href="/masuk" onClick={() => dispatch({ type: "LOGOUT" })}>Keluar</Button>
+            <Button className="mr-3" href="/ubahprofil">
+              Ubah Profil
+            </Button>
+            <Button href="/masuk" onClick={() => dispatch({ type: "LOGOUT" })}>
+              Keluar
+            </Button>
           </NavbarText>
         </Collapse>
       </Navbar>

@@ -51,6 +51,7 @@ import InfoKredit from "./Component/Pages/Informasi/InfoKredit";
 import InfoSimpanan from "./Component/Pages/Informasi/InfoSimpanan";
 import InfoPinjaman from "./Component/Pages/Informasi/InfoPinjaman";
 import InfoPembelian from "./Component/Pages/Informasi/InfoPembelian";
+import Komplain from "./Component/Pages/Komplain/Komplain";
 
 export const AuthContext = createContext();
 
@@ -130,6 +131,7 @@ function App() {
           <Route exact path="/pinjam" component={Pinjam1} />
           <Route exact path="/pinjam2" component={Pinjam2} />          
           <Route exact path="/tabungan" component={Tabungan} />
+          <Route exact path="/komplain" component={Komplain} />
           <Route exact path="/pengambilan" component={Pengambilan} />
           <Route exact path="/tampilpinjaman" component={TampilPinjaman} />
           <Route exact path="/tampilkredit" component={TampilKredit} />

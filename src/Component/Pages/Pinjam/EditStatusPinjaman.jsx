@@ -21,16 +21,8 @@ export default function EditStatusPinjaman(props) {
   const { state } = useContext(AuthContext);
   const [pinjam, setpinjam] = useState([]);
   const [data, setData] = useState({});
-
-  const [status, setStatus] = useState([]);
-  useEffect(() => {
-    axios.get(api + "/tampilStatusKP/").then((res) => {
-      setStatus(res.data.values);
-    });
-  }, []);
-  const statusKP = status.map((statusKP) => statusKP);
-
   const [cicilan, setCicilan] = useState([]);
+
   useEffect(() => {
     axios.get(api + "/tampilCicilan/").then((res) => {
       setCicilan(res.data.values);
@@ -215,21 +207,34 @@ export default function EditStatusPinjaman(props) {
                   </Col>
                 </Row>
               </FormGroup>
-              <Label>Ubah Status</Label>
+              <Label>Status Kaprim</Label>
               <FormGroup>
                 <Row>
                   <Col>
                     <Input
                       type="select"
-                      name="id_status"
-                      value={data.id_status}
+                      name="status_kaprim"
+                      value={data.status_kaprim}
                       onChange={(e) => handle(e)}
                     >
-                      {statusKP.map((statusKP, key) => (
-                        <option key={key} value={statusKP.id_statusKP}>
-                          {statusKP.status}
-                        </option>
-                      ))}
+                      <option value="0">Belum Disetujui</option>
+                      <option value="1">Disetujui</option>
+                    </Input>
+                  </Col>
+                </Row>
+              </FormGroup>
+              <Label>Status Kasatker</Label>
+              <FormGroup>
+                <Row>
+                  <Col>
+                    <Input
+                      type="select"
+                      name="status_kasatker"
+                      value={data.status_kasatker}
+                      onChange={(e) => handle(e)}
+                    >
+                      <option value="0">Belum Disetujui</option>
+                      <option value="1">Disetujui</option>
                     </Input>
                   </Col>
                 </Row>

@@ -28,7 +28,7 @@ export default function MenuMember(props) {
     <div>
       <Navbar className="navbar-dark bg-dark" light expand="md">
         <Container>
-          <NavbarBrand href="/">PRIMKOPAL AAL</NavbarBrand>
+          <NavbarBrand>PRIMKOPAL AAL</NavbarBrand>
           <NavbarToggler onClick={toggle} />
           <Collapse isOpen={isOpen} navbar>
             <Nav className="mr-auto" navbar>

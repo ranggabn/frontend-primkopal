@@ -1,8 +1,44 @@
-import React from "react";
-import { Input, Button } from "reactstrap";
+import React, { useState, useEffect } from "react";
+import { Input, Button, Alert } from "reactstrap";
 import styled from "styled-components";
+import moment from "moment";
+import axios from "axios";
+
+const api = "http://localhost:3001";
 
 export default function Kontak() {
+  const [komplain, setKomplain] = useState([]);
+  const [data, setData] = useState({
+    komplain: "",
+    tanggal: "",
+  });
+  const [visible, setVisible] = useState(false);
+  const onDismiss = () => setVisible(false);
+
+  useEffect(() => {
+    setData({
+      tanggal: moment().format("YYYY-MM-DD"),
+    });
+  }, []);
+
+  function handle(e) {
+    const newData = { ...data };
+    newData[e.target.name] = e.target.value;
+    setData(newData);
+  }
+
+  function submit(e) {
+    e.preventDefault();
+    axios.post(api + "/tambahKomplain", data).then((res) => {
+      const myData = [...komplain, res.data.values, visible];
+      setKomplain(myData);
+      setVisible(myData);
+      setData({
+        komplain: "",
+      });
+    });
+  }
+
   return (
     <FooterContainer className="main-footer mt-5">
       <div className="footer-middle">
@@ -81,11 +117,19 @@ export default function Kontak() {
                   <Input
                     type="textarea"
                     id="txtbox"
+                    name="komplain"
+                    value={data.komplain}
+                    onChange={(e) => handle(e)}
                     placeholder="Kami sangat menerima kritik dan saran anda."
                   />
                 </li>
+                <Alert color="info" isOpen={visible} toggle={onDismiss} className="mt-2">
+                  Kritik & Saran Anda Berhasil Terkirim.
+                </Alert>
                 <li className="mt-2">
-                  <Button block>Kirim</Button>
+                  <Button type="submit" onClick={(e) => submit(e)} block>
+                    Kirim
+                  </Button>
                 </li>
               </ul>
             </div>

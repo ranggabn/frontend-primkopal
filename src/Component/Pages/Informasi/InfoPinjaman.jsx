@@ -1,9 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { Container, Card, CardImg, Row, Col, FormText } from "reactstrap";
+import {
+  Container,
+  Card,
+  CardImg,
+  Row,
+  Col,
+  FormText,
+  Button,
+} from "reactstrap";
 import pinjam from "./Images/Pinjaman.png";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import SKGaji from "./File/SKGaji.docx";
+import Asuransi from "./File/Asuransi.pdf";
 
 const api = "http://localhost:3001";
 
@@ -40,6 +50,29 @@ export default function InfoPinjaman() {
                 Primkopal AAL Surabaya dan Juru Bayar Gaji.
               </p>
             </Col>
+          </Row>
+          <Row className="ml-5 mr-5 mt-2">
+            <Col className="text-center">
+              <h5>Unggah Dokumen Persyaratan Dibawah Ini.</h5>
+            </Col>
+          </Row>
+          <Row className="ml-5 mr-5 mt-2 mb-5">
+            <Col></Col>
+            <Col className="text-center">
+              <Button outline color="info">
+                <a href={SKGaji} download>
+                  Surat Keterangan Gaji
+                </a>
+              </Button>
+            </Col>
+            <Col className="text-center">
+              <Button outline color="info">
+                <a href={Asuransi} download>
+                  Formulir Asuransi
+                </a>
+              </Button>
+            </Col>
+            <Col></Col>
           </Row>
           <Row className="ml-5 mr-5 mt-2 mb-3 text-justify">
             <Col>

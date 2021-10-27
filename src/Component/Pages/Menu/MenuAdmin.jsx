@@ -20,7 +20,7 @@ export default function MenuAdmin() {
   return (
     <div>
       <Navbar className="navbar-dark bg-dark" light expand="md">
-        <NavbarBrand href="/">ADMIN | PRIMKOPAL AAL</NavbarBrand>
+        <NavbarBrand>ADMIN | PRIMKOPAL AAL</NavbarBrand>
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
           <Nav className="mr-auto" navbar>
@@ -36,7 +36,7 @@ export default function MenuAdmin() {
             </NavItem>
             <NavItem>
               <NavLink to="/pengambilan" className="nav-link">
-                Pengambilan Barang
+                Pengambilan
               </NavLink>
             </NavItem>
             <NavItem>
@@ -51,23 +51,32 @@ export default function MenuAdmin() {
             </NavItem>
             <NavItem>
               <NavLink to="/daftarpinjaman" className="nav-link">
-                Daftar Pinjaman
+                Pinjaman
               </NavLink>
             </NavItem>
             <NavItem>
               <NavLink to="/daftarsimpanan" className="nav-link">
-                Daftar Simpanan
+                Simpanan
               </NavLink>
             </NavItem>
             <NavItem>
               <NavLink to="/daftarkredit" className="nav-link">
-                Daftar Kredit
+                Kredit
               </NavLink>
             </NavItem>
-            
+            <NavItem>
+              <NavLink to="/komplain" className="nav-link">
+                Kritik & Saran
+              </NavLink>
+            </NavItem>
           </Nav>
           <NavbarText>
-            <Button onClick={() => dispatch({ type: "LOGOUT" })} href="/masuk">Keluar</Button>
+            <Button className="mr-3" href="/ubahprofil">
+              Ubah Profil
+            </Button>
+            <Button onClick={() => dispatch({ type: "LOGOUT" })} href="/masuk">
+              Keluar
+            </Button>
           </NavbarText>
         </Collapse>
       </Navbar>
