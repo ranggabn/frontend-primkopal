@@ -128,34 +128,65 @@ export default function Masuk(props) {
                   </div>
                 )}
 
-                <Button color="primary" disabled={data.isSubmitting}>
+                <Button
+                  color="primary"
+                  disabled={data.isSubmitting}
+                  className="float-right"
+                >
                   {data.isSubmitting ? "...loading" : "Masuk"}
                 </Button>
                 <br />
                 <br />
+
                 <hr />
-                <FormGroup>
-                  <FormText className="text-center">
-                    Belum mendaftar sebagai anggota Primkopal? Silahkan daftar
-                    disini
-                  </FormText>
-                </FormGroup>
-                <FormGroup>
-                  <Row>
-                    <Col>
-                      <Button
-                        color="secondary"
-                        className="mt-3 mb-4"
-                        type="button"
-                        href="/daftar"
-                        block
-                      >
-                        {" "}
-                        Daftar{" "}
-                      </Button>
-                    </Col>
-                  </Row>
-                </FormGroup>
+                <Row>
+                  <Col>
+                    <FormGroup>
+                      <FormText className="text-center">
+                        Lupa Kata Sandi? Tekan tombol lupa password dibawah ini.
+                      </FormText>
+                    </FormGroup>
+                    <FormGroup>
+                      <Row>
+                        <Col>
+                          <Button
+                            color="secondary"
+                            className="mt-2 mb-5"
+                            type="button"
+                            href="/lupapassword"
+                            block
+                          >
+                            {" "}
+                            Lupa Kata Sandi{" "}
+                          </Button>
+                        </Col>
+                      </Row>
+                    </FormGroup>
+                  </Col>
+                  <Col>
+                    <FormGroup>
+                      <FormText className="text-center">
+                        Belum mendaftar sebagai anggota Primkopal? Daftar disini.
+                      </FormText>
+                    </FormGroup>
+                    <FormGroup>
+                      <Row>
+                        <Col>
+                          <Button
+                            color="info"
+                            className="mt-2 mb-5"
+                            type="button"
+                            href="/daftar"
+                            block
+                          >
+                            {" "}
+                            Daftar{" "}
+                          </Button>
+                        </Col>
+                      </Row>
+                    </FormGroup>
+                  </Col>
+                </Row>
               </Form>
             </Col>
           </Row>

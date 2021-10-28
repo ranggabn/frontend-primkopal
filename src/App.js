@@ -52,6 +52,7 @@ import InfoSimpanan from "./Component/Pages/Informasi/InfoSimpanan";
 import InfoPinjaman from "./Component/Pages/Informasi/InfoPinjaman";
 import InfoPembelian from "./Component/Pages/Informasi/InfoPembelian";
 import Komplain from "./Component/Pages/Komplain/Komplain";
+import LupaPassword from "./Component/Pages/Informasi/LupaPassword";
 
 export const AuthContext = createContext();
 
@@ -65,7 +66,7 @@ const initialState = {
   satker: localStorage.getItem("satker"),
   nomor_telefon: localStorage.getItem("nomor_telefon"),
   tempat_lahir: localStorage.getItem("tempat_lahir"),
-  tanggal_lahir: localStorage.getItem("tanggal_lahir")
+  tanggal_lahir: localStorage.getItem("tanggal_lahir"),  
 };
 
 const reducer = (state, action) => {
@@ -90,7 +91,7 @@ const reducer = (state, action) => {
         satker: action.payload.satker,
         nomor_telefon: action.payload.nomor_telefon,
         tempat_lahir: action.payload.tempat_lahir,
-        tanggal_lahir: action.payload.tanggal_lahir
+        tanggal_lahir: action.payload.tanggal_lahir,
       };
     case "LOGOUT":
       localStorage.clear();
@@ -122,6 +123,7 @@ function App() {
           <Route exact path="/infosimpanan" component={InfoSimpanan} />
           <Route exact path="/infopinjaman" component={InfoPinjaman} />
           <Route exact path="/infopembelian" component={InfoPembelian} />
+          <Route exact path="/lupapassword" component={LupaPassword} />
           <Route exact path="/visimisi" component={Visimisi} />
           <Route exact path="/tokopublik" component={Toko} />
           <Route exact path="/kredit" component={Kredit1} />          

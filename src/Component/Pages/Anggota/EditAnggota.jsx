@@ -9,7 +9,8 @@ import {
   Label,
   Input,
   Card,
-  CardImg
+  CardImg,
+  Alert,
 } from "reactstrap";
 import axios from "axios";
 import { Redirect, useParams } from "react-router";
@@ -18,6 +19,7 @@ import moment from "moment";
 import { getBase64 } from "../../../Util/GetBase64";
 
 const api = "http://localhost:3001";
+const qs = require("querystring");
 
 export default function EditAnggota(props) {
   let { id } = useParams();
@@ -34,6 +36,18 @@ export default function EditAnggota(props) {
     role: "",
   });
   const [role, setrole] = useState([]);
+  const [disable, setdisable] = useState({
+    isDisabled: true,
+    noDisabled: false,
+  });
+  const [dataReset, setdataReset] = useState({
+    id: "",
+    currpassword: "",
+    newpassword: "",
+    lupa_password: "",
+    errorMessage: null,
+    successMessage: null,
+  });
 
   useEffect(() => {
     axios.get(api + "/tampilRole").then((res) => {
@@ -41,11 +55,18 @@ export default function EditAnggota(props) {
     });
     async function getData() {
       let response = await axios.get(api + "/tampil/" + id);
-      console.log(response.data.values);
       response = response.data.values[0];
       setData(response);
     }
     getData();
+    axios.get(api + "/tampilpassword/" + id).then((res) => {
+      setdataReset({
+        id: res.data.values[0].id,
+        currpassword: res.data.values[0].password,
+        newpassword: res.data.values[0].id,
+        lupa_password: 0
+      });
+    });
   }, []);
   const roles = role.map((roles) => roles);
 
@@ -58,6 +79,10 @@ export default function EditAnggota(props) {
     setanggota({ ...anggota, bukti_transfer: result });
   }
 
+  const handle = (name) => (e) => {
+    setData({ ...data, [name]: e.target.value });
+  };
+
   const submit = async (e) => {
     e.preventDefault();
     await axios.put(api + "/ubah", data).catch((err) => console.error(err));
@@ -65,8 +90,49 @@ export default function EditAnggota(props) {
     props.history.push("/daftaranggota");
   };
 
-  const handle = (name) => (e) => {
-    setData({ ...data, [name]: e.target.value });
+  const handleFormSubmit = (event) => {
+    event.preventDefault();
+    setdataReset({
+      ...dataReset,
+      errorMessage: null,
+      successMessage: null,
+    });
+
+    const requestBody = {
+      id: data.id,
+      currpassword: dataReset.currpassword,
+      newpassword: dataReset.newpassword,
+      lupa_password: dataReset.lupa_password
+    };
+    console.log(requestBody);
+
+    const config = {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+    };
+
+    axios
+      .post(
+        api + "/auth/api/v1/resetpassword",
+        qs.stringify(requestBody),
+        config
+      )
+      .then((res) => {
+        if (res.data.success === true) {
+          setdataReset({
+            successMessage: res.data.message,
+            errorMessage: null,
+          });
+        } else {
+          setdataReset({
+            ...dataReset,
+            errorMessage: res.data.message,
+            successMessage: null,
+          });
+        }
+        throw res;
+      });
   };
 
   if (!state.isAuthenticated) {
@@ -202,7 +268,7 @@ export default function EditAnggota(props) {
                     <Input
                       type="file"
                       name="bukti_transfer"
-                      onChange={handle("bukti_transfer")}
+                      onChange={(e) => handleUploadImage(e)}
                     />
                     <br />
                     <Row>
@@ -231,6 +297,39 @@ export default function EditAnggota(props) {
                           >
                             {" "}
                             Kembali{" "}
+                          </Button>
+                        </Col>
+                      </Row>
+                    </FormGroup>
+                  </Col>
+                  <Col>
+                    <FormGroup>
+                      <Row>
+                        <Col>
+                          {dataReset.successMessage && (
+                            <div className="alert alert-success" role="alert">
+                              {dataReset.successMessage}
+                            </div>
+                          )}
+                          {dataReset.errorMessage && (
+                            <div className="alert alert-danger" role="alert">
+                              {dataReset.errorMessage}
+                            </div>
+                          )}
+                          <Button
+                            className="mt-3"
+                            type="button"
+                            color="danger"
+                            onClick={handleFormSubmit}
+                            block
+                            disabled={
+                              data.lupa_password
+                                ? disable.noDisabled
+                                : disable.isDisabled
+                            }
+                          >
+                            {" "}
+                            Reset Kata Sandi{" "}
                           </Button>
                         </Col>
                       </Row>

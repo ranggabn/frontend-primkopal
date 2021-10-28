@@ -30,12 +30,6 @@ export default function Ubahpassword() {
 
   const [data, setData] = useState(initialState);
 
-  // useEffect(() => {
-  //   setData({
-  //     id: state.id,
-  //   });
-  // }, []);
-
   const handleInputChange = (event) => {
     setData({
       ...data,
