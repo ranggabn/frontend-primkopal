@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import {Card} from 'react-bootstrap';
+import {Card, CardBody} from 'reactstrap';
 import visi from './Images/visi.jpg'
 import misi from './Images/misi.jpg'
 
@@ -19,10 +19,10 @@ export default class Visimisi extends Component {
         </h3>
         <h5 className="text-center mt-3">(PRIMKOPAL AKADEMI ANGKATAN LAUT)</h5>
         <Card className="mt-4">
-          <Card.Body className="text-center">
+          <CardBody className="text-center">
             <img className="mt-3" style={{ width: "100%" }} src={visi} alt="visi"/>
             <img className="mt-4" style={{ width: "100%" }} src={misi} alt="misi"/>
-          </Card.Body>
+          </CardBody>
         </Card>
       </div>
     );
