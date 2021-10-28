@@ -109,6 +109,7 @@ export default function Daftar() {
                       name="username"
                       value={state.username}
                       onChange={(e) => handle(e)}
+                      required
                     />
                   </Col>
                 </Row>
@@ -122,6 +123,7 @@ export default function Daftar() {
                       name="id"
                       value={state.id}
                       onChange={(e) => handle(e)}
+                      required
                     />
                   </Col>
                 </Row>
@@ -135,6 +137,7 @@ export default function Daftar() {
                       name="satker"
                       value={state.satker}
                       onChange={(e) => handle(e)}
+                      required
                     />
                   </Col>
                 </Row>
@@ -150,6 +153,7 @@ export default function Daftar() {
                           name="tempat_lahir"
                           value={state.tempat_lahir}
                           onChange={(e) => handle(e)}
+                          required
                         />
                       </Col>
                     </Row>
@@ -165,6 +169,7 @@ export default function Daftar() {
                           name="tanggal_lahir"
                           value={state.tanggal_lahir}
                           onChange={(e) => handle(e)}
+                          required
                         />
                       </Col>
                     </Row>
@@ -180,6 +185,7 @@ export default function Daftar() {
                       name="nomor_telefon"
                       value={state.nomor_telefon}
                       onChange={(e) => handle(e)}
+                      required
                     />
                   </Col>
                 </Row>
@@ -193,6 +199,7 @@ export default function Daftar() {
                       name="password"
                       value={state.password}
                       onChange={(e) => handle(e)}
+                      required
                     />
                   </Col>
                 </Row>
@@ -207,6 +214,7 @@ export default function Daftar() {
                       value={state.password_ulang}
                       onChange={(e) => handle(e)}
                       invalid={retype ? true : false}
+                      required
                     />
                     <FormFeedback>{retype}</FormFeedback>
                   </Col>
@@ -243,8 +251,7 @@ export default function Daftar() {
                     <Button
                       color="primary"
                       className="mt-3 float-right"
-                      type="button"
-                      onClick={(e) => submit(e)}
+                      type="submit"
                     >
                       {" "}
                       Daftar{" "}
