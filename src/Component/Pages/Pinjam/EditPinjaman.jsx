@@ -49,7 +49,6 @@ export default function EditPinjaman(props) {
       response = await response.data.values[0];
       setData(response);
       setviewPdf(response.persyaratan)
-      console.log(response);
     }
     getData();
   }, []);

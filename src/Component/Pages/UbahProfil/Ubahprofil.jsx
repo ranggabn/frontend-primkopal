@@ -23,7 +23,7 @@ export default function Ubahprofil() {
   const { state } = useContext(AuthContext);
   const [anggota, setanggota] = useState([]);
   const [data, setData] = useState({
-    id: state.id,
+    id: "",
     username: "",
     satker: "",
     tempat_lahir: "",
@@ -40,7 +40,7 @@ export default function Ubahprofil() {
       setrole(res.data.values);
     });
     async function getData() {
-      let response = await axios.get(api + "/tampil/" + data.id);
+      let response = await axios.get(api + "/tampil/" + state.id);
       console.log(response.data.values);
       response = response.data.values[0];
       setData(response);
@@ -51,10 +51,11 @@ export default function Ubahprofil() {
 
   const submit = async (e) => {
     e.preventDefault();
-    await axios.put(api + "/ubah", data).catch((err) => console.error(err));
+    await axios.put(api + "/ubahProfil", data).catch((err) => console.error(err));
     const myData = [...anggota, visible];
     setanggota(data);
     setVisible(myData);
+    console.log(data);
   };
 
   const handle = (name) => (e) => {
@@ -108,7 +109,7 @@ export default function Ubahprofil() {
                       name="id"
                       value={data.id}
                       onChange={handle("id")}
-                      required
+                      disabled
                     />
                   </Col>
                 </Row>

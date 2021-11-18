@@ -149,6 +149,19 @@ export default function Simpan(props) {
                     </Col>
                   </Row>
                 </FormGroup>
+                <Label>Keterangan</Label>
+                <FormGroup>
+                  <Row>
+                    <Col>
+                      <Input
+                        type="textarea"
+                        name="keterangan"
+                        value={data.keterangan}
+                        onChange={handle("keterangan")}
+                      />
+                    </Col>
+                  </Row>
+                </FormGroup>
                 <hr />
                 <Row>
                   <Col>

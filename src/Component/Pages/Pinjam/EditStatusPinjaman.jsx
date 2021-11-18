@@ -13,6 +13,10 @@ import {
 import axios from "axios";
 import { Redirect, useParams } from "react-router";
 import { AuthContext } from "../../../App";
+import { Viewer, Worker } from "@react-pdf-viewer/core";
+import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
+import "@react-pdf-viewer/core/lib/styles/index.css";
+import "@react-pdf-viewer/default-layout/lib/styles/index.css";
 
 const api = "http://localhost:3001";
 
@@ -22,6 +26,8 @@ export default function EditStatusPinjaman(props) {
   const [pinjam, setpinjam] = useState([]);
   const [data, setData] = useState({});
   const [cicilan, setCicilan] = useState([]);
+  const [viewPdf, setviewPdf] = useState(null);
+  const defaultLayoutPluginInstance = defaultLayoutPlugin();
 
   useEffect(() => {
     axios.get(api + "/tampilCicilan/").then((res) => {
@@ -35,6 +41,7 @@ export default function EditStatusPinjaman(props) {
       let response = await axios.get(api + "/tampilPinjaman/" + id);
       response = await response.data.values[0];
       setData(response);
+      setviewPdf(response.persyaratan)
     }
     getData();
   }, []);
@@ -239,6 +246,21 @@ export default function EditStatusPinjaman(props) {
                   </Col>
                 </Row>
               </FormGroup>
+              <br></br>
+              <h4>File Persyaratan</h4>
+              <div className="pdf-container">
+                {viewPdf && (
+                  <>
+                    <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.6.347/build/pdf.worker.min.js">
+                      <Viewer
+                        fileUrl={viewPdf}
+                        plugins={[defaultLayoutPluginInstance]}
+                      />
+                    </Worker>
+                  </>
+                )}
+                {!viewPdf && <>No PDF file selected</>}
+              </div>
               <FormGroup>
                 <Row>
                   <Col>

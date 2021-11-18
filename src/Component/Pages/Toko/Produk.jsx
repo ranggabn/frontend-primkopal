@@ -323,7 +323,7 @@ export default function Produk(props) {
                 }
               })
               .map((produks, key) => (
-                <Col md={4} xs={6} className="mb-4" key={key}>
+                <Col md={5} xs={6} className="mb-4" key={key}>
                   <Card className="shadow">
                     <CardImg
                       top
