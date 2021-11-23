@@ -47,9 +47,6 @@ export default function Kredit1(props) {
       id_status: 1,
       id_user: state.id,
     });
-    axios.get(api + "/tampilCicilan").then((res) => {
-      setCicilan(res.data.values);
-    });
     axios.get(api + "/tampilBarang").then((res) => {
       setlistbarang(res.data.values);
     });
@@ -57,7 +54,7 @@ export default function Kredit1(props) {
 
   function submit(e) {
     e.preventDefault();
-    axios.post(api + "/tambahKredit", data).then((res) => {        
+    axios.post(api + "/tambahKredit", data).then((res) => {
       const myData = [...kredit, res.data.values, visible];
       setKredit(myData);
       setVisible(myData);
@@ -84,6 +81,19 @@ export default function Kredit1(props) {
       id_status: 1,
       id_user: state.id,
     });
+    if (e.harga <= 10000000) {
+      axios.get(api + "/tampilCicilan/" + 1).then((res) => {
+        setCicilan(res.data.values);
+      });
+    } else if (e.harga > 10000000 && e.harga <= 20000000) {
+      axios.get(api + "/tampilCicilan2").then((res) => {
+        setCicilan(res.data.values);
+      });
+    } else {
+      axios.get(api + "/tampilCicilan/").then((res) => {
+        setCicilan(res.data.values);
+      });
+    }
     setdatabaru({
       nama_barang: e.value,
     });

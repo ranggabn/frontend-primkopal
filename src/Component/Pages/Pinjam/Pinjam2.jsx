@@ -51,14 +51,11 @@ export default function Pinjam2() {
       satker: state.satker,
       nomor_telefon: state.nomor_telefon,
     });
-    axios.get(api + "/tampilCicilan").then((res) => {
-      setCicilan(res.data.values);
-    });
   }, []);
 
   function submit(e) {
     e.preventDefault();
-    axios.post(api + "/tambahPinjaman", data).then((res) => {      
+    axios.post(api + "/tambahPinjaman", data).then((res) => {
       const myData = [...pinjam, res.data.values, visible];
       setpinjam(myData);
       setVisible(myData);
@@ -80,6 +77,22 @@ export default function Pinjam2() {
   function handle(e) {
     const newData = { ...data };
     newData[e.target.name] = e.target.value;
+    if (newData.besar_pinjaman <= 10000000) {
+      axios.get(api + "/tampilCicilan/" + 1).then((res) => {
+        setCicilan(res.data.values);
+      });
+    } else if (
+      newData.besar_pinjaman > 10000000 &&
+      newData.besar_pinjaman <= 20000000
+    ) {
+      axios.get(api + "/tampilCicilan2").then((res) => {
+        setCicilan(res.data.values);
+      });
+    } else {
+      axios.get(api + "/tampilCicilan/").then((res) => {
+        setCicilan(res.data.values);
+      });
+    }
     besarCicilan =
       parseInt(newData.besar_pinjaman, 10) / parseInt(newData.id_cicil, 10) +
       parseInt(newData.besar_pinjaman, 10) * 0.01;
@@ -239,7 +252,9 @@ export default function Pinjam2() {
               />
             </FormGroup>
             <hr />
-            <h4><strong>Persyaratan Pinjaman</strong></h4>
+            <h4>
+              <strong>Persyaratan Pinjaman</strong>
+            </h4>
             <p>1. KTA</p>
             <p>2. KTP Pemohon Usipa</p>
             <p>3. KTP suami / istri</p>
@@ -248,12 +263,19 @@ export default function Pinjam2() {
             <p>6. KK non dinas</p>
             <p>7. Surat Pernyataan Kesehatan</p>
             <p>8. Formulir Surat Permintaan Asuransi Jiwa BP ASRI</p>
-            <p>9. <strong>Untuk pinjaman Rp 21.000.000,00 s.d. Rp 25.000.000,00</strong> melampirkan surat pernyataan bebas hutang bank mengetahui Kepala Bagian.</p>
+            <p>
+              9.{" "}
+              <strong>
+                Untuk pinjaman Rp 21.000.000,00 s.d. Rp 25.000.000,00
+              </strong>{" "}
+              melampirkan surat pernyataan bebas hutang bank mengetahui Kepala
+              Bagian.
+            </p>
             <FormGroup>
               <Input
                 type="file"
                 name="persyaratan"
-                id="persyaratan"                
+                id="persyaratan"
                 onChange={(e) => handlePdfFileChange(e)}
                 accept="application/pdf"
                 required
