@@ -21,12 +21,12 @@ export default function MenuMember(props) {
 
   function update(id) {
     console.log(id);
-    props.history.push("/editanggota/"+state.id)
+    props.history.push("/editanggota/" + state.id);
   }
 
   return (
     <div>
-      <Navbar className="navbar-dark bg-dark" light expand="md">
+      <Navbar className="navbar-dark bg-dark" light expand="lg">
         <Container>
           <NavbarBrand>PRIMKOPAL AAL</NavbarBrand>
           <NavbarToggler onClick={toggle} />
@@ -73,11 +73,16 @@ export default function MenuMember(props) {
                 </NavLink>
               </NavItem>
             </Nav>
-            <NavbarText>
-            <Button className="mr-3" href="/ubahprofil">
+            <NavbarText className="navbar-text-res">
+              <Button className="mr-3" href="/ubahprofil">
                 Ubah Profil
               </Button>
-            <Button onClick={() => dispatch({ type: "LOGOUT" })} href="/masuk">Keluar</Button>
+              <Button
+                onClick={() => dispatch({ type: "LOGOUT" })}
+                href="/masuk"
+              >
+                Keluar
+              </Button>
             </NavbarText>
           </Collapse>
         </Container>

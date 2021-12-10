@@ -33,15 +33,15 @@ export default function InfoPinjaman() {
       <h5 className="text-center">PRIMKOPAL AAL SURABAYA</h5>
       <Card className="mt-4">
         <Container>
-          <Row className="mt-5 ml-5">
-            <Col>
+          <Row className="mt-5 row-text-information">
+            <Col md={10} className="text-information">
               <h4>
                 <b>Pinjaman Dana</b>
               </h4>
             </Col>
           </Row>
-          <Row className="ml-5 mr-5 mt-2 mb-3 text-justify">
-            <Col>
+          <Row className="row-text-information mt-3">
+            <Col md={10} className="text-information">
               <p>
                 Pinjaman Dana pada website Primkopal AAL Surabaya dapat
                 dilakukan dengan mengikuti beberapa langkah yang ada pada
@@ -51,31 +51,31 @@ export default function InfoPinjaman() {
               </p>
             </Col>
           </Row>
-          <Row className="ml-5 mr-5 mt-2">
-            <Col className="text-center">
+          <Row className="row-text-information mt-3">
+            <Col md={10} className="text-center">
               <h5>Unggah Dokumen Persyaratan Dibawah Ini.</h5>
             </Col>
           </Row>
-          <Row className="ml-5 mr-5 mt-2 mb-5">
-            <Col></Col>
-            <Col className="text-center">
+          <Row className="row-text-information mt-3 mb-4">
+            <Col md={3}></Col>
+            <Col md={3} className="text-center pt-1">
               <Button outline color="info">
                 <a href={SKGaji} download>
                   Surat Keterangan Gaji
                 </a>
               </Button>
             </Col>
-            <Col className="text-center">
+            <Col md={3} className="text-center pt-1">
               <Button outline color="info">
                 <a href={Asuransi} download>
                   Formulir Asuransi
                 </a>
               </Button>
             </Col>
-            <Col></Col>
+            <Col md={3}></Col>
           </Row>
-          <Row className="ml-5 mr-5 mt-2 mb-3 text-justify">
-            <Col>
+          <Row className="row-text-information mt-3">
+            <Col md={10} className="text-information">
               <p>
                 <b>
                   Terdapat beberapa ketentuan dan persyaratan yang harus
@@ -91,20 +91,22 @@ export default function InfoPinjaman() {
             </Col>
           </Row>
         </Container>
-        <Row className="mt-4 mb-5">
-          <Col sm="12" md={{ size: 6, offset: 3 }}>
+        <Row className="image-information">
+          <Col md={6}>
             <CardImg height={300} src={pinjam} />
           </Col>
         </Row>
-        <Row className="ml-5 mr-5 mt-2 mb-5 text-justify">
-          <Col>
-            <FormText color="muted">
-              <FontAwesomeIcon icon={faInfoCircle} /> &nbsp;Anda tidak perlu
-              daftar kembali apabila telah memiliki akun pada website Primkopal
-              AAL Surabaya.
-            </FormText>
-          </Col>
-        </Row>
+        <Container>
+          <Row className="row-text-information mt-3 mb-5">
+            <Col md={10} className="text-information">
+              <FormText color="muted">
+                <FontAwesomeIcon icon={faInfoCircle} /> &nbsp;Anda tidak perlu
+                daftar kembali apabila telah memiliki akun pada website
+                Primkopal AAL Surabaya.
+              </FormText>
+            </Col>
+          </Row>
+        </Container>
       </Card>
     </Container>
   );

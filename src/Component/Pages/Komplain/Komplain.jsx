@@ -33,34 +33,38 @@ export default function Komplain() {
           setsearchTerm(event.target.value);
         }}
       />
-      <Table className="table-bordered">
-        <thead>
-          <tr>
-            <th>Tanggal</th>
-            <th>Kritik & Saran</th>
-          </tr>
-        </thead>
-        <tbody>
-          {komplain
-            .filter((komplain) => {
-              if (searchTerm === "") {
-                return komplain;
-              } else if (
-                komplain.komplain
-                  .toLowerCase()
-                  .includes(searchTerm.toLowerCase())
-              ) {
-                return komplain;
-              }
-            })
-            .map((komplain) => (
-              <tr key={komplain.id_komplain}>
-                <td className="col-md-3 col-sm-6">{moment(komplain.tanggal).format("YYYY-MM-DD")}</td>
-                <td>{komplain.komplain}</td>
-              </tr>
-            ))}
-        </tbody>
-      </Table>
+      <div className="table-all-after-lgn">
+        <Table className="table-bordered">
+          <thead>
+            <tr>
+              <th>Tanggal</th>
+              <th>Kritik & Saran</th>
+            </tr>
+          </thead>
+          <tbody>
+            {komplain
+              .filter((komplain) => {
+                if (searchTerm === "") {
+                  return komplain;
+                } else if (
+                  komplain.komplain
+                    .toLowerCase()
+                    .includes(searchTerm.toLowerCase())
+                ) {
+                  return komplain;
+                }
+              })
+              .map((komplain) => (
+                <tr key={komplain.id_komplain}>
+                  <td className="col-md-3 col-sm-6">
+                    {moment(komplain.tanggal).format("YYYY-MM-DD")}
+                  </td>
+                  <td>{komplain.komplain}</td>
+                </tr>
+              ))}
+          </tbody>
+        </Table>
+      </div>
     </Container>
   );
 }

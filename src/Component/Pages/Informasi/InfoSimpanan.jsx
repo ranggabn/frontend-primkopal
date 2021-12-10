@@ -13,15 +13,15 @@ export default function InfoSimpanan() {
       <h5 className="text-center">PRIMKOPAL AAL SURABAYA</h5>
       <Card className="mt-4">
         <Container>
-          <Row className="mt-5 ml-5">
-            <Col>
+          <Row className="row-text-information mt-5">
+            <Col md={10} className="text-information">
               <h4>
                 <b>Simpanan Sukarela</b>
               </h4>
             </Col>
           </Row>
-          <Row className="ml-5 mr-5 mt-2 mb-3 text-justify">
-            <Col>
+          <Row className="row-text-information mt-3">
+            <Col md={10} className="text-information">
               <p>
                 Simpanan Sukarela pada website Primkopal AAL Surabaya dapat
                 dilakukan dengan mengikuti beberapa langkah yang ada pada
@@ -35,20 +35,22 @@ export default function InfoSimpanan() {
             </Col>
           </Row>
         </Container>
-        <Row className="mt-4 mb-5">
-          <Col sm="12" md={{ size: 6, offset: 3 }}>
+        <Row className="image-information">
+          <Col md={6}>
             <CardImg height={200} src={simpanan} />
           </Col>
         </Row>
-        <Row className="ml-5 mr-5 mt-2 mb-5 text-justify">
-          <Col>
-            <FormText color="muted">
-              <FontAwesomeIcon icon={faInfoCircle} /> &nbsp;Anda tidak perlu
-              daftar kembali apabila telah memiliki akun pada website Primkopal
-              AAL Surabaya.
-            </FormText>
-          </Col>
-        </Row>
+        <Container>
+          <Row className="row-text-information mt-3 mb-5">
+            <Col md={10} className="text-information">
+              <FormText color="muted">
+                <FontAwesomeIcon icon={faInfoCircle} /> &nbsp;Anda tidak perlu
+                daftar kembali apabila telah memiliki akun pada website
+                Primkopal AAL Surabaya.
+              </FormText>
+            </Col>
+          </Row>
+        </Container>
       </Card>
     </Container>
   );

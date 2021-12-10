@@ -59,8 +59,8 @@ export default function LupaPassword() {
       <h5 className="text-center">PRIMKOPAL AAL SURABAYA</h5>
       <Card className="mt-4">
         <Container>
-          <Row className="mt-5 ml-5">
-            <Col>
+          <Row className="row-text-information mt-5">
+            <Col md={10} className="text-information">
               <h4>
                 <b>Lupa Kata Sandi</b>
               </h4>
@@ -70,7 +70,7 @@ export default function LupaPassword() {
           <Form onSubmit={submit}>
             <FormGroup>
               <Row className="ml-5 mr-5 text-justify">
-                <Col>
+                <Col md={4}>
                   <Input
                     name="id"
                     id="id"
@@ -80,7 +80,7 @@ export default function LupaPassword() {
                     required
                   />
                 </Col>
-                <Col>
+                <Col md={8}>
                   {" "}
                   <Button color="primary" type="submit">
                     Reset Kata Sandi
@@ -96,8 +96,8 @@ export default function LupaPassword() {
               </Row>
             </FormGroup>
           </Form>
-          <Row className="ml-5 mr-5 mb-2 text-justify">
-            <Col>
+          <Row className="row-text-information mt-5">
+            <Col md={10} className="text-information">
               <p>
                 Dengan menekan tombol reset kata sandi maka akan terbuka pilihan
                 untuk administrator mereset kata sandi anda. Langkah selanjutnya
@@ -107,8 +107,8 @@ export default function LupaPassword() {
               </p>
             </Col>
           </Row>
-          <Row className="ml-5 mr-5 mb-3 text-justify">
-            <Col>
+          <Row className="row-text-information mt-3">
+            <Col md={10} className="text-information">
               <strong>
                 Nama &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;: <br />
                 NIP/NRP &ensp;&ensp;&ensp;: <br />
@@ -118,8 +118,8 @@ export default function LupaPassword() {
               </strong>
             </Col>
           </Row>
-          <Row className="ml-5 mr-5 mt-2 mb-5 text-justify">
-            <Col>
+          <Row className="row-text-information mt-3">
+            <Col md={10} className="text-information">
               <p>
                 Selanjutnya tunggu konfirmasi dari pihak pengurus Primkopal AAL
                 Surabaya. Apabila sudah mendapat konfirmasi, silahkan masuk

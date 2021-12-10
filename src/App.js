@@ -2,7 +2,7 @@ import React, { useReducer, createContext } from "react";
 import "./App.css";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import Home from "./Component/Pages/Home/Home";
-import Footer from "./Component/Fungsional/Footer";
+// import Footer from "./Component/Fungsional/Footer";
 import Visimisi from "./Component/Pages/Profil/Visimisi";
 import Kredit1 from "./Component/Pages/Kredit/Kredit1";
 import Masuk from "./Component/Pages/Masuk/Masuk";
@@ -53,6 +53,7 @@ import InfoPinjaman from "./Component/Pages/Informasi/InfoPinjaman";
 import InfoPembelian from "./Component/Pages/Informasi/InfoPembelian";
 import Komplain from "./Component/Pages/Komplain/Komplain";
 import LupaPassword from "./Component/Pages/Informasi/LupaPassword";
+import Kontak from "./Component/Fungsional/Kontak";
 
 export const AuthContext = createContext();
 
@@ -66,7 +67,7 @@ const initialState = {
   satker: localStorage.getItem("satker"),
   nomor_telefon: localStorage.getItem("nomor_telefon"),
   tempat_lahir: localStorage.getItem("tempat_lahir"),
-  tanggal_lahir: localStorage.getItem("tanggal_lahir"),  
+  tanggal_lahir: localStorage.getItem("tanggal_lahir"),
 };
 
 const reducer = (state, action) => {
@@ -77,9 +78,9 @@ const reducer = (state, action) => {
       localStorage.setItem("role", action.payload.role);
       localStorage.setItem("id", action.payload.id);
       localStorage.setItem("satker", action.payload.satker);
-      localStorage.setItem("nomor_telefon", action.payload.nomor_telefon)
-      localStorage.setItem("tempat_lahir", action.payload.tempat_lahir)
-      localStorage.setItem("tanggal_lahir", action.payload.tanggal_lahir)
+      localStorage.setItem("nomor_telefon", action.payload.nomor_telefon);
+      localStorage.setItem("tempat_lahir", action.payload.tempat_lahir);
+      localStorage.setItem("tanggal_lahir", action.payload.tanggal_lahir);
       return {
         ...state,
         isAuthenticated: true,
@@ -101,7 +102,8 @@ const reducer = (state, action) => {
         user: null,
         token: null,
       };
-    default: return state;
+    default:
+      return state;
   }
 };
 
@@ -126,12 +128,12 @@ function App() {
           <Route exact path="/lupapassword" component={LupaPassword} />
           <Route exact path="/visimisi" component={Visimisi} />
           <Route exact path="/tokopublik" component={Toko} />
-          <Route exact path="/kredit" component={Kredit1} />          
+          <Route exact path="/kredit" component={Kredit1} />
           <Route exact path="/masuk" component={Masuk} />
           <Route exact path="/daftar" component={Daftar} />
           <Route exact path="/simpan" component={Simpan} />
           <Route exact path="/pinjam" component={Pinjam1} />
-          <Route exact path="/pinjam2" component={Pinjam2} />          
+          <Route exact path="/pinjam2" component={Pinjam2} />
           <Route exact path="/tabungan" component={Tabungan} />
           <Route exact path="/komplain" component={Komplain} />
           <Route exact path="/pengambilan" component={Pengambilan} />
@@ -148,8 +150,16 @@ function App() {
           <Route exact path="/daftarsimpanan" component={DaftarSimpanan} />
           <Route exact path="/daftarkredit" component={DaftarKredit} />
           <Route exact path="/daftarpenjualan" component={DaftarPenjualan} />
-          <Route exact path="/pinjamsementara" component={DaftarPinjamanSementara}/>
-          <Route exact path="/kreditsementara" component={DaftarKreditSementara}/>
+          <Route
+            exact
+            path="/pinjamsementara"
+            component={DaftarPinjamanSementara}
+          />
+          <Route
+            exact
+            path="/kreditsementara"
+            component={DaftarKreditSementara}
+          />
           <Route exact path="/editanggota/:id" component={EditAnggota} />
           <Route exact path="/editbarang/:id" component={EditBarang} />
           <Route exact path="/editkredit/:id" component={EditKredit} />
@@ -158,16 +168,24 @@ function App() {
           <Route exact path="/editsimpanan/:id" component={EditSimpanan} />
           <Route exact path="/tambahanggota" component={TambahAnggota} />
           <Route exact path="/tambahpenjualan" component={TambahPenjualan} />
-          <Route exact path="/tambahbarang" component={TambahBarang} />          
+          <Route exact path="/tambahbarang" component={TambahBarang} />
           <Route exact path="/penarikan" component={Penarikan} />
-          <Route exact path="/editstatuskredit/:id" component={EditStatusKredit} />
-          <Route exact path="/editstatuspinjam/:id" component={EditStatusPinjaman} />
+          <Route
+            exact
+            path="/editstatuskredit/:id"
+            component={EditStatusKredit}
+          />
+          <Route
+            exact
+            path="/editstatuspinjam/:id"
+            component={EditStatusPinjaman}
+          />
           <Route exact path="/detailBarang/:id" component={DetailBarang} />
           <Route exact path="/editprofil/:id" component={EditProfil} />
           <Route exact path="/detailBarang2/:id" component={DetailBarang2} />
         </AuthContext.Provider>
       </Switch>
-      <Footer />
+      <Kontak />
     </BrowserRouter>
   );
 }

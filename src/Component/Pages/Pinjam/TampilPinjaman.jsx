@@ -3,16 +3,16 @@ import { Container, Table } from "reactstrap";
 import axios from "axios";
 import { Redirect, useParams } from "react-router";
 import { AuthContext } from "../../../App";
-import moment from 'moment'
+import moment from "moment";
 import { numberWithCommas } from "../../Fungsional/Koma";
 
 const api = "http://localhost:3001";
 
 export default function TampilPinjaman() {
   const { state } = useContext(AuthContext);
-  let id_user  = useParams()
-  id_user = state.id
-  const [pinjaman, setpinjaman] = useState([])
+  let id_user = useParams();
+  id_user = state.id;
+  const [pinjaman, setpinjaman] = useState([]);
 
   useEffect(() => {
     axios.get(api + "/tampilPinjamanUser/" + id_user).then((res) => {
@@ -26,29 +26,30 @@ export default function TampilPinjaman() {
   }
   return (
     <Container className="mt-5">
-        <h2>Data Pinjaman</h2>
-        <hr />
+      <h2>Data Pinjaman</h2>
+      <hr />
+      <div className="table-all-after-lgn">
         <Table className="table-bordered">
           <thead>
             <tr>
               <th colSpan="10" className="text-center" bgcolor="#BABABA">
-                <h5><b>RINCIAN PINJAMAN</b></h5>
+                <h5>
+                  <b>RINCIAN PINJAMAN</b>
+                </h5>
               </th>
             </tr>
             <tr>
               <th>
                 Nama
-                <br/>
-                NRP  
-                <br/>
+                <br />
+                NRP
+                <br />
                 Satuan Kerja
               </th>
               <th colSpan="10">
                 : {state.user}
-                <br/>
-                : {state.id}
-                <br/>
-                : {state.satker}
+                <br />: {state.id}
+                <br />: {state.satker}
               </th>
             </tr>
             <tr>
@@ -61,18 +62,23 @@ export default function TampilPinjaman() {
             </tr>
           </thead>
           <tbody>
-          {pinjaman.map((pinjaman) => (
-            <tr key={pinjaman.id_pinjaman}>
-              <td>{moment(pinjaman.tanggal_pinjam).format('YYYY-MM-DD')}</td>
-              <td>{pinjaman.id_cicil} Bulan</td>
-              <td>Rp. {numberWithCommas(pinjaman.besar_cicilan)}</td>
-              <td>Rp. {numberWithCommas(pinjaman.besar_pinjaman)}</td>
-              <td>{pinjaman.status_kaprim ? "Disetujui" : "Belum Disetujui"}</td>
-              <td>{pinjaman.status_kasatker ? "Disetujui" : "Belum Disetujui"}</td>
+            {pinjaman.map((pinjaman) => (
+              <tr key={pinjaman.id_pinjaman}>
+                <td>{moment(pinjaman.tanggal_pinjam).format("YYYY-MM-DD")}</td>
+                <td>{pinjaman.id_cicil} Bulan</td>
+                <td>Rp. {numberWithCommas(pinjaman.besar_cicilan)}</td>
+                <td>Rp. {numberWithCommas(pinjaman.besar_pinjaman)}</td>
+                <td>
+                  {pinjaman.status_kaprim ? "Disetujui" : "Belum Disetujui"}
+                </td>
+                <td>
+                  {pinjaman.status_kasatker ? "Disetujui" : "Belum Disetujui"}
+                </td>
               </tr>
             ))}
           </tbody>
         </Table>
-      </Container>
-  )
+      </div>
+    </Container>
+  );
 }

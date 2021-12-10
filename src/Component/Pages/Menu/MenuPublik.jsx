@@ -46,7 +46,9 @@ export default function MenuPublik() {
                 </DropdownToggle>
                 <DropdownMenu>
                   <DropdownItem href="/infopembelian">Pembelian</DropdownItem>
-                  <DropdownItem href="/infosimpanan">Simpanan Sukarela</DropdownItem>
+                  <DropdownItem href="/infosimpanan">
+                    Simpanan Sukarela
+                  </DropdownItem>
                   <DropdownItem href="/infokredit">Kredit</DropdownItem>
                   <DropdownItem href="infopinjaman">Pinjaman</DropdownItem>
                 </DropdownMenu>
@@ -57,7 +59,7 @@ export default function MenuPublik() {
                 </NavLink>
               </NavItem>
             </Nav>
-            <NavbarText>
+            <NavbarText className="navbar-text-res">
               <Button className="mr-3" href="/masuk">
                 Masuk
               </Button>

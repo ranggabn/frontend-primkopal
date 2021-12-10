@@ -35,7 +35,7 @@ export default function MenuKasatker() {
               </NavLink>
             </NavItem>
           </Nav>
-          <NavbarText>
+          <NavbarText className="navbar-text-res">
             <Button className="mr-3" href="/ubahprofil">
               Ubah Profil
             </Button>

@@ -42,8 +42,8 @@ export default function Tabungan() {
     <Container className="mt-5">
       <h2>Tabungan Sukarela</h2>
       <hr />
-      <Row className="float-right mb-3">
-        <Col>
+      <Row className="mb-3">
+        <Col md={12}>
           <Pdf
             targetRef={ref}
             filename="tabungan.pdf"
@@ -59,56 +59,63 @@ export default function Tabungan() {
           </Pdf>
         </Col>
       </Row>
+
       <div className="Post" ref={ref}>
-        <Table className="table-bordered">
-          <thead>
-            <tr>
-              <th colSpan="4" className="text-center" bgcolor="#BABABA">
-                <h5>
-                  <b>BUKU TABUNGAN</b>
-                </h5>
-              </th>
-            </tr>
-            <tr>
-              <th>
-                Nama
-                <br />
-                NRP
-                <br />
-                Satuan Kerja
-              </th>
-              <th colSpan="3">
-                : {state.user}
-                <br />: {state.id}
-                <br />: {state.satker}
-              </th>
-            </tr>
-            <tr>
-              <th>Tanggal</th>
-              <th>Saldo Masuk</th>
-              <th>Penarikan</th>
-              <th>Keterangan</th>
-            </tr>
-          </thead>
-          <tbody>
-            {simpanan.map((simpanan) => (
-              <tr key={simpanan.id_user}>
-                <td>{moment(simpanan.tanggal_simpan).format("YYYY-MM-DD")}</td>
-                <td>Rp. {numberWithCommasString(simpanan.jumlah_simpanan)}</td>
-                <td>Rp. {numberWithCommasString(simpanan.penarikan)}</td>
-                <td>{simpanan.keterangan}</td>
+        <div className="table-all-after-lgn">
+          <Table className="table-bordered">
+            <thead>
+              <tr>
+                <th colSpan="4" className="text-center" bgcolor="#BABABA">
+                  <h5>
+                    <b>BUKU TABUNGAN</b>
+                  </h5>
+                </th>
               </tr>
-            ))}
-            <tr>
-              <td colSpan="3">
-                <strong>TOTAL SALDO</strong>
-              </td>
-              <td>
-                <strong>Rp. {numberWithCommasString(totalSaldo)}</strong>
-              </td>
-            </tr>
-          </tbody>
-        </Table>
+              <tr>
+                <th>
+                  Nama
+                  <br />
+                  NRP
+                  <br />
+                  Satuan Kerja
+                </th>
+                <th colSpan="3">
+                  : {state.user}
+                  <br />: {state.id}
+                  <br />: {state.satker}
+                </th>
+              </tr>
+              <tr>
+                <th>Tanggal</th>
+                <th>Saldo Masuk</th>
+                <th>Penarikan</th>
+                <th>Keterangan</th>
+              </tr>
+            </thead>
+            <tbody>
+              {simpanan.map((simpanan) => (
+                <tr key={simpanan.id_user}>
+                  <td>
+                    {moment(simpanan.tanggal_simpan).format("YYYY-MM-DD")}
+                  </td>
+                  <td>
+                    Rp. {numberWithCommasString(simpanan.jumlah_simpanan)}
+                  </td>
+                  <td>Rp. {numberWithCommasString(simpanan.penarikan)}</td>
+                  <td>{simpanan.keterangan}</td>
+                </tr>
+              ))}
+              <tr>
+                <td colSpan="3">
+                  <strong>TOTAL SALDO</strong>
+                </td>
+                <td>
+                  <strong>Rp. {numberWithCommasString(totalSaldo)}</strong>
+                </td>
+              </tr>
+            </tbody>
+          </Table>
+        </div>
       </div>
     </Container>
   );

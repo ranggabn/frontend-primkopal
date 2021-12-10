@@ -89,7 +89,7 @@ export default function Masuk(props) {
         </Row>
         <Card className="container mt-3">
           <Row className="justify-content-md-center">
-            <Col xs={6}>
+            <Col md={6}>
               <Form className="mt-4" onSubmit={handleFormSubmit}>
                 <Label>NRP / NIP</Label>
                 <FormGroup>
@@ -166,7 +166,8 @@ export default function Masuk(props) {
                   <Col>
                     <FormGroup>
                       <FormText className="text-center">
-                        Belum mendaftar sebagai anggota Primkopal? Daftar disini.
+                        Belum mendaftar sebagai anggota Primkopal? Daftar
+                        disini.
                       </FormText>
                     </FormGroup>
                     <FormGroup>

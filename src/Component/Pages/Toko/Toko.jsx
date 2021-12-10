@@ -11,7 +11,7 @@ import {
   CardText,
   CardTitle,
   Button,
-  Input
+  Input,
 } from "reactstrap";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -23,9 +23,7 @@ import {
   faCar,
   faShoppingBag,
 } from "@fortawesome/free-solid-svg-icons";
-import {  
-  numberWithCommasString,
-} from "../../Fungsional/Koma";
+import { numberWithCommasString } from "../../Fungsional/Koma";
 
 const api = "http://localhost:3001";
 
@@ -110,7 +108,7 @@ export default function Toko(props) {
             <strong>Kategori</strong>
           </h4>
           <hr />
-          <ListGroup>
+          <ListGroup className="listgroup-toko">
             <ListGroupItem
               tag="button"
               action
@@ -131,7 +129,7 @@ export default function Toko(props) {
             ))}
           </ListGroup>
         </Col>
-        <Col>
+        <Col md={10}>
           <hr />
           <h4>
             <strong>Daftar Produk</strong>
@@ -146,45 +144,47 @@ export default function Toko(props) {
             }}
           />
           <Row>
-          {produks
-            .filter((produks) => {
-              if (searchTerm === "") {
-                return produks;
-              } else if (
-                produks.nama.toLowerCase().includes(searchTerm.toLowerCase())
-              ) {
-                return produks;
-              }
-            }).map((produks, key) => (
-              <Col md={3} xs={6} className="mb-4" key={key}>
-                <Card className="shadow">
-                  <CardImg
-                    top
-                    width="100%"
-                    height="200vw"
-                    src={produks.gambar}
-                    alt="gambar"
-                  />
-                  <CardBody>
-                    <CardTitle tag="h5">{produks.nama}</CardTitle>
-                    <CardText>
-                      <hr/>
-                      <strong>Rp. {numberWithCommasString(produks.harga)}</strong>
-                      <p>Stok : {produks.stok}</p>
-                    </CardText>
-                    <Button
-                      color="secondary"
-                      className="mt-3"
-                      type="button"
-                      onClick={() => detailbarang(produks.id_barang)}
-                      block
-                    >
-                      Detail Barang
-                    </Button>
-                  </CardBody>
-                </Card>
-              </Col>
-            ))}
+            {produks
+              .filter((produks) => {
+                if (searchTerm === "") {
+                  return produks;
+                } else if (
+                  produks.nama.toLowerCase().includes(searchTerm.toLowerCase())
+                ) {
+                  return produks;
+                }
+              })
+              .map((produks, key) => (
+                <Col md={3} xs={6} className="mb-4" key={key}>
+                  <Card className="shadow card-body-toko">
+                    <CardImg
+                      top
+                      className="card-image-toko"
+                      src={produks.gambar}
+                      alt="gambar"
+                    />
+                    <CardBody>
+                      <CardTitle tag="h5">{produks.nama}</CardTitle>
+                      <CardText>
+                        <hr />
+                        <strong>
+                          Rp. {numberWithCommasString(produks.harga)}
+                        </strong>
+                        <p>Stok : {produks.stok}</p>
+                      </CardText>
+                      <Button
+                        color="secondary"
+                        className="button-card-toko mt-3"
+                        type="button"
+                        onClick={() => detailbarang(produks.id_barang)}
+                        block
+                      >
+                        Detail Barang
+                      </Button>
+                    </CardBody>
+                  </Card>
+                </Col>
+              ))}
           </Row>
         </Col>
       </Row>

@@ -2,7 +2,6 @@ import React, { useContext } from "react";
 import { Redirect } from "react-router";
 import { Jumbotron, Button, Container, Col, Row, CardImg } from "reactstrap";
 import { AuthContext } from "../../../App";
-import Kontak from "../../Fungsional/Kontak";
 import user from "./Images/user.png";
 import moment from "moment";
 
@@ -17,56 +16,78 @@ export default function RoleAdmin() {
       <Jumbotron>
         <Container>
           <Row>
-            <Col className="col-md-3 col-sm-6">
-              <CardImg src={user} />
+            <Col md={3} className="col-logo-home-img mt-1">
+              <CardImg src={user} className="img-home-after-login" />
             </Col>
-            <Col>
+            <Col md={9} className="mt-1">
               <h1>Selamat Datang, </h1>
               <h4>Admin Primkopal AAL Surabaya</h4>
               <p className="lead">
-                <Row>
-                  <Col>
-                    Nama &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&nbsp;&nbsp;&nbsp;:{" "}
+                <Row className="">
+                  <Col md={3} sm={4} xs={5}>
+                    Nama
                   </Col>
-                  <Col>{state.user}</Col>
-                  <Col></Col>
-                  <Col></Col>
-                  <Col></Col>
+                  <Col md={1} sm={1} xs={1}>
+                    :
+                  </Col>
+                  <Col md={7} sm={6} xs={5}>
+                    {state.user}
+                  </Col>
                 </Row>
                 <Row>
-                  <Col> NIP / NRP &ensp;&ensp;&ensp;&nbsp;&nbsp;: </Col>
-                  <Col>{state.id}</Col>
-                  <Col></Col>
-                  <Col></Col>
-                  <Col></Col>
+                  <Col md={3} sm={4} xs={5}>
+                    NIP / NRP
+                  </Col>
+                  <Col md={1} sm={1} xs={1}>
+                    :
+                  </Col>
+                  <Col md={7} sm={6} xs={5}>
+                    {state.id}
+                  </Col>
                 </Row>
                 <Row>
-                  <Col>Satuan Kerja &ensp; &nbsp;:</Col>
-                  <Col>{state.satker}</Col>
-                  <Col></Col>
-                  <Col></Col>
-                  <Col></Col>
+                  <Col md={3} sm={4} xs={5}>
+                    Satuan Kerja
+                  </Col>
+                  <Col md={1} sm={1} xs={1}>
+                    :
+                  </Col>
+                  <Col md={7} sm={6} xs={5}>
+                    {state.satker}
+                  </Col>
                 </Row>
                 <Row>
-                  <Col>Tempat Lahir &ensp;&ensp;:</Col>
-                  <Col>{state.tempat_lahir}</Col>
-                  <Col></Col>
-                  <Col></Col>
-                  <Col></Col>
+                  <Col md={3} sm={4} xs={5}>
+                    Tempat Lahir
+                  </Col>
+                  <Col md={1} sm={1} xs={1}>
+                    :
+                  </Col>
+                  <Col md={7} sm={6} xs={5}>
+                    {state.tempat_lahir}
+                  </Col>
                 </Row>
                 <Row>
-                  <Col>Tanggal Lahir &ensp; :</Col>
-                  <Col>{moment(state.tanggal_lahir).format("DD-MM-YYYY")}</Col>
-                  <Col></Col>
-                  <Col></Col>
-                  <Col></Col>
+                  <Col md={3} sm={4} xs={5}>
+                    Tanggal Lahir
+                  </Col>
+                  <Col md={1} sm={1} xs={1}>
+                    :
+                  </Col>
+                  <Col md={7} sm={6} xs={5}>
+                    {moment(state.tanggal_lahir).format("DD-MM-YYYY")}
+                  </Col>
                 </Row>
                 <Row>
-                  <Col>Nomor Telefon :</Col>
-                  <Col>{state.nomor_telefon}</Col>
-                  <Col></Col>
-                  <Col></Col>
-                  <Col></Col>
+                  <Col md={3} sm={4} xs={5}>
+                    Nomor Telefon
+                  </Col>
+                  <Col md={1} sm={1} xs={1}>
+                    :
+                  </Col>
+                  <Col md={7} sm={6} xs={5}>
+                    {state.nomor_telefon}
+                  </Col>
                 </Row>
               </p>
             </Col>
@@ -82,7 +103,6 @@ export default function RoleAdmin() {
           </Row>
         </Container>
       </Jumbotron>
-      <Kontak />
     </div>
   );
 }

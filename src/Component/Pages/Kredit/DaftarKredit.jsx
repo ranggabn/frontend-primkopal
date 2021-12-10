@@ -56,61 +56,69 @@ export default function DaftarKredit(props) {
           setsearchTerm(event.target.value);
         }}
       />
-      <Table className="table-bordered">
-        <thead>
-          <tr>
-            <th colSpan="8" className="text-center" bgcolor="#BABABA">
-              <h5>
-                <b>Rincian Kredit Anggota</b>
-              </h5>
-            </th>
-          </tr>
-          <tr>
-            <th>Tanggal</th>
-            <th>Nama</th>
-            <th>NRP / NIP</th>
-            <th>Nama Barang</th>
-            <th>Cicilan / Bulan</th>
-            <th>Lama Cicilan</th>
-            <th>Status</th>
-            <th>Aksi</th>
-          </tr>
-        </thead>
-        <tbody>
-        {kredit
-            .filter((kredit) => {
-              if (searchTerm === "") {
-                return kredit;
-              } else if (
-                kredit.username.toLowerCase().includes(searchTerm.toLowerCase())
-              ) {
-                return kredit;
-              }
-            }).map((kredit) => (
-            <tr key={kredit.id_kredit}>
-              <td>{moment(kredit.tanggal_kredit).format('YYYY-MM-DD')}</td>
-              <td>{kredit.username}</td>
-              <td>{kredit.id_user}</td>
-              <td>{kredit.nama_barang}</td>
-              <td>Rp. {numberWithCommasString(kredit.besar_cicilan)}</td>
-              <td>{kredit.cicilan} Bulan</td>
-              <td>{kredit.status ? "Disetujui" : "Belum Disetujui"}</td>
-              <td>
-                <Button
-                  color="secondary"
-                  onClick={() => update(kredit.id_kredit)}
-                >
-                  Detail
-                </Button>
-                <span> </span>
-                <Button color="danger" onClick={() => remove(kredit.id_kredit)}>
-                  Hapus
-                </Button>
-              </td>
+      <div className="table-all-after-lgn">
+        <Table className="table-bordered">
+          <thead>
+            <tr>
+              <th colSpan="8" className="text-center" bgcolor="#BABABA">
+                <h5>
+                  <b>Rincian Kredit Anggota</b>
+                </h5>
+              </th>
             </tr>
-          ))}
-        </tbody>
-      </Table>
+            <tr>
+              <th>Tanggal</th>
+              <th>Nama</th>
+              <th>NRP / NIP</th>
+              <th>Nama Barang</th>
+              <th>Cicilan / Bulan</th>
+              <th>Lama Cicilan</th>
+              <th>Status</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody>
+            {kredit
+              .filter((kredit) => {
+                if (searchTerm === "") {
+                  return kredit;
+                } else if (
+                  kredit.username
+                    .toLowerCase()
+                    .includes(searchTerm.toLowerCase())
+                ) {
+                  return kredit;
+                }
+              })
+              .map((kredit) => (
+                <tr key={kredit.id_kredit}>
+                  <td>{moment(kredit.tanggal_kredit).format("YYYY-MM-DD")}</td>
+                  <td>{kredit.username}</td>
+                  <td>{kredit.id_user}</td>
+                  <td>{kredit.nama_barang}</td>
+                  <td>Rp. {numberWithCommasString(kredit.besar_cicilan)}</td>
+                  <td>{kredit.cicilan} Bulan</td>
+                  <td>{kredit.status ? "Disetujui" : "Belum Disetujui"}</td>
+                  <td>
+                    <Button
+                      color="secondary"
+                      onClick={() => update(kredit.id_kredit)}
+                    >
+                      Detail
+                    </Button>
+                    <span> </span>
+                    <Button
+                      color="danger"
+                      onClick={() => remove(kredit.id_kredit)}
+                    >
+                      Hapus
+                    </Button>
+                  </td>
+                </tr>
+              ))}
+          </tbody>
+        </Table>
+      </div>
     </Container>
   );
 }

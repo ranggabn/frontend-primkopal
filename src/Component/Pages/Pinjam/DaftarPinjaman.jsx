@@ -58,69 +58,77 @@ export default function DaftarPinjaman(props) {
           setsearchTerm(event.target.value);
         }}
       />
-      <Table className="table-bordered">
-        <thead>
-          <tr>
-            <th colSpan="10" className="text-center" bgcolor="#BABABA">
-              <h5>
-                <b>Rincian pinjaman Anggota</b>
-              </h5>
-            </th>
-          </tr>
-          <tr>
-            <th>Tanggal</th>
-            <th>Nama</th>
-            <th>NRP / NIP</th>
-            <th>Jumlah Pinjaman</th>
-            <th>Cicilan / Bulan</th>
-            <th>Lama Cicilan</th>
-            <th>Status Kaprim</th>
-            <th>Status Kasatker</th>
-            <th>Aksi</th>
-          </tr>
-        </thead>
-        <tbody>
-          {pinjaman
-            .filter((pinjaman) => {
-              if (searchTerm === "") {
-                return pinjaman;
-              } else if (
-                pinjaman.username
-                  .toLowerCase()
-                  .includes(searchTerm.toLowerCase())
-              ) {
-                return pinjaman;
-              }
-            })
-            .map((pinjaman) => (
-              <tr key={pinjaman.id_pinjaman}>
-                <td>{moment(pinjaman.tanggal_pinjam).format("YYYY-MM-DD")}</td>
-                <td>{pinjaman.username}</td>
-                <td>{pinjaman.id_user}</td>
-                <td>Rp. {numberWithCommasString(pinjaman.besar_pinjaman)}</td>
-                <td>Rp. {numberWithCommasString(pinjaman.besar_cicilan)}</td>
-                <td>{pinjaman.cicilan} Bulan</td>
-                <td>{pinjaman.status_kaprim ? "Disetujui" : "Belum Disetujui"}</td>
-                <td>{pinjaman.status_kasatker ? "Disetujui" : "Belum Disetujui"}</td>
-                <td>
-                  <Button
-                    color="secondary"
-                    onClick={() => update(pinjaman.id_pinjaman)}
-                  >
-                    Detail
-                  </Button>
-                  <span> </span>
-                  <Button
-                    color="danger"
-                    onClick={() => remove(pinjaman.id_pinjaman)}
-                  >
-                    Hapus
-                  </Button>
-                </td>
-              </tr>
-            ))}
-        </tbody>
-      </Table>
+      <div className="table-all-after-lgn">
+        <Table className="table-bordered">
+          <thead>
+            <tr>
+              <th colSpan="10" className="text-center" bgcolor="#BABABA">
+                <h5>
+                  <b>Rincian pinjaman Anggota</b>
+                </h5>
+              </th>
+            </tr>
+            <tr>
+              <th>Tanggal</th>
+              <th>Nama</th>
+              <th>NRP / NIP</th>
+              <th>Jumlah Pinjaman</th>
+              <th>Cicilan / Bulan</th>
+              <th>Lama Cicilan</th>
+              <th>Status Kaprim</th>
+              <th>Status Kasatker</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody>
+            {pinjaman
+              .filter((pinjaman) => {
+                if (searchTerm === "") {
+                  return pinjaman;
+                } else if (
+                  pinjaman.username
+                    .toLowerCase()
+                    .includes(searchTerm.toLowerCase())
+                ) {
+                  return pinjaman;
+                }
+              })
+              .map((pinjaman) => (
+                <tr key={pinjaman.id_pinjaman}>
+                  <td>
+                    {moment(pinjaman.tanggal_pinjam).format("YYYY-MM-DD")}
+                  </td>
+                  <td>{pinjaman.username}</td>
+                  <td>{pinjaman.id_user}</td>
+                  <td>Rp. {numberWithCommasString(pinjaman.besar_pinjaman)}</td>
+                  <td>Rp. {numberWithCommasString(pinjaman.besar_cicilan)}</td>
+                  <td>{pinjaman.cicilan} Bulan</td>
+                  <td>
+                    {pinjaman.status_kaprim ? "Disetujui" : "Belum Disetujui"}
+                  </td>
+                  <td>
+                    {pinjaman.status_kasatker ? "Disetujui" : "Belum Disetujui"}
+                  </td>
+                  <td>
+                    <Button
+                      color="secondary"
+                      onClick={() => update(pinjaman.id_pinjaman)}
+                    >
+                      Detail
+                    </Button>
+                    <span> </span>
+                    <Button
+                      color="danger"
+                      onClick={() => remove(pinjaman.id_pinjaman)}
+                    >
+                      Hapus
+                    </Button>
+                  </td>
+                </tr>
+              ))}
+          </tbody>
+        </Table>
+      </div>
     </Container>
   );
 }

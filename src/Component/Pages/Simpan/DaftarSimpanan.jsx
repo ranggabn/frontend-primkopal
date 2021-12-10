@@ -65,65 +65,71 @@ export default function DaftarSimpanan(props) {
           setsearchTerm(event.target.value);
         }}
       />
-      <Table className="table-bordered">
-        <thead>
-          <tr>
-            <th colSpan="8" className="text-center" bgcolor="#BABABA">
-              <h5>
-                <b>Rincian Simpanan Anggota</b>
-              </h5>
-            </th>
-          </tr>
-          <tr>
-            <th>Tanggal</th>
-            <th>Nama</th>
-            <th>NRP / NIP</th>
-            <th>Jumlah Simpanan</th>
-            <th>Penarikan</th>
-            <th>Keterangan</th>
-            <th>Aksi</th>
-          </tr>
-        </thead>
-        <tbody>
-          {simpanan
-            .filter((simpanan) => {
-              if (searchTerm === "") {
-                return simpanan;
-              } else if (
-                simpanan.username
-                  .toLowerCase()
-                  .includes(searchTerm.toLowerCase())
-              ) {
-                return simpanan;
-              }
-            })
-            .map((simpanan) => (
-              <tr key={simpanan.id_simpanan}>
-                <td>{moment(simpanan.tanggal_simpan).format("YYYY-MM-DD")}</td>
-                <td>{simpanan.username}</td>
-                <td>{simpanan.id_user}</td>
-                <td>Rp. {numberWithCommasString(simpanan.jumlah_simpanan)}</td>
-                <td>Rp. {numberWithCommasString(simpanan.penarikan)}</td>
-                <td>{simpanan.keterangan ? simpanan.keterangan : "-"}</td>
-                <td>
-                  <Button
-                    color="secondary"
-                    onClick={() => update(simpanan.id_simpanan)}
-                  >
-                    Detail
-                  </Button>
-                  <span> </span>
-                  <Button
-                    color="danger"
-                    onClick={() => remove(simpanan.id_simpanan)}
-                  >
-                    Hapus
-                  </Button>
-                </td>
-              </tr>
-            ))}
-        </tbody>
-      </Table>
+      <div className="table-all-after-lgn">
+        <Table className="table-bordered">
+          <thead>
+            <tr>
+              <th colSpan="8" className="text-center" bgcolor="#BABABA">
+                <h5>
+                  <b>Rincian Simpanan Anggota</b>
+                </h5>
+              </th>
+            </tr>
+            <tr>
+              <th>Tanggal</th>
+              <th>Nama</th>
+              <th>NRP / NIP</th>
+              <th>Jumlah Simpanan</th>
+              <th>Penarikan</th>
+              <th>Keterangan</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody>
+            {simpanan
+              .filter((simpanan) => {
+                if (searchTerm === "") {
+                  return simpanan;
+                } else if (
+                  simpanan.username
+                    .toLowerCase()
+                    .includes(searchTerm.toLowerCase())
+                ) {
+                  return simpanan;
+                }
+              })
+              .map((simpanan) => (
+                <tr key={simpanan.id_simpanan}>
+                  <td>
+                    {moment(simpanan.tanggal_simpan).format("YYYY-MM-DD")}
+                  </td>
+                  <td>{simpanan.username}</td>
+                  <td>{simpanan.id_user}</td>
+                  <td>
+                    Rp. {numberWithCommasString(simpanan.jumlah_simpanan)}
+                  </td>
+                  <td>Rp. {numberWithCommasString(simpanan.penarikan)}</td>
+                  <td>{simpanan.keterangan ? simpanan.keterangan : "-"}</td>
+                  <td>
+                    <Button
+                      color="secondary"
+                      onClick={() => update(simpanan.id_simpanan)}
+                    >
+                      Detail
+                    </Button>
+                    <span> </span>
+                    <Button
+                      color="danger"
+                      onClick={() => remove(simpanan.id_simpanan)}
+                    >
+                      Hapus
+                    </Button>
+                  </td>
+                </tr>
+              ))}
+          </tbody>
+        </Table>
+      </div>
     </Container>
   );
 }

@@ -40,7 +40,7 @@ export default function Kontak() {
   }
 
   return (
-    <FooterContainer className="main-footer mt-5">
+    <FooterContainer className="main-footer footer-fix mt-5">
       <div className="footer-middle">
         <div className="container">
           <div className="row">
@@ -70,7 +70,7 @@ export default function Kontak() {
                 </li>
               </ul>
             </div>
-            <div className="col-md-3 col-sm-6">
+            <div className="col-md-2 col-sm-6">
               <h4 className="mb-3">Layanan</h4>
               <ul className="ml-4">
                 <li className="mb-2">
@@ -93,7 +93,7 @@ export default function Kontak() {
                 </li>
               </ul>
             </div>
-            <div className="col-md-3 col-sm-6">
+            <div className="col-md-2 col-sm-6">
               <h4 className="mb-3">Informasi</h4>
               <ul className="ml-4">
                 <li className="mb-2">
@@ -110,10 +110,10 @@ export default function Kontak() {
                 </li>
               </ul>
             </div>
-            <div className="col-md-3 col-sm-6">
+            <div className="col-md-5 col-sm-6">
               <h4 className="mb-3">Kritik & Saran</h4>
               <ul className="list-unstyled">
-                <li>
+                <li className="kritik-footer">
                   <Input
                     type="textarea"
                     id="txtbox"
@@ -123,7 +123,12 @@ export default function Kontak() {
                     placeholder="Kami sangat menerima kritik dan saran anda."
                   />
                 </li>
-                <Alert color="info" isOpen={visible} toggle={onDismiss} className="mt-2">
+                <Alert
+                  color="info"
+                  isOpen={visible}
+                  toggle={onDismiss}
+                  className="mt-2"
+                >
                   Kritik & Saran Anda Berhasil Terkirim.
                 </Alert>
                 <li className="mt-2">

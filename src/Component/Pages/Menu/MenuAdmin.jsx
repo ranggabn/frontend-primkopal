@@ -9,6 +9,7 @@ import {
   NavItem,
   NavbarText,
   Button,
+  Container,
 } from "reactstrap";
 import { AuthContext } from "../../../App";
 
@@ -19,7 +20,8 @@ export default function MenuAdmin() {
 
   return (
     <div>
-      <Navbar className="navbar-dark bg-dark" light expand="md">
+      <Navbar className="navbar-dark bg-dark" light expand="xl">
+        {/* <Container className="container-navbar-admin"> */}
         <NavbarBrand>ADMIN | PRIMKOPAL AAL</NavbarBrand>
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
@@ -70,7 +72,7 @@ export default function MenuAdmin() {
               </NavLink>
             </NavItem>
           </Nav>
-          <NavbarText>
+          <NavbarText className="navbar-text-res">
             <Button className="mr-3" href="/ubahprofil">
               Ubah Profil
             </Button>
@@ -79,6 +81,7 @@ export default function MenuAdmin() {
             </Button>
           </NavbarText>
         </Collapse>
+        {/* </Container> */}
       </Navbar>
     </div>
   );

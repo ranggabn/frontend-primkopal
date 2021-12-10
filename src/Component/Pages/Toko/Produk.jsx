@@ -158,59 +158,59 @@ export default function Produk(props) {
       console.log(response);
       axios
         .get(api + "/tampilKeranjangBarang/" + newData.id_barang)
-        .then((res) => {            
-            if (res.data.values.length === 0) {
-              const dataKer = {
-                ...dataKeranjang,
-                id_barang: response.id_barang,
-                id_user: state.id,
-                jumlah_harga: response.harga,
-                total_harga: 0,
-                jumlah: 1,
-                tanggal_penjualan: moment().format("YYYY-MM-DD"),
-                status: false,
-              };
-              setdataKeranjang(dataKer);
-              axios.post(api + "/tambahKeranjang", dataKer).then((res) => {
-                swal({
-                  title: "Sukses Masuk Keranjang",
-                  text: "Cek Keranjang Anda!",
-                  icon: "success",
-                  button: false,
-                  timer: 1200,
-                });
-                const myData = [...keranjangs, res.data.values];
-                setkeranjangs(myData);
-                getListKeranjang();
-              });
-            } else if (res.data.values[0].jumlah !== response.stok) {
-              const dataKer = {
-                ...dataKeranjang,
-                id_barang: response.id_barang,
-                jumlah_harga: res.data.values[0].jumlah_harga + response.harga,
-                jumlah: res.data.values[0].jumlah + 1,
-              };
-              axios.put(api + "/ubahKeranjang", dataKer).then((res) => {
-                swal({
-                  title: "Sukses Masuk Keranjang",
-                  text: "Cek Keranjang Anda!",
-                  icon: "success",
-                  button: false,
-                  timer: 1200,
-                });
-                const myData = [...keranjangs, res.data.values];
-                setkeranjangs(myData);
-                getListKeranjang();
-              });
-            } else {
+        .then((res) => {
+          if (res.data.values.length === 0) {
+            const dataKer = {
+              ...dataKeranjang,
+              id_barang: response.id_barang,
+              id_user: state.id,
+              jumlah_harga: response.harga,
+              total_harga: 0,
+              jumlah: 1,
+              tanggal_penjualan: moment().format("YYYY-MM-DD"),
+              status: false,
+            };
+            setdataKeranjang(dataKer);
+            axios.post(api + "/tambahKeranjang", dataKer).then((res) => {
               swal({
-                title: "Gagal Masuk Keranjang",
-                text: "Barang Yang Dibeli Tidak Dapat Melebihi Stok Tersedia!",
-                icon: "error",
+                title: "Sukses Masuk Keranjang",
+                text: "Cek Keranjang Anda!",
+                icon: "success",
                 button: false,
-                timer: 1500,
+                timer: 1200,
               });
-            }
+              const myData = [...keranjangs, res.data.values];
+              setkeranjangs(myData);
+              getListKeranjang();
+            });
+          } else if (res.data.values[0].jumlah !== response.stok) {
+            const dataKer = {
+              ...dataKeranjang,
+              id_barang: response.id_barang,
+              jumlah_harga: res.data.values[0].jumlah_harga + response.harga,
+              jumlah: res.data.values[0].jumlah + 1,
+            };
+            axios.put(api + "/ubahKeranjang", dataKer).then((res) => {
+              swal({
+                title: "Sukses Masuk Keranjang",
+                text: "Cek Keranjang Anda!",
+                icon: "success",
+                button: false,
+                timer: 1200,
+              });
+              const myData = [...keranjangs, res.data.values];
+              setkeranjangs(myData);
+              getListKeranjang();
+            });
+          } else {
+            swal({
+              title: "Gagal Masuk Keranjang",
+              text: "Barang Yang Dibeli Tidak Dapat Melebihi Stok Tersedia!",
+              icon: "error",
+              button: false,
+              timer: 1500,
+            });
+          }
           semuaKategori();
         });
     });
@@ -297,7 +297,7 @@ export default function Produk(props) {
             ))}
           </ListGroup>
         </Col>
-        <Col>
+        <Col md={7}>
           <hr />
           <h4>
             <strong>Daftar Produk</strong>
@@ -323,12 +323,11 @@ export default function Produk(props) {
                 }
               })
               .map((produks, key) => (
-                <Col md={5} xs={6} className="mb-4" key={key}>
-                  <Card className="shadow">
+                <Col md={4} xs={6} className="mb-4" key={key}>
+                  <Card className="shadow card-body-toko">
                     <CardImg
                       top
-                      width="100%"
-                      height="200vw"
+                      className="card-image-toko"
                       src={produks.gambar}
                       alt="gambar"
                     />
@@ -340,7 +339,7 @@ export default function Produk(props) {
                       </CardText>
                       <Button
                         color="secondary"
-                        className="mt-3"
+                        className="button-card-toko mt-3"
                         type="button"
                         onClick={() => detailbarang(produks.id_barang)}
                         block
@@ -415,10 +414,10 @@ export default function Produk(props) {
           <ListGroup>
             <ListGroupItem color="success">
               <Row>
-                <Col xs="4">
+                <Col md={4} sm={4} xs={4}>
                   <h5>Total : </h5>
                 </Col>
-                <Col>
+                <Col md={8} sm={8} xs={8}>
                   <h5>
                     {dataKeranjang.total_harga
                       ? "Rp. " +

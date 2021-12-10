@@ -22,20 +22,20 @@ export default function Home() {
     <div>
       <Container className="mt-5">
         <Row className="justify-content-md-center">
-          <Col md="auto" className="mb-3">
+          <Col md={3} className="mb-3 logo-home-prim">
             <img className="Header-logo" src={logo} alt="Logo" />
           </Col>
         </Row>
         <Row className="justify-content-md-center">
-          <Col md="auto">
-            <h1>
+          <Col md={10}>
+            <h1 className="h1-home">
               <b>PRIMER KOPERASI ANGKATAN LAUT</b>
             </h1>
-            <h4 className="text-center">Akademi Angkatan Laut Surabaya</h4>
+            <h4 className="h1-home">Akademi Angkatan Laut Surabaya</h4>
           </Col>
         </Row>
         <Row className="justify-content-md-center">
-          <Col md="auto">
+          <Col md={4} className="h1-home">
             <h5>
               <b>(PRIMKOPAL AAL)</b>
             </h5>
@@ -45,12 +45,12 @@ export default function Home() {
         <Row className="mt-5"></Row>
         <Row className="mt-5"></Row>
 
-        <Jumbotron>
+        <Jumbotron className="col-md-10 col-sm-10 jumbotron-home">
           <h4>
             <b>LAYANAN PRIMKOPAL AAL</b>
           </h4>
           <hr />
-          <CardDeck className="mt-4">
+          <CardDeck className="card-deck-home col-md-12">
             <Card>
               <CardImg variant="top" src={toko} className="mt-4" />
               <CardBody>
@@ -91,7 +91,6 @@ export default function Home() {
           </CardDeck>
         </Jumbotron>
       </Container>
-      <Kontak />
     </div>
   );
 }

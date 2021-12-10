@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import {Card, CardBody} from 'reactstrap';
-import visi from './Images/visi.jpg'
-import misi from './Images/misi.jpg'
+import { Card, CardBody } from "reactstrap";
+import visi from "./Images/visi.jpg";
+import misi from "./Images/misi.jpg";
 
 export default class Visimisi extends Component {
   constructor(props) {
@@ -12,7 +12,7 @@ export default class Visimisi extends Component {
 
   render() {
     return (
-      <div className="container mt-5">
+      <div className="container mt-5 b-5">
         <br />
         <h3 className="text-center">
           <b>VISI MISI</b>
@@ -20,8 +20,18 @@ export default class Visimisi extends Component {
         <h5 className="text-center mt-3">(PRIMKOPAL AKADEMI ANGKATAN LAUT)</h5>
         <Card className="mt-4">
           <CardBody className="text-center">
-            <img className="mt-3" style={{ width: "100%" }} src={visi} alt="visi"/>
-            <img className="mt-4" style={{ width: "100%" }} src={misi} alt="misi"/>
+            <img
+              className="mt-3"
+              style={{ width: "100%" }}
+              src={visi}
+              alt="visi"
+            />
+            <img
+              className="mt-4"
+              style={{ width: "100%" }}
+              src={misi}
+              alt="misi"
+            />
           </CardBody>
         </Card>
       </div>
