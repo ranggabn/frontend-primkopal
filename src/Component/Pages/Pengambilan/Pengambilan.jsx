@@ -58,18 +58,16 @@ export default function Pengambilan(props) {
       .get(api + "/tampilPengambilan/" + newData.id_pengambilan)
       .then((res) => {
         const response = res.data.values[0];
-        axios
-          .get(api + "/tampilBarang/" + response.id_barang)
-          .then((res) => {
-            const barang = res.data.values[0];
-            const dataBaru = {
-              id_barang: barang.id_barang,
-              stok: barang.stok + response.jumlah
-            }
-            axios.put(api + "/ubahBarang2", dataBaru)
-          }); 
+        axios.get(api + "/tampilBarang/" + response.id_barang).then((res) => {
+          const barang = res.data.values[0];
+          const dataBaru = {
+            id_barang: barang.id_barang,
+            stok: barang.stok + response.jumlah,
+          };
+          axios.put(api + "/ubahBarang2", dataBaru);
+        });
       });
-      remove(newData.id_pengambilan)
+    remove(newData.id_pengambilan);
   }
 
   if (!state.isAuthenticated) {
@@ -87,67 +85,71 @@ export default function Pengambilan(props) {
           setsearchTerm(event.target.value);
         }}
       />
-      <Table className="table-bordered">
-        <thead>
-          <tr>
-            <th colSpan="7" className="text-center" bgcolor="#BABABA">
-              <h5>
-                <b>Rincian Barang</b>
-              </h5>
-            </th>
-          </tr>
-          <tr>
-            <th>Tanggal</th>
-            <th>List Barang</th>
-            <th>Jumlah Barang</th>
-            <th>Nama Pembeli</th>
-            <th>Jumlah Harga</th>
-            <th>Status</th>
-            <th>Aksi</th>
-          </tr>
-        </thead>
-        <tbody>
-          {pengambilan
-            .filter((pengambilan) => {
-              if (searchTerm === "") {
-                return pengambilan;
-              } else if (
-                pengambilan.nama
-                  .toLowerCase()
-                  .includes(searchTerm.toLowerCase())
-              ) {
-                return pengambilan;
-              }
-            })
-            .map((pengambilan) => (
-              <tr key={pengambilan.id_pengambilan}>
-                <td>
-                  {moment(pengambilan.tanggal_pengambilan).format("YYYY-MM-DD")}
-                </td>
-                <td>{pengambilan.nama}</td>
-                <td>{pengambilan.jumlah}</td>
-                <td>{pengambilan.username}</td>
-                <td>Rp. {numberWithCommasString(pengambilan.jumlah_harga)}</td>
-                <td>{pengambilan.status ? "Lunas" : "Hutang"}</td>
-                <td>
-                  <Button
-                    color="danger"
-                    onClick={() => batal(pengambilan.id_pengambilan)}
-                  >
-                    Batal
-                  </Button>
-                  <span> </span>
-                  <Button
-                    color="success"
-                    onClick={() => sudah(pengambilan.id_pengambilan)}
-                  >
-                    Sudah
-                  </Button>
-                </td>
-              </tr>
-            ))}
-        </tbody>
-      </Table>
+      <div className="table-all-after-lgn">
+        <Table className="table-bordered">
+          <thead>
+            <tr>
+              <th colSpan="7" className="text-center" bgcolor="#BABABA">
+                <h5>
+                  <b>Rincian Barang</b>
+                </h5>
+              </th>
+            </tr>
+            <tr>
+              <th>Tanggal</th>
+              <th>List Barang</th>
+              <th>Jumlah Barang</th>
+              <th>Nama Pembeli</th>
+              <th>Jumlah Harga</th>
+              <th>Status</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody>
+            {pengambilan
+              .filter((pengambilan) => {
+                if (searchTerm === "") {
+                  return pengambilan;
+                } else if (
+                  pengambilan.nama
+                    .toLowerCase()
+                    .includes(searchTerm.toLowerCase())
+                ) {
+                  return pengambilan;
+                }
+              })
+              .map((pengambilan) => (
+                <tr key={pengambilan.id_pengambilan}>
+                  <td>
+                    {moment(pengambilan.tanggal_penjualan).format("YYYY-MM-DD")}
+                  </td>
+                  <td>{pengambilan.nama}</td>
+                  <td>{pengambilan.jumlah}</td>
+                  <td>{pengambilan.username}</td>
+                  <td>
+                    Rp. {numberWithCommasString(pengambilan.jumlah_harga)}
+                  </td>
+                  <td>{pengambilan.status ? "Lunas" : "Hutang"}</td>
+                  <td>
+                    <Button
+                      color="danger"
+                      onClick={() => batal(pengambilan.id_pengambilan)}
+                    >
+                      Batal
+                    </Button>
+                    <span> </span>
+                    <Button
+                      color="success"
+                      onClick={() => sudah(pengambilan.id_pengambilan)}
+                    >
+                      Sudah
+                    </Button>
+                  </td>
+                </tr>
+              ))}
+          </tbody>
+        </Table>
+      </div>
     </Container>
   );
 }

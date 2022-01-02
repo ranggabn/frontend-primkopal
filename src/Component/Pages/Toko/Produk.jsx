@@ -155,7 +155,6 @@ export default function Produk(props) {
     setdata(newData);
     axios.get(api + "/tampilBarang/" + newData.id_barang).then((res) => {
       const response = res.data.values[0];
-      console.log(response);
       axios
         .get(api + "/tampilKeranjangBarang/" + newData.id_barang)
         .then((res) => {

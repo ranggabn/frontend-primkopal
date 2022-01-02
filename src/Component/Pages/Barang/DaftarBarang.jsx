@@ -1,10 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import {
-  Container,
-  Button,
-  Table,
-  Input,
-} from "reactstrap";
+import { Container, Button, Table, Input } from "reactstrap";
 import axios from "axios";
 import qs from "querystring";
 import { AuthContext } from "../../../App";
@@ -67,61 +62,63 @@ export default function DaftarBarang(props) {
           setsearchTerm(event.target.value);
         }}
       />
-      <Table className="table-bordered">
-        <thead>
-          <tr>
-            <th colSpan="7" className="text-center" bgcolor="#BABABA">
-              <h5>
-                <b>Rincian Data Barang</b>
-              </h5>
-            </th>
-          </tr>
-          <tr>
-            <th>Nama Barang</th>
-            <th>Harga</th>
-            <th>Stok</th>
-            <th>Keterangan</th>
-            <th>Kategori</th>
-            <th>Aksi</th>
-          </tr>
-        </thead>
-        <tbody>
-          {barang
-            .filter((barang) => {
-              if (searchTerm === "") {
-                return barang;
-              } else if (
-                barang.nama.toLowerCase().includes(searchTerm.toLowerCase())
-              ) {
-                return barang;
-              }
-            })
-            .map((barang) => (
-              <tr key={barang.id_barang}>
-                <td>{barang.nama}</td>
-                <td>Rp. {numberWithCommasString(barang.harga)}</td>
-                <td>{barang.stok}</td>
-                <td>{barang.keterangan}</td>
-                <td>{barang.kategori_barang}</td>                
-                <td>
-                  <Button
-                    color="secondary"
-                    onClick={() => update(barang.id_barang)}
-                  >
-                    Edit
-                  </Button>
-                  <span> </span>
-                  <Button
-                    color="danger"
-                    onClick={() => remove(barang.id_barang)}
-                  >
-                    Hapus
-                  </Button>
-                </td>
-              </tr>
-            ))}
-        </tbody>
-      </Table>
+      <div className="table-all-after-lgn">
+        <Table className="table-bordered">
+          <thead>
+            <tr>
+              <th colSpan="7" className="text-center" bgcolor="#BABABA">
+                <h5>
+                  <b>Rincian Data Barang</b>
+                </h5>
+              </th>
+            </tr>
+            <tr>
+              <th>Nama Barang</th>
+              <th>Harga</th>
+              <th>Stok</th>
+              <th>Keterangan</th>
+              <th>Kategori</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody>
+            {barang
+              .filter((barang) => {
+                if (searchTerm === "") {
+                  return barang;
+                } else if (
+                  barang.nama.toLowerCase().includes(searchTerm.toLowerCase())
+                ) {
+                  return barang;
+                }
+              })
+              .map((barang) => (
+                <tr key={barang.id_barang}>
+                  <td>{barang.nama}</td>
+                  <td>Rp. {numberWithCommasString(barang.harga)}</td>
+                  <td>{barang.stok}</td>
+                  <td>{barang.keterangan}</td>
+                  <td>{barang.kategori_barang}</td>
+                  <td>
+                    <Button
+                      color="secondary"
+                      onClick={() => update(barang.id_barang)}
+                    >
+                      Edit
+                    </Button>
+                    <span> </span>
+                    <Button
+                      color="danger"
+                      onClick={() => remove(barang.id_barang)}
+                    >
+                      Hapus
+                    </Button>
+                  </td>
+                </tr>
+              ))}
+          </tbody>
+        </Table>
+      </div>
     </Container>
   );
 }

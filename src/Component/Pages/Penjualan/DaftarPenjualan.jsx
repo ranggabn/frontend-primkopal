@@ -29,7 +29,6 @@ export default function DaftarPenjualan(props) {
         headers: { "Content-type": "application/x-www-form-urlencoded" },
       })
       .then((res) => {
-        console.log(res.data.values);
         const newData = penjualan.filter(
           (penjualan) => penjualan.id_penjualan !== id
         );
@@ -39,7 +38,6 @@ export default function DaftarPenjualan(props) {
   }
 
   function update(id) {
-    console.log(id);
     props.history.push("/editpenjualan/" + id);
   }
 
@@ -58,65 +56,69 @@ export default function DaftarPenjualan(props) {
           setsearchTerm(event.target.value);
         }}
       />
-      <Table className="table-bordered">
-        <thead>
-          <tr>
-            <th colSpan="7" className="text-center" bgcolor="#BABABA">
-              <h5>
-                <b>Rincian Penjualan</b>
-              </h5>
-            </th>
-          </tr>
-          <tr>
-            <th>Tanggal</th>
-            <th>List Barang</th>
-            <th>Jumlah Barang</th>
-            <th>Nama Pembeli</th>
-            <th>Jumlah Harga</th>
-            <th>Status</th>
-            <th>Aksi</th>
-          </tr>
-        </thead>
-        <tbody>
-          {penjualan
-            .filter((penjualan) => {
-              if (searchTerm === "") {
-                return penjualan;
-              } else if (
-                penjualan.nama.toLowerCase().includes(searchTerm.toLowerCase())
-              ) {
-                return penjualan;
-              }
-            })
-            .map((penjualan) => (
-              <tr key={penjualan.id_penjualan}>
-                <td>
-                  {moment(penjualan.tanggal_penjualan).format("YYYY-MM-DD")}
-                </td>
-                <td>{penjualan.nama}</td>
-                <td>{penjualan.jumlah}</td>
-                <td>{penjualan.username}</td>
-                <td>Rp. {numberWithCommasString(penjualan.jumlah_harga)}</td>
-                <td>{penjualan.status ? "Lunas" : "Hutang"}</td>
-                <td>
-                <Button
-                    color="secondary"
-                    onClick={() => update(penjualan.id_penjualan)}                    
-                  >
-                    Edit
-                  </Button>
-                  <span> </span>
-                  <Button
-                    color="danger"
-                    onClick={() => remove(penjualan.id_penjualan)}
-                  >
-                    Hapus
-                  </Button>
-                </td>
-              </tr>
-            ))}
-        </tbody>
-      </Table>
+      <div className="table-all-after-lgn">
+        <Table className="table-bordered">
+          <thead>
+            <tr>
+              <th colSpan="7" className="text-center" bgcolor="#BABABA">
+                <h5>
+                  <b>Rincian Penjualan</b>
+                </h5>
+              </th>
+            </tr>
+            <tr>
+              <th>Tanggal</th>
+              <th>List Barang</th>
+              <th>Jumlah Barang</th>
+              <th>Nama Pembeli</th>
+              <th>Jumlah Harga</th>
+              <th>Status</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody>
+            {penjualan
+              .filter((penjualan) => {
+                if (searchTerm === "") {
+                  return penjualan;
+                } else if (
+                  penjualan.nama
+                    .toLowerCase()
+                    .includes(searchTerm.toLowerCase())
+                ) {
+                  return penjualan;
+                }
+              })
+              .map((penjualan) => (
+                <tr key={penjualan.id_penjualan}>
+                  <td>
+                    {moment(penjualan.tanggal_penjualan).format("YYYY-MM-DD")}
+                  </td>
+                  <td>{penjualan.nama}</td>
+                  <td>{penjualan.jumlah}</td>
+                  <td>{penjualan.username}</td>
+                  <td>Rp. {numberWithCommasString(penjualan.jumlah_harga)}</td>
+                  <td>{penjualan.status ? "Lunas" : "Hutang"}</td>
+                  <td>
+                    <Button
+                      color="secondary"
+                      onClick={() => update(penjualan.id_penjualan)}
+                    >
+                      Edit
+                    </Button>
+                    <span> </span>
+                    <Button
+                      color="danger"
+                      onClick={() => remove(penjualan.id_penjualan)}
+                    >
+                      Hapus
+                    </Button>
+                  </td>
+                </tr>
+              ))}
+          </tbody>
+        </Table>
+      </div>
     </Container>
   );
 }

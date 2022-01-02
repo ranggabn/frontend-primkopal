@@ -46,13 +46,14 @@ export default function ModalSetuju({
   tampilkeranjang.map((lb) =>
     arr.push({
       id_barang: lb.id_barang,
-      stok: lb.stok - lb.jumlah
+      stok: lb.stok - lb.jumlah,
     })
   );
   function handleSubmit(e) {
     e.preventDefault();
     tampilkeranjang.map(
-      (newData) => axios.post(api + "/tambahPengambilan", newData).then((res) => {}),
+      (newData) =>
+        axios.post(api + "/tambahPengambilan", newData).then((res) => {}),
       swal({
         title: "Pembelian Sukses!",
         text: "Lihat Bukti Pembelian Anda",
@@ -61,7 +62,8 @@ export default function ModalSetuju({
         timer: 1200,
       })
     );
-    arr.map(arr => axios.put(api + "/ubahBarang2", arr))
+    console.log(tampilkeranjang);
+    arr.map((arr) => axios.put(api + "/ubahBarang2", arr));
     handleClose();
     remove(state.id);
   }
@@ -79,7 +81,7 @@ export default function ModalSetuju({
             2. Ketika anda menekan tombol setuju, bukti pembelian akan otomatis
             diunduh ke perangkat anda
           </p>
-          <p>3. Bukti pembelian digunakan untuk melakukan pengambilan gambar</p>
+          <p>3. Bukti pembelian digunakan untuk melakukan pengambilan barang</p>
           <div className="Post" ref={ref}>
             <br />
             <hr />
@@ -135,7 +137,11 @@ export default function ModalSetuju({
           </Button>{" "}
           <Pdf targetRef={ref} filename="struk.pdf">
             {({ toPdf }) => (
-              <Button color="primary" onClick={(e) => handleSubmit(e)} onClickCapture={toPdf}>
+              <Button
+                color="primary"
+                onClick={(e) => handleSubmit(e)}
+                onClickCapture={toPdf}
+              >
                 Setuju
               </Button>
             )}
